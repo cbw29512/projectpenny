@@ -1,6 +1,8 @@
 """Durable admission and exclusive claims; internal callers only."""
 from uuid import UUID, uuid4
 
+from penny.memory.task import INFORMED_PREFIX
+
 from .policy import admission, next_task
 from .state import Admission, TaskSpec
 from .storage_db import expire_waiting, locked, snapshot, tier_for
@@ -68,12 +70,14 @@ class TaskStore:
             lease = min(chosen.expires_at, now + (900 if chosen.member_id is None else 120))
             row = conn.execute(
                 """UPDATE work_task SET state='running',fence=%s,started_at=%s,lease_until=%s
-                WHERE id=%s AND state='queued' RETURNING id,payload""",
+                WHERE id=%s AND state='queued' RETURNING id,payload,member_id,idempotency_key""",
                 (fence, now, lease, UUID(chosen.task_id)),
             ).fetchone()
             if row is None:
                 raise RuntimeError("claimed task disappeared")
-            return Claim(row["id"], fence, row["payload"], lease)
+            informed = (row["member_id"] is None and
+                        row["idempotency_key"].startswith(INFORMED_PREFIX))
+            return Claim(row["id"], fence, row["payload"], lease, informed)
 
     def set_paused(self, paused: bool) -> None:
         if type(paused) is not bool:

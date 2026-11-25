@@ -6,6 +6,8 @@ from enum import Enum
 from penny.guardian.policy import authorize, validate_draft
 from penny.guardian.state import Actor, Capability
 
+from penny.memory.recall import recall
+
 from .outcomes import complete
 
 logger = logging.getLogger(__name__)
@@ -31,7 +33,18 @@ def run_once(store, brain, *, finish=complete, clock=time.time) -> WorkerResult:
         if budget <= 0:
             logger.warning("Worker claim has insufficient execution budget")
             return WorkerResult.BLOCKED
-        text = brain.generate(claim.payload, budget)
+        if claim.memory_enabled:
+            memories = recall(store.dsn, claim.task_id, claim.fence)
+            # Recall takes time too; never give inference the old lease budget.
+            budget = min(90.0, claim.lease_until - clock() - 5.0)
+            if budget <= 0:
+                return WorkerResult.BLOCKED
+            if memories:
+                text = brain.generate_with_memory(claim.payload, budget, memories)
+            else:
+                text = brain.generate(claim.payload, budget)
+        else:
+            text = brain.generate(claim.payload, budget)
         decision = validate_draft(text)
         if not decision.allowed:
             logger.warning("Guardian blocked draft storage: %s", decision.reason)

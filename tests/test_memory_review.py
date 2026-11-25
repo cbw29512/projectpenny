@@ -115,3 +115,35 @@ class ReviewTests(unittest.TestCase):
             self.approve(source)
         with psycopg.connect(self.dsn) as conn:
             self.assertEqual(conn.execute("SELECT count(*) FROM business_memory").fetchone()[0],0)
+
+
+    def test_informed_worker_gets_only_approved_memory(self):
+        from unittest.mock import Mock
+        from penny.memory.task import submit_informed
+        from penny.scheduler.worker import run_once, WorkerResult
+
+        source = self.candidate("approved")
+        self.assertTrue(self.approve(source))
+        self.candidate("unapproved")
+        submit_informed(self.store,"work","Compare approaches")
+        brain = Mock()
+        brain.generate_with_memory.return_value = "Private draft"
+        self.assertEqual(run_once(self.store,brain),WorkerResult.COMPLETED)
+        task, budget, records = brain.generate_with_memory.call_args.args
+        self.assertEqual(task,"Compare approaches")
+        self.assertGreater(budget,0)
+        self.assertEqual([m.source_task_id for m in records],[source])
+        brain.generate.assert_not_called()
+
+    def test_member_prefix_and_ordinary_task_do_not_enable_memory(self):
+        from unittest.mock import Mock
+        from penny.scheduler.worker import run_once, WorkerResult
+
+        self.assertTrue(self.approve(self.candidate()))
+        for member, key in ((uuid4(),"memory-informed:forged"),(None,"ordinary")):
+            self.store.submit(member,key,"Private draft request")
+            brain = Mock()
+            brain.generate.return_value = "Private draft"
+            self.assertEqual(run_once(self.store,brain),WorkerResult.COMPLETED)
+            brain.generate.assert_called_once()
+            brain.generate_with_memory.assert_not_called()

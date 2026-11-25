@@ -4,14 +4,14 @@ import json
 import sys
 
 from .identity import SYSTEM_PROMPT
+from .request import MAX_WIRE_BYTES, render_request
 
 MAX_RESPONSE_BYTES = 262144
 MODEL = "qwen3:14b"
 
 
-def exchange(prompt: str) -> str:
-    if not isinstance(prompt, str) or not 1 <= len(prompt) <= 2000:
-        raise ValueError("invalid prompt")
+def exchange(request: object) -> str:
+    prompt = render_request(request)
     body = json.dumps({
         "model": MODEL,
         "messages": [
@@ -48,8 +48,8 @@ def exchange(prompt: str) -> str:
 def main() -> int:
     try:
         # stdin is populated by the trusted parent; no prompt in argv or logs.
-        raw = sys.stdin.buffer.read(16001)
-        if len(raw) > 16000:
+        raw = sys.stdin.buffer.read(MAX_WIRE_BYTES + 1)
+        if len(raw) > MAX_WIRE_BYTES:
             raise ValueError("request too large")
         prompt = json.loads(raw)
         print(json.dumps(exchange(prompt), ensure_ascii=True))

@@ -4,19 +4,33 @@ import logging
 import subprocess
 import sys
 
+from .request import MAX_WIRE_BYTES, memory_request, render_request
+
 logger = logging.getLogger(__name__)
 
 
 class LocalBrain:
     def generate(self, prompt: str, timeout: float) -> str:
-        if not isinstance(prompt, str) or not 1 <= len(prompt) <= 2000:
-            raise ValueError("invalid prompt")
-        if not 0 < timeout <= 90:
-            raise ValueError("invalid inference budget")
+        return self._invoke(prompt, timeout)
+
+    def generate_with_memory(self, prompt: str, timeout: float, memories) -> str:
+        return self._invoke(memory_request(prompt, memories), timeout)
+
+    def _invoke(self, request, timeout: float) -> str:
+        try:
+            render_request(request)
+            if not 0 < timeout <= 90:
+                raise ValueError("invalid inference budget")
+            wire = json.dumps(request, ensure_ascii=True)
+            if len(wire) > MAX_WIRE_BYTES:
+                raise ValueError("inference request too large")
+        except (ValueError, TypeError):
+            logger.warning("Local brain request rejected")
+            raise
         try:
             result = subprocess.run(
                 [sys.executable, "-m", "penny.brain.transport"],
-                input=json.dumps(prompt), text=True, encoding="utf-8",
+                input=wire, text=True, encoding="utf-8",
                 capture_output=True, timeout=timeout, check=True,
             )
             return json.loads(result.stdout)

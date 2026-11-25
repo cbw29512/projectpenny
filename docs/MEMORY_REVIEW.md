@@ -31,7 +31,7 @@ authenticated HTTP endpoints. The caller must be an authenticated, isolated
 administrator adapter; UUID arguments alone are not authentication. The model
 has no adapter or DB credentials. Production role separation and append-only
 DB permissions are still required. Reviewed content remains data, never policy
-or authority. No automatic prompt injection of recall yet; in-flight recall
+or authority. Opt-in inference integration is described in [memory context](MEMORY_CONTEXT.md); in-flight recall
 snapshots cannot be revoked retroactively. Retention expires recall, not storage;
 physical deletion and consent are still pending. No member records or unattended
 self-approval. Initial retention maximum 365 days and recall limits are

@@ -16,3 +16,4 @@ class Claim:
     fence: UUID
     payload: str
     lease_until: int
+    memory_enabled: bool = False
