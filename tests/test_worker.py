@@ -20,6 +20,19 @@ class WorkerTests(unittest.TestCase):
     def run_worker(self):
         return run_once(self.store, self.brain, finish=self.finish, clock=lambda: 1000)
 
+    def test_identity_failure_does_not_claim_or_call_brain(self):
+        with patch("penny.brain.identity.SYSTEM_PROMPT", "changed"):
+            self.assertEqual(self.run_worker(), WorkerResult.BLOCKED)
+        self.store.claim.assert_not_called()
+        self.brain.generate.assert_not_called()
+        self.finish.assert_not_called()
+
+    def test_guardian_rechecks_identity_after_inference(self):
+        with patch("penny.guardian.policy.identity_matches", side_effect=[True, False]):
+            self.assertEqual(self.run_worker(), WorkerResult.BLOCKED)
+        self.brain.generate.assert_called_once()
+        self.finish.assert_not_called()
+
     def test_idle_no_model_call(self):
         self.store.claim.return_value = None
         self.assertEqual(self.run_worker(), WorkerResult.IDLE)
