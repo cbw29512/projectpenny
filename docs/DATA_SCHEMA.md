@@ -30,6 +30,13 @@ Proposed relational contract; not implemented DDL. UUID identifiers, UTC timesta
 | compute_usage | task_id, model_version, tokens, wall_time, cost_estimate, reconciliation_ref |
 | milestone | metric, threshold, verified_at, evidence_ref, world_asset_version |
 | audit_event | actor, action, entity_ref, correlation_id, timestamp; append-only |
+| metric_definition | key/version, unit, source, aggregation, publication class, freshness SLA |
+| metric_observation | metric key/version, period, typed value, evidence_ref, source_status, measured_or_estimated, correction_of |
+| progress_event | id, kind, occurred_at, recorded_at, sanitized_summary, evidence_ref, status, correction_of, approved_by |
+| upgrade_record | event_id, before/after asset refs, cost journal ref, approval_ref, benchmark refs, outcome |
+| incident_record | event_id, public_impact, resolved_at, recovery_event_ref, sanitized_explanation |
+| public_projection | version, generated_at, allowlisted_payload, event_cursor |
+| follow_subscription | member_id, topic, consent, channel, dedupe_key, expiry |
 
 ## Transitions
 Task: submitted -> queued -> running -> succeeded/failed/canceled/expired. Running -> checkpointed -> queued only with reserved bounded capacity. Leases and fencing reject stale workers; external effects require idempotency and reconciliation.
