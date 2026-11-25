@@ -8,7 +8,7 @@ Admission: a decision enum; this is not a reservation. Inputs must be authentica
 
 ## Logic
 1. Reject invalid, paused, expired or over-capacity proposals. Count active work toward per-member outstanding caps; waiting slots alone count toward class/global caps.
-2. The selector returns no task while paused or active. Filter expired work. Prefer another requester when available, then oldest over-age work, otherwise pick the class with least consumed seconds relative to its target share. Within supporter class, higher tier wins; equal tiers use arrival order then ID.
+2. The selector returns no task while paused or active. Filter expired work. Choose oldest over-age work first; otherwise prefer another requester when available and pick the class with least consumed seconds relative to its target share. Within supporter class, higher tier wins; equal tiers use arrival order then ID.
 3. Return only a candidate; the adapter must claim it transactionally and revalidate entitlement and policy before inference.
 4. The adapter must expire queued records, track measured usage, implement atomic idempotency/quota, exclusive claims, fenced leases, cancellation, outcomes and notification outbox. No external effects are implemented in this slice.
 
