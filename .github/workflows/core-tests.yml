@@ -10,9 +10,26 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: penny_test
+          POSTGRES_PASSWORD: disposable_ci_only
+          POSTGRES_DB: penny_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U penny_test -d penny_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PENNY_TEST_DSN: postgresql://penny_test:disposable_ci_only@127.0.0.1:5432/penny_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - run: python -m pip install -r requirements-dev.txt
       - run: python -m unittest discover -s tests -v
