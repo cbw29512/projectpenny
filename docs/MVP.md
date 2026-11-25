@@ -6,6 +6,7 @@ Scope agreed; implementation pending. Detailed configuration thresholds remain p
 - [ ] FastAPI backend, PostgreSQL durable state, replaceable local inference adapter, Docker portable deployment. Proposed Reflex UI. No public home-network listener.
 - [ ] Bounded durable scheduler, verified priorities, transactional transitions, recovery, deadlines; non-LLM status.
 - [ ] Versioned identity, canonical artwork and controlled expressions; final artwork and voice require approval.
+- [ ] Immutable identity boundary and model-upgrade personality regression gates; evidence-backed contributor appreciation and consented recognition; see [identity and recognition contract](IDENTITY_AND_RECOGNITION.md).
 - [ ] Consent-controlled personal memory and evidence-backed business learning; no untrusted policy mutation.
 - [ ] Independent Guardian, approved tools, isolated development, no unrestricted shell or payment credentials.
 - [ ] Balanced Vault and separate Founder Ledger. Actual startup costs only; no fabricated balances. Mixed revenue allocation pending approval.
