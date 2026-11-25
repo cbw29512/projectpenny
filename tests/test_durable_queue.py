@@ -100,6 +100,26 @@ class DurableQueueTests(unittest.TestCase):
         self.assertFalse(recover_expired(DSN,claim.task_id,claim.fence,worker_isolated=True))
         self.assertIsNotNone(self.store.claim())
 
+    def test_worker_persists_one_draft_and_leaves_next_waiting(self):
+        from unittest.mock import Mock
+        from penny.scheduler.worker import WorkerResult, run_once
+
+        first = self.store.submit(None, "first", "business")
+        self.store.submit(uuid4(), "second", "community")
+        brain = Mock()
+        brain.generate.return_value = "Penny's draft"
+        self.assertEqual(run_once(self.store, brain), WorkerResult.COMPLETED)
+        brain.generate.assert_called_once()
+        with psycopg.connect(DSN) as conn:
+            row = conn.execute(
+                "SELECT status,result FROM task_outcome WHERE task_id=%s",
+                (first.task_id,),
+            ).fetchone()
+            self.assertEqual(row, ("succeeded", "Penny's draft"))
+            self.assertEqual(conn.execute(
+                "SELECT count(*) FROM work_task WHERE state='queued'"
+            ).fetchone()[0], 1)
+
     def test_pause_and_replay(self):
         member = uuid4()
         accepted = self.store.submit(member,"a","hello")
