@@ -13,10 +13,12 @@ class GuardianTests(unittest.TestCase):
         for actor in Actor:
             for capability in Capability:
                 with self.subTest(actor=actor, capability=capability):
-                    allowed = actor is Actor.WORKER and capability in (
+                    allowed = (actor is Actor.WORKER and capability in (
                         Capability.GENERATE_DRAFT, Capability.STORE_DRAFT,
-                        Capability.STAGE_MEMORY_CANDIDATE,
-                    )
+                        Capability.STAGE_MEMORY_CANDIDATE, Capability.RECALL_BUSINESS_MEMORY,
+                    )) or (actor is Actor.ADMIN and capability in (
+                        Capability.APPROVE_BUSINESS_MEMORY, Capability.REVOKE_BUSINESS_MEMORY,
+                    ))
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 
     def test_untrusted_strings_and_unknown_values(self):
