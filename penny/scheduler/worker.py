@@ -3,6 +3,9 @@ import logging
 import time
 from enum import Enum
 
+from penny.guardian.policy import authorize, validate_draft
+from penny.guardian.state import Actor, Capability
+
 from .outcomes import complete
 
 logger = logging.getLogger(__name__)
@@ -17,6 +20,10 @@ class WorkerResult(str, Enum):
 def run_once(store, brain, *, finish=complete, clock=time.time) -> WorkerResult:
     """Trusted internal entry point; output is a draft, not a public reply."""
     try:
+        permission = authorize(Actor.WORKER, Capability.GENERATE_DRAFT)
+        if not permission.allowed:
+            logger.warning("Guardian blocked generation: %s", permission.reason)
+            return WorkerResult.BLOCKED
         claim = store.claim()
         if claim is None:
             return WorkerResult.IDLE
@@ -25,8 +32,10 @@ def run_once(store, brain, *, finish=complete, clock=time.time) -> WorkerResult:
             logger.warning("Worker claim has insufficient execution budget")
             return WorkerResult.BLOCKED
         text = brain.generate(claim.payload, budget)
-        if not isinstance(text, str) or not text.strip() or len(text) > 16000 or "\x00" in text:
-            raise ValueError("invalid inference result")
+        decision = validate_draft(text)
+        if not decision.allowed:
+            logger.warning("Guardian blocked draft storage: %s", decision.reason)
+            return WorkerResult.BLOCKED
         if clock() >= claim.lease_until:
             logger.warning("Worker result arrived after lease")
             return WorkerResult.BLOCKED
