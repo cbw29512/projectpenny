@@ -12,6 +12,7 @@ APPROVED_PROMPT_SHA256 = "75a9b0bb59b89daa6921b7794a364adb3c85849f2d1e8382acdf1d
 _ALLOWED = frozenset({
     (Actor.WORKER, Capability.GENERATE_DRAFT),
     (Actor.WORKER, Capability.STORE_DRAFT),
+    (Actor.WORKER, Capability.STAGE_MEMORY_CANDIDATE),
 })
 
 
@@ -34,6 +35,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability is Capability.STAGE_MEMORY_CANDIDATE:
+            return Decision(True, "quarantined_candidate_only")
         return Decision(True, "private_draft_only")
     except Exception:
         logger.error("Guardian authorization failed closed")

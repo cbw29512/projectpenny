@@ -15,6 +15,7 @@ class GuardianTests(unittest.TestCase):
                 with self.subTest(actor=actor, capability=capability):
                     allowed = actor is Actor.WORKER and capability in (
                         Capability.GENERATE_DRAFT, Capability.STORE_DRAFT,
+                        Capability.STAGE_MEMORY_CANDIDATE,
                     )
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 

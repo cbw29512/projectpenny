@@ -1,6 +1,8 @@
 """Fenced completion and conservative supervisor recovery."""
 from uuid import UUID
 
+from penny.memory.intake import stage_from_review
+
 from .storage_db import locked
 
 
@@ -37,6 +39,9 @@ def complete(dsn: str, task_id: UUID, fence: UUID, *, success: bool, result: str
         if not row or now >= row["lease_until"]:
             return False
         _finalize(conn, row, "succeeded" if success else "failed", result, now)
+        if success:
+            # Candidate and its fenced source outcome commit together or not at all.
+            stage_from_review(conn, row, result)
         return True
 
 
