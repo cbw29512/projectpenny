@@ -17,6 +17,8 @@ Scope agreed; implementation pending. Detailed configuration thresholds remain p
 - [ ] Business workflow researches, prototypes, tests and measures outcomes within approved limits.
 - [ ] Mobile-first World, Inbox, Council, Vault, diary, ventures, wishlist, member impact and actual availability.
 - [ ] Growth milestones represent verified progress; no fabricated life events or finances.
+- [ ] Public Life Dashboard, historical metrics, upgrade comparisons and complete sanitized progress timeline including setbacks and recoveries; see [public progress contract](PUBLIC_PROGRESS.md).
+- [ ] Evidence-backed, cached public read model with freshness, correction history, opt-in attribution and no inference calls for browsing.
 - [ ] Payment sandbox, verified events, refunds, expiry and replay protection. No live funds yet.
 
 ## C. Public launch gate
