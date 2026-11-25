@@ -10,6 +10,7 @@ Every visitor can follow Penny's genuine growth, improvements, failures and reco
 - Learning: counts of validated memories and verified skills, benchmark improvements and regressions; no memory content.
 - Business: disclosed ventures, products, launches, sales, refunds, experiments, costs, outcomes and discontinued projects.
 - Community: aggregate membership, proposals, votes, implemented ideas and consented attribution. Avoid small-cohort disclosure.
+- Recognition: verified contributor impact and successful ideas, consented credit, corrections and private follow-ups; see [identity and recognition contract](IDENTITY_AND_RECOGNITION.md). Financial support does not inflate measured idea impact.
 - World: canonical character asset version, current residence metaphor, inventory and chapter changes tied to verified infrastructure milestones.
 - Founder: Penny-branded merchandise/entertainment summaries and actual contributions under approved attribution policy; no unrelated personal finances.
 
