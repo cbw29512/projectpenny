@@ -16,4 +16,6 @@ Specification baseline; application, payments and deployment are not yet impleme
 ## Development
 Approve contracts and benchmark Qwen3-14B; implement durable scheduling, identity, memory, Guardian, ledger and community interfaces in that order. Keep modules small and test each change. No private data, credentials, model weights or actual financial records in Git.
 
-Copyright reserved; no open-source license is granted. GitHub's platform terms still apply.
+## License and branding
+
+**All rights reserved.** This is a proprietary, publicly visible project, not an open-source release. See [LICENSE](LICENSE) for the reservation of rights, GitHub permissions, statutory exceptions and third-party licensing terms. Contact the repository owner for commercial licensing or authorized brand use.
