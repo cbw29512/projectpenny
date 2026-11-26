@@ -13,12 +13,13 @@ SCOPES = {
                "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)",
                "mailbox_allow_bridge(text)"),
     "maintenance": ("mailbox_purge()",),
+    "admin": ("mailbox_admin_status(uuid)","mailbox_admin_pause(uuid)"),
 }
 HELPER = "mailbox_expire(timestamptz)"
 NAME = re.compile(r"[a-z][a-z0-9_]{0,62}")
 
 
-def configure_roles(conn, schema, *, member, bridge, maintenance):
+def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None):
     """Grant narrow execution on a dedicated schema in one transaction.
 
     Roles must already exist; no passwords or account creation here.
@@ -28,10 +29,12 @@ def configure_roles(conn, schema, *, member, bridge, maintenance):
     """
     try:
         mapping = dict(member=member,bridge=bridge,maintenance=maintenance)
+        if admin is not None:
+            mapping['admin'] = admin
         names = [schema,*mapping.values()]
         if any(type(n) is not str or not NAME.fullmatch(n) for n in names):
             raise ValueError("invalid role or schema name")
-        if len(set(mapping.values())) != 3 or schema in ("public","pg_catalog","information_schema"):
+        if len(set(mapping.values())) != len(mapping) or schema in ("public","pg_catalog","information_schema"):
             raise ValueError("separate roles and dedicated schema required")
         with conn.transaction():
             owner = conn.execute(
