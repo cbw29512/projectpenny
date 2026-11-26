@@ -1,0 +1,9 @@
+.life-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; margin-top:1rem; }
+.life h3 { font-size:1rem; margin:.25rem 0 .5rem; }
+.metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; margin:0; }
+.metric { min-width:0; border:1px solid var(--line); border-radius:.55rem; padding:.65rem; background:#f7f4ed; }
+.metric dt { color:var(--muted); font-size:.76rem; line-height:1.4; }
+.metric dd { margin:.3rem 0 0; font-weight:750; font-size:clamp(.9rem,2vw,1.1rem); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+#snapshot-status { font-weight:650; }
+@media(max-width:760px) { .life-columns { grid-template-columns:1fr; } }
+@media(max-width:360px) { .metrics { grid-template-columns:1fr; } }

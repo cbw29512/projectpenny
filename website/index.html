@@ -8,7 +8,9 @@
   <title>Project Penny | Her World</title>
   <link rel="stylesheet" href="/assets/base.css">
   <link rel="stylesheet" href="/assets/world.css">
+  <link rel="stylesheet" href="/assets/progress.css">
   <script type="module" src="/assets/home.mjs"></script>
+  <script type="module" src="/assets/progress.mjs"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to Penny</a>
@@ -58,9 +60,49 @@
       <p>Verified earnings have not been recorded. No progress percentage is available.</p></div>
       <div class="goal"><span>Lifetime goal</span><strong>$1,000,000</strong><span>Metric definition pending approval</span></div>
     </section>
+    <section id="life-dashboard" class="panel life" aria-labelledby="life-title">
+      <p class="eyebrow">THE LIFE DASHBOARD</p>
+      <h2 id="life-title">Every win. Every setback.</h2>
+      <p id="snapshot-status" role="status">No reviewed snapshot available</p>
+      <p id="snapshot-updated" class="small">No verified update timestamp</p>
+      <div class="life-columns">
+        <section aria-labelledby="finance-title">
+          <h3 id="finance-title">Financial Vault · USD</h3>
+          <dl class="metrics">
+          <div class="metric"><dt>Commercial receipts</dt><dd data-progress-scope="finance" data-progress-key="commercial_receipts">Unavailable</dd></div>
+          <div class="metric"><dt>Refunds</dt><dd data-progress-scope="finance" data-progress-key="commercial_refunds">Unavailable</dd></div>
+          <div class="metric"><dt>Community support</dt><dd data-progress-scope="finance" data-progress-key="community_support">Unavailable</dd></div>
+          <div class="metric"><dt>Founder cash contributions</dt><dd data-progress-scope="finance" data-progress-key="founder_cash_funding">Unavailable</dd></div>
+          <div class="metric"><dt>Founder-paid costs</dt><dd data-progress-scope="finance" data-progress-key="founder_paid_costs">Unavailable</dd></div>
+          <div class="metric"><dt>Operating costs (includes founder-paid)</dt><dd data-progress-scope="finance" data-progress-key="operating_expenses">Unavailable</dd></div>
+          <div class="metric"><dt>Payment fees</dt><dd data-progress-scope="finance" data-progress-key="payment_fees">Unavailable</dd></div>
+          <div class="metric"><dt>Recorded commercial result</dt><dd data-progress-scope="finance" data-progress-key="commercial_result_after_recorded_costs">Unavailable</dd></div>
+          <div class="metric"><dt>Reviewed cash balance</dt><dd data-progress-scope="finance" data-progress-key="matched_cash">Unavailable</dd></div>
+          </dl>
+          <p class="small">Reviewed historical cash is not available-to-spend cash. Recorded commercial result is not audited profit. Support and founder funding are not commercial earnings.</p>
+        </section>
+        <section aria-labelledby="business-title">
+          <h3 id="business-title">Business experiments</h3>
+          <dl class="metrics">
+          <div class="metric"><dt>Proposed</dt><dd data-progress-scope="business" data-progress-key="proposed">Unavailable</dd></div>
+          <div class="metric"><dt>Approved</dt><dd data-progress-scope="business" data-progress-key="approved">Unavailable</dd></div>
+          <div class="metric"><dt>In progress</dt><dd data-progress-scope="business" data-progress-key="started">Unavailable</dd></div>
+          <div class="metric"><dt>Overdue</dt><dd data-progress-scope="business" data-progress-key="overdue">Unavailable</dd></div>
+          <div class="metric"><dt>Expired</dt><dd data-progress-scope="business" data-progress-key="expired">Unavailable</dd></div>
+          <div class="metric"><dt>Rejected</dt><dd data-progress-scope="business" data-progress-key="rejected">Unavailable</dd></div>
+          <div class="metric"><dt>Stopped</dt><dd data-progress-scope="business" data-progress-key="stopped">Unavailable</dd></div>
+          <div class="metric"><dt>Targets met</dt><dd data-progress-scope="business" data-progress-key="measured_target_met">Unavailable</dd></div>
+          <div class="metric"><dt>Targets missed</dt><dd data-progress-scope="business" data-progress-key="measured_target_missed">Unavailable</dd></div>
+          </dl>
+          <p class="small">Experiment targets are not sales. Failed and stopped experiments remain part of the record.</p>
+        </section>
+      </div>
+      <p class="small">Figures appear only from a current reviewed snapshot. Missing information is not a zero balance.</p>
+    </section>
     <div class="dashboard">
       <section id="progress" class="panel" aria-labelledby="achievement-title">
         <p class="eyebrow">MILESTONES</p><h2 id="achievement-title">Achievement Center</h2>
+        <p><a href="#life-dashboard">View financial and business progress</a></p>
         <p class="muted">Unlocks require verified evidence.</p>
         <ul class="achievements">
           <li><span class="medal" aria-hidden="true">01</span><div><strong>Hello, World</strong><small>First verified conversation</small></div><span class="label">Unverified</span></li>
@@ -86,5 +128,6 @@
     </div>
   </nav>
   <footer class="wrap footer">Development preview · No live chat, payments or financial claims.</footer>
+  <script type="application/json" id="progress-snapshot">{"status":"unavailable","payload":null}</script>
 </body>
 </html>
