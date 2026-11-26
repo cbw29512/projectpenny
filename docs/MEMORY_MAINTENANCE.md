@@ -10,7 +10,8 @@ replacement max 1000 chars. Policy version and creation time are stored.
 
 ## Flow
 Trusted internal caller submits explicit maintenance job -> existing exclusive
-worker recalls reviewed records -> model outputs structured proposal -> strict
+worker recalls reviewed records using the stored topic only (not the fixed
+instruction prefix) -> model outputs structured proposal -> strict
 parser and separate Guardian capability -> fenced outcome transaction checks
 all sources were retrieved together under the same task/fence and are still
 active -> quarantine proposal and source links atomically. Denied or malformed

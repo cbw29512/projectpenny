@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
 from penny.scheduler.storage_db import locked
-from .ranking import search_expression, select_ranked
+from .ranking import task_search_expression, select_ranked
 from .review_state import MAX_RANKED_CANDIDATES, RECALL_RANK_VERSION, ReviewedMemory
 from .task import INFORMED_PREFIX
 
@@ -31,7 +31,7 @@ def recall(dsn, task_id: UUID, fence: UUID) -> tuple[ReviewedMemory, ...]:
             if not task or not task["idempotency_key"].startswith(INFORMED_PREFIX):
                 return ()
             # Use trusted stored task text, not a second caller-supplied query.
-            query = search_expression(task["payload"])
+            query = task_search_expression(task["idempotency_key"], task["payload"])
             rows = conn.execute(
                 """WITH q AS (
                        SELECT websearch_to_tsquery('english',%s) AS terms

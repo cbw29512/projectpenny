@@ -7,7 +7,7 @@ MAX_RECALL_RECORDS = 3
 MAX_RECALL_CHARS = 1500
 MAX_SEARCH_TERMS = 32
 MAX_RANKED_CANDIDATES = 24
-RECALL_RANK_VERSION = "english-lexical-v1"
+RECALL_RANK_VERSION = "english-lexical-v2"
 
 
 @dataclass(frozen=True, slots=True)

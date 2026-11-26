@@ -2,7 +2,8 @@
 import unittest
 from uuid import uuid4
 
-from penny.memory.ranking import search_expression, select_ranked
+from penny.memory.ranking import search_expression, select_ranked, task_search_expression
+from penny.memory.maintenance_state import MAINTENANCE_PREFIX, MAINTENANCE_PROMPT
 from penny.memory.review_state import MAX_SEARCH_TERMS
 
 
@@ -13,6 +14,15 @@ class RankingTests(unittest.TestCase):
         self.assertEqual(search_expression("!?"),"")
         self.assertEqual(len(search_expression(" ".join("term"+str(i) for i in range(80))).split(" OR ")),
                          MAX_SEARCH_TERMS)
+
+    def test_maintenance_topic_only_and_operator_filter(self):
+        self.assertEqual(task_search_expression(MAINTENANCE_PREFIX+"test",
+                                                MAINTENANCE_PROMPT+"shipping OR outcomes"),
+                         "shipping OR outcomes")
+        self.assertEqual(task_search_expression(MAINTENANCE_PREFIX+"test","shipping"),"")
+        self.assertEqual(task_search_expression(MAINTENANCE_PREFIX+"test",MAINTENANCE_PROMPT),"")
+        self.assertEqual(task_search_expression("memory-informed:ordinary","shipping OR outcomes"),
+                         "shipping OR outcomes")
 
     def test_duplicate_and_budget(self):
         def row(content):

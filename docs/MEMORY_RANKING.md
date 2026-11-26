@@ -15,7 +15,9 @@ permissions in production. The event represents retrieval, not proof of model us
 
 ## Logic
 Guardian -> verify stored task, fence, lease, internal owner and explicit purpose
--> normalize up to 32 plain search terms from stored task payload -> parameterized
+-> normalize up to 32 plain search terms from stored task payload (maintenance
+jobs use only the topic after the exact fixed prompt prefix; literal OR tokens
+are excluded) -> parameterized
 PostgreSQL English OR query -> rank by lexical match, recency and UUID -> bounded
 24 candidate pool -> suppress case/whitespace-normalized duplicates -> select
 at most 3 whole records / 1500 content characters -> transactional audit -> return.

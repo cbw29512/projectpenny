@@ -5,7 +5,7 @@ import re
 from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
 from .maintenance_parse import parse_maintenance
-from .maintenance_state import MAINTENANCE_PREFIX
+from .maintenance_state import MAINTENANCE_PREFIX, MAINTENANCE_PROMPT, MAX_TOPIC_CHARS
 
 logger = logging.getLogger(__name__)
 
@@ -15,16 +15,9 @@ def submit_maintenance(store, key: str, topic: str):
     try:
         if type(key) is not str or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", key):
             raise ValueError("invalid maintenance key")
-        if type(topic) is not str or not topic.strip() or len(topic) > 1000 or "\x00" in topic:
+        if type(topic) is not str or not topic.strip() or len(topic) > MAX_TOPIC_CHARS or "\x00" in topic:
             raise ValueError("invalid maintenance topic")
-        prompt = (
-            "Review supplied historical memories for the topic below. Return one JSON object "
-            'with action (correct, consolidate, outdated, contradiction), sources (list of '
-            'recalled source UUIDs), rationale (max 500 chars), replacement (max 1000 chars '
-            'for correct/consolidate, null otherwise). Correct/outdated use one source; '
-            'consolidate/contradiction use two or three distinct sources. '
-            'Return {} if insufficient evidence. Do not claim verification. Topic: ' + topic
-        )
+        prompt = MAINTENANCE_PROMPT + topic
         return store.submit(None,MAINTENANCE_PREFIX+key,prompt)
     except Exception as exc:
         logger.warning("Memory maintenance submission rejected (%s)",type(exc).__name__)

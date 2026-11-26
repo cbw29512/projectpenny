@@ -99,6 +99,13 @@ class MaintenanceTests(ReviewFixture):
         self.assertTrue(self.finish(claim,proposal("outdated",[a])))
         self.assertEqual(self.count(),0)
 
+    def test_instruction_words_are_not_recall_terms(self):
+        relevant = self.approved()
+        self.approved("noise","Historical review of correction and consolidation proposals")
+        claim = self.start()
+        self.assertEqual([m.source_task_id for m in recall(self.dsn,claim.task_id,claim.fence)],
+                         [relevant])
+
     def test_storage_failure_rolls_back_outcome(self):
         a = self.approved()
         claim = self.start()
