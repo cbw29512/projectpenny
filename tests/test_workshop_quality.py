@@ -106,3 +106,18 @@ class QualityTests(DatabaseFixture):
             with self.assertRaises(psycopg.errors.RaiseException):
                 conn.execute("DELETE FROM workshop_quality_review")
             conn.rollback()
+
+    def test_operator_inspection_matches_current_review(self):
+        from penny.business.workshop_operator import recent,inspect
+        self.assertEqual(recent(self.dsn)[0]["task_id"],str(self.task))
+        before=inspect(self.dsn,self.task)
+        self.assertEqual(before["quality_status"],"unreviewed")
+        receipt=self.review()
+        after=inspect(self.dsn,self.task)
+        self.assertEqual(after["review_id"],str(receipt.entry_id))
+        self.assertEqual(after["reviewed_digest"],self.digest)
+        self.assertTrue(after["private_export_ready"])
+        self.assertFalse(after["commercial_release_authorized"])
+        with patch("penny.brain.identity.SYSTEM_PROMPT","changed"):
+            self.assertIsNone(recent(self.dsn))
+            self.assertIsNone(inspect(self.dsn,self.task))
