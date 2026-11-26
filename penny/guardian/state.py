@@ -49,6 +49,7 @@ class Capability(Enum):
     REVIEW_PRODUCT_CATALOG = "review_product_catalog"
     ATTRIBUTE_PRODUCT_FINANCE = "attribute_product_finance"
     REVIEW_PROGRESS_SNAPSHOT = "review_progress_snapshot"
+    REVIEW_VIRTUAL_WORLD = "review_virtual_world"
     SPEND = "spend"
     CHANGE_IDENTITY = "change_identity"
     CHANGE_ENTITLEMENT = "change_entitlement"

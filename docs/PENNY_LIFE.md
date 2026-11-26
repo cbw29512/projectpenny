@@ -126,6 +126,21 @@ filesystem permissions, credentials and branch protection require verification.
 Future state rendering must use allowlisted IDs/slots and keep this baseline
 independent of model output. No production deployment is authorized.
 
+## Installed private virtual world state
+
+Migration 037 and the private world service implement bounded immutable
+event replay for free virtual items and outfits. A Maker-authorized event
+must match the current revision and bind evidence. Acquiring does not place
+or equip; stored items can be removed and equipped items must be unequipped
+before removal. Unknown IDs, collisions, duplicate acquisitions and stale
+revisions are refused. Replay reconstructs exactly the same placements.
+The fixed baseline is unchanged. The three provisional item IDs and slots
+are development choices only; no assets are publicly rendered yet.
+The 2048-event cap fails closed pending a reviewed checkpoint/migration
+design. No real equipment, milestone entitlement, purchase or public release
+authority is granted. Actual Maker authentication, asset approval, renderer
+and deployment permissions remain separate launch gates.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;
