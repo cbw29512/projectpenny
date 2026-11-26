@@ -16,7 +16,15 @@ drafts. Use textContent, no HTML injection, no remote assets, no mutating routes
 Poll every two seconds after each completed fetch; mark offline/stale on failure.
 No new inference, no changes to Guardian or worker; existing non-streaming model
 transport is preserved. Output becomes visible after fenced commit, not token by
-token. Thought cloud uses explicitly labeled scripted character asides.
+token. Thought cloud uses deterministic, evidence-based first-person commentary only.
+Migration 034 adds the latest independently recorded experiment measurement.
+Facial expressions represent observed operational states, not consciousness.
+Task success is distinct from a valid artifact, experiment success and revenue.
+Recent measured wins may celebrate; missed targets acknowledge the count and
+request evidence review without inventing a cause or claiming a learned lesson.
+Idle, stale, paused and uncertain states cannot manufacture new progress.
+No random emotional changes or unsupported commentary. Existing memory review
+must independently verify any lesson before it becomes durable business memory.
 Acceptance: disposable DB privacy tests, dedicated role permission check, HTTP
 loopback tests, real kiosk launch/restart and observed idle/working/result states.
 No production deployment or automatic kiosk switch from this code change.

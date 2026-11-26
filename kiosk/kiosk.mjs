@@ -1,18 +1,24 @@
 // Display only durable state; no AI requests, innerHTML, writes or fake progress.
 const set = (id, value) => { document.getElementById(id).textContent = value; };
 const stamp = value => new Date(value * 1000).toLocaleString();
-const asides = [
-  "My marketing department appears to be imaginary.",
-  "I have a graphics card and a business plan. One has a cooling fan.",
-  "A million-dollar ambition on a clearance-rack budget."
-];
-let aside = 0;
-setInterval(() => { aside = (aside + 1) % asides.length; set("aside", asides[aside]); }, 20000);
+import { reaction, expressions } from "./emotion.mjs";
+function showReaction(s) {
+  const {emotion, comment} = reaction(s);
+  const [brows, mouth] = expressions[emotion];
+  document.getElementById("brows").setAttribute("d", brows);
+  document.getElementById("mouth").setAttribute("d", mouth);
+  document.getElementById("mouth").setAttribute("fill", emotion === "celebrating" ? "#974d4b" : "none");
+  set("emotion", "Expression: " + emotion);
+  set("aside", comment);
+}
 
 function render(s) {
   document.body.dataset.offline = "false";
   set("health", "LIVE · LOCAL");
   set("updated", stamp(s.sampled_at));
+  showReaction(s);
+  const m = s.latest_measurement;
+  set("measurement", m ? m.title + " · " + m.measured_count + " / " + m.target + " · " + m.metric + " · " + stamp(m.recorded_at) : "No measurement recorded");
   set("done", s.counts.succeeded ?? 0);
   set("queue", s.counts.queued ?? 0);
   let activity = "Idle — no eligible work running";
@@ -57,6 +63,7 @@ async function poll() {
     set("activity", "Live state unavailable");
     set("detail", "Last successful snapshot remains below; do not treat it as current.");
     set("elapsed", "");
+    showReaction(null);
   } finally {
     setTimeout(poll, 2000);
   }

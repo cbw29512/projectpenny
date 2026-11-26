@@ -16,6 +16,7 @@ ASSETS = {
     "/": (ROOT / "kiosk/index.html", "text/html; charset=utf-8"),
     "/kiosk.css": (ROOT / "kiosk/kiosk.css", "text/css; charset=utf-8"),
     "/kiosk.mjs": (ROOT / "kiosk/kiosk.mjs", "text/javascript; charset=utf-8"),
+    "/emotion.mjs": (ROOT / "kiosk/emotion.mjs", "text/javascript; charset=utf-8"),
     "/penny.svg": (ROOT / "website/assets/penny-preview.svg", "image/svg+xml"),
 }
 
