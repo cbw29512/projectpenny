@@ -21,7 +21,6 @@ from penny.vault.summary import summarize
 RAW=json.dumps({"title":"Weekly planning","instructions":"Review each item.",
                 "items":["Choose three priorities","Check deadlines","Review completed work"]})
 
-
 class ChecklistTests(unittest.TestCase):
     def test_printable_shape_and_invalid_inputs(self):
         self.assertEqual(render_checklist(RAW),
@@ -31,7 +30,6 @@ class ChecklistTests(unittest.TestCase):
             {"title":"X","instructions":"Y","items":["a","A","b"]}),json.dumps(
             {"title":"X","instructions":"Y","items":["a","b","c"],"tool":"publish"})):
             self.assertIsNone(render_checklist(raw))
-
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
 class WorkshopTests(DatabaseFixture):
