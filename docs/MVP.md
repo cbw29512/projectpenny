@@ -3,7 +3,7 @@ Scope agreed; implementation pending. Detailed configuration thresholds remain p
 
 ## A. Private core
 - [ ] Benchmark Qwen3-14B quantized on a 16 GB GPU: 8192 context initial target, full GPU residency, measured throughput and stability. No paid inference.
-- [ ] FastAPI backend, PostgreSQL durable state, replaceable local inference adapter, Docker portable deployment. Proposed Reflex UI. No public home-network listener.
+- [ ] FastAPI backend, PostgreSQL durable state, replaceable local inference adapter, Docker portable deployment. Netlify-hosted public UI and native Netlify Database mailbox; outbound-only NucBox bridge. See [deployment contract](NETLIFY_BRIDGE.md). No public home-network listener.
 - [ ] Bounded durable scheduler, verified priorities, transactional transitions, recovery, deadlines; non-LLM status.
 - [ ] Versioned identity, canonical artwork and controlled expressions; final artwork and voice require approval.
 - [ ] Immutable identity boundary and model-upgrade personality regression gates; evidence-backed contributor appreciation and consented recognition; see [identity and recognition contract](IDENTITY_AND_RECOGNITION.md).
@@ -16,7 +16,7 @@ Scope agreed; implementation pending. Detailed configuration thresholds remain p
 - [ ] Individual asynchronous chat, opt-in follow-ups and private reply delivery.
 - [ ] Community proposals and votes influence real decisions; traceable evidence and explanations, opt-in credit.
 - [ ] Business workflow researches, prototypes, tests and measures outcomes within approved limits.
-- [ ] Mobile-first World, Inbox, Council, Vault, diary, ventures, wishlist, member impact and actual availability.
+- [ ] Mobile-first game-style Penny home scene, private dialogue bubble and question input, Achievement Center, greatest contributors showcase, World, Inbox, Council, Vault, diary, ventures, wishlist, member impact and actual availability. See [game UI contract](GAME_UI.md).
 - [ ] Growth milestones represent verified progress; no fabricated life events or finances.
 - [ ] Public Life Dashboard, historical metrics, upgrade comparisons and complete sanitized progress timeline including setbacks and recoveries; see [public progress contract](PUBLIC_PROGRESS.md).
 - [ ] Evidence-backed, cached public read model with freshness, correction history, opt-in attribution and no inference calls for browsing.

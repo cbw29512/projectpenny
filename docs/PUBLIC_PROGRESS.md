@@ -54,3 +54,6 @@ No raw logs, prompts, private task content, personal names without consent, netw
 - Historical metrics compare only like-for-like versions and units; incompatible benchmarks are labeled.
 - Dashboard and timeline remain readable during inference downtime.
 - Test fixtures clearly labeled and never published as real activity.
+
+## Public presentation and deployment
+See [game-style home interface](GAME_UI.md) and [Netlify outbound bridge contract](NETLIFY_BRIDGE.md). Keep achievements and contributor displays evidence-backed and independent of paid tier.
