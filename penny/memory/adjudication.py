@@ -49,8 +49,9 @@ def adjudicate(dsn, task_id, *, reviewer_id, review_ref, evidence, expected_prop
                 """SELECT p.action,p.rationale,p.replacement FROM memory_maintenance_proposal p
                    JOIN work_task t ON t.id=p.task_id JOIN task_outcome o ON o.task_id=t.id
                    WHERE p.task_id=%s AND t.member_id IS NULL AND o.status='succeeded'
+                   AND p.purged_at IS NULL AND p.review_until>to_timestamp(%s)
                    AND NOT EXISTS (SELECT 1 FROM memory_maintenance_decision d WHERE d.task_id=p.task_id)""",
-                (task_id,),
+                (task_id,now),
             ).fetchone()
             if not row or (row["action"],row["rationale"],row["replacement"]) != (
                 proposal.action.value,proposal.rationale,proposal.replacement):

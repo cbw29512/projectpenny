@@ -22,7 +22,7 @@ decision commit atomically; replay or stale sources cannot change state.
 ## Limits
 No model access to this interface. Caller authentication and isolated DB roles
 are not implemented here; reviewer UUID alone is not authentication. Fingerprint
-establishes integrity, not truth. Old text remains stored for audit until a
-separate retention/deletion process is implemented. Review references must
+establishes integrity, not truth. Old approved text remains stored for audit. Expired unapproved drafts are subject
+to the bounded logical redaction process in [MEMORY_RETENTION.md](MEMORY_RETENTION.md). Review references must
 point to independently preserved evidence. Existing in-flight inference
 snapshots cannot be retracted. No unattended approval or deployment.

@@ -43,8 +43,9 @@ def approve(dsn, source_id, *, reviewer_id, review_ref, evidence, expected_conte
                    JOIN work_task t ON t.id=c.source_task_id
                    JOIN task_outcome o ON o.task_id=t.id
                    WHERE c.source_task_id=%s AND t.member_id IS NULL
-                   AND o.status='succeeded' AND c.validation_state='quarantined'""",
-                (source_id,),
+                   AND o.status='succeeded' AND c.validation_state='quarantined'
+                   AND c.purged_at IS NULL AND c.review_until>to_timestamp(%s)""",
+                (source_id,now),
             ).fetchone()
             if not row or row["content"] != expected_content:
                 return False

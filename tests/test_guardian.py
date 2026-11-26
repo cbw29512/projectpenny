@@ -19,7 +19,7 @@ class GuardianTests(unittest.TestCase):
                         Capability.STAGE_MEMORY_MAINTENANCE,
                     )) or (actor is Actor.ADMIN and capability in (
                         Capability.APPROVE_BUSINESS_MEMORY, Capability.REVOKE_BUSINESS_MEMORY,
-                        Capability.REVIEW_MEMORY_MAINTENANCE,
+                        Capability.REVIEW_MEMORY_MAINTENANCE, Capability.PURGE_EXPIRED_MEMORY_DRAFTS,
                     ))
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 

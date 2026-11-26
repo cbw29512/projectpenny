@@ -22,6 +22,7 @@ class Capability(Enum):
     RECALL_BUSINESS_MEMORY = "recall_business_memory"
     STAGE_MEMORY_MAINTENANCE = "stage_memory_maintenance"
     REVIEW_MEMORY_MAINTENANCE = "review_memory_maintenance"
+    PURGE_EXPIRED_MEMORY_DRAFTS = "purge_expired_memory_drafts"
     NETWORK = "network"
     SHELL = "shell"
     SPEND = "spend"
@@ -33,4 +34,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.5"
+    policy_version: str = "guardian-v0.6"
