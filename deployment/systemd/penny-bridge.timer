@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule Penny outbound mailbox communication
+
+[Timer]
+OnBootSec=90s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Unit=penny-bridge.service
+
+[Install]
+WantedBy=timers.target

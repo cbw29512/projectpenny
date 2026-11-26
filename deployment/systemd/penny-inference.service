@@ -1,0 +1,13 @@
+[Unit]
+Description=Penny private bounded inference cycle
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/.local/share/penny/release
+ExecStart=%h/.local/share/penny/venv/bin/python -m penny.runtime inference --config %h/.config/penny/inference.json
+TimeoutStartSec=120
+TimeoutStopSec=10
+KillMode=control-group
+NoNewPrivileges=true
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1
