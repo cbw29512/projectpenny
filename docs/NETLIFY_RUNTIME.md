@@ -23,3 +23,12 @@ scoped role provisioning, provider edge/credit gates, real TLS validation,
 admin MFA adapter and function configuration remain prerequisites.
 Member auth is operator-issued beta tokens, not a public signup or session
 issuer. Admin routes remain disabled. No new expenditure.
+
+## Admin composition candidate
+Independent production-only PENNY_ADMIN_ENABLED gate and explicit admin
+connection with role distinct from member and bridge. Reuses checked-client
+principal validation, TLS options, persistent admin limiter and existing
+admin routines. Requires an injected trusted provider verifier; missing
+verifier fails closed. No actual MFA provider or login implemented. No
+function entrypoint, driver installation, provisioning or deployment.
+Five synthetic Node tests exercise composition and failure boundaries.
