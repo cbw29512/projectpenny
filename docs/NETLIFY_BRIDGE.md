@@ -90,3 +90,6 @@ verified credit consumption and zero-subscription launch gate.
 
 ## Admission defense in depth
 Local rolling budgets are defined in [ADMISSION_SECURITY.md](ADMISSION_SECURITY.md). Cloud request and polling limits must independently reject abuse before database and inference work. A member quota or global quota rejection must not be retried in a tight loop.
+
+## SQL foundation
+See [cloud mailbox core](CLOUD_MAILBOX.md) for the closed-by-default independent SQL schema and operations. HTTP routes, credentials and local reconciliation remain pending.
