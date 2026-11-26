@@ -25,7 +25,7 @@ test("all poster themes exist and the read-only catalog has a separate wall art 
   assert.equal(new Set(POSTERS.map(p=>p.phrase)).size,30);
   for(const p of POSTERS) {
     const svg=readFileSync(new URL("../../website/assets/scene/posters/"+p.id+".svg",import.meta.url),"utf8");
-    assert.ok(svg.includes(p.title));
+    assert.ok(svg.includes(p.title.replaceAll("&","&amp;")), p.id+" title");
     for(const line of p.lines) assert.ok(svg.includes(line.replaceAll("&","&amp;")));
     assert.doesNotMatch(svg,/<script|<foreignObject|href=/i);
   }
