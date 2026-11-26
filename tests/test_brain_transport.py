@@ -29,6 +29,9 @@ class TransportTests(unittest.TestCase):
         self.assertNotIn("tools",request)
         self.assertFalse(request["stream"])
         self.assertEqual(request["model"],"qwen3:14b")
+        self.assertEqual(request["keep_alive"], -1)
+        self.assertFalse(request["think"])
+        self.assertEqual(request["options"], {"num_ctx": 8192, "num_predict": 512})
         connection.return_value.close.assert_called_once()
 
     @patch("penny.brain.transport.http.client.HTTPConnection")

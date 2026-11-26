@@ -22,7 +22,7 @@ def exchange(request: object) -> str:
             {"role": "system", "content": identity.SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
-        "stream": False, "think": False, "keep_alive": "5m",
+        "stream": False, "think": False, "keep_alive": -1,
         "options": {"num_ctx": 8192, "num_predict": 512},
     }).encode("utf-8")
     # http.client performs no automatic redirects or environment proxy routing.
