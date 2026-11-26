@@ -16,6 +16,7 @@ class GuardianTests(unittest.TestCase):
                     allowed = (actor is Actor.WORKER and capability in (
                         Capability.GENERATE_DRAFT, Capability.STORE_DRAFT,
                         Capability.STAGE_MEMORY_CANDIDATE, Capability.RECALL_BUSINESS_MEMORY,
+                        Capability.STAGE_MEMORY_MAINTENANCE,
                     )) or (actor is Actor.ADMIN and capability in (
                         Capability.APPROVE_BUSINESS_MEMORY, Capability.REVOKE_BUSINESS_MEMORY,
                     ))

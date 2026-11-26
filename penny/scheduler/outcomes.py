@@ -2,6 +2,7 @@
 from uuid import UUID
 
 from penny.memory.intake import stage_from_review
+from penny.memory.maintenance import stage_maintenance
 
 from .storage_db import locked
 
@@ -42,6 +43,7 @@ def complete(dsn: str, task_id: UUID, fence: UUID, *, success: bool, result: str
         if success:
             # Candidate and its fenced source outcome commit together or not at all.
             stage_from_review(conn, row, result)
+            stage_maintenance(conn, row, result, now)
         return True
 
 

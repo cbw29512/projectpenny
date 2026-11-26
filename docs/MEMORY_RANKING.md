@@ -25,6 +25,6 @@ Audit failures roll back and stop worker execution through its existing boundary
 ## Limitations
 English lexical matching may miss synonyms, multilingual text and implicit context;
 pool and limits are provisional. Duplicate suppression is recall-time only.
-No autonomous correction or semantic contradiction detection yet. Audit records
+Quarantined correction/consolidation proposals are supported via [maintenance](MEMORY_MAINTENANCE.md); no verified contradiction detection or automatic application. Audit records
 allowed retrievals, not denied attempts, and does not prove inference completion.
 No automatic public access, trusted approval or production deployment.
