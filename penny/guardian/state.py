@@ -35,6 +35,7 @@ class Capability(Enum):
     NETWORK = "network"
     SHELL = "shell"
     RECORD_VAULT_ENTRY = "record_vault_entry"
+    RECONCILE_VAULT = "reconcile_vault"
     SPEND = "spend"
     CHANGE_IDENTITY = "change_identity"
     CHANGE_ENTITLEMENT = "change_entitlement"
@@ -44,4 +45,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.13"
+    policy_version: str = "guardian-v0.14"

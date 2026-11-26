@@ -23,6 +23,7 @@ class GuardianTests(unittest.TestCase):
                         Capability.REVIEW_MEMORY_MAINTENANCE, Capability.PURGE_EXPIRED_MEMORY_DRAFTS,
                         Capability.ISSUE_MEMBER_SESSION, Capability.VERIFY_CONTRIBUTION,
                         Capability.APPROVE_BRIDGE_REPLY, Capability.RECORD_VAULT_ENTRY,
+                        Capability.RECONCILE_VAULT,
                     ))
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
