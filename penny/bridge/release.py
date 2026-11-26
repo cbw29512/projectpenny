@@ -35,6 +35,7 @@ def _live(conn,question_id,now):
         JOIN task_outcome o ON o.task_id=t.id AND o.status='succeeded'
         LEFT JOIN bridge_release a ON a.question_id=r.question_id
         WHERE r.question_id=%s AND r.acked_at IS NOT NULL AND r.expires_at>%s
+          AND r.remote_rejected_at IS NULL
         FOR UPDATE OF r,m,t,o""",(question_id,now)
     ).fetchone()
 
