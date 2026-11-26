@@ -112,6 +112,20 @@ approved add/remove/move/equip affects only intended slots; replay cannot
 duplicate objects; invalid or unapproved transitions cannot alter the world;
 offline state and dream mode cannot rewrite persistent state.
 
+## Installed website baseline (provisional artwork)
+
+The public development preview now composes three fixed same-viewBox SVGs
+(room, Penny, foreground desk) in HTML/CSS with no model-controlled URL,
+HTML, coordinate or style input. The original drawing is preserved exactly
+in the same painter order. SHA-256 pins and scene markup regression tests
+guard accidental changes; the pins themselves require trusted review and
+are not a substitute for protected branches or deployment access control.
+This is not final Maker-approved artwork or a persistent inventory engine.
+The worker has no website mutation capability in Guardian; actual production
+filesystem permissions, credentials and branch protection require verification.
+Future state rendering must use allowlisted IDs/slots and keep this baseline
+independent of model output. No production deployment is authorized.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;
