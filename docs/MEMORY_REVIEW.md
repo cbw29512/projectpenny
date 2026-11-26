@@ -22,11 +22,11 @@ Independent reviewer assesses evidence and exact candidate -> trusted adapter
 authenticates reviewer -> Guardian explicit approve permission -> transaction
 checks source outcome and exact candidate content -> approved snapshot + event.
 A later revocation inserts a separate event. Recall requires live internal task
-ID and fence, unpaused scheduler and Guardian permission; at most 3 complete
+ID and fence, explicit internal memory-informed task key, unpaused scheduler and Guardian permission; at most 3 complete
 records and 1500 content characters. No member task can use this recall path.
 
 ## Boundaries and limitations
-Apply migrations 001–003 in order. These Python entry points are internal, not
+Apply migrations 001–004 in order. These Python entry points are internal, not
 authenticated HTTP endpoints. The caller must be an authenticated, isolated
 administrator adapter; UUID arguments alone are not authentication. The model
 has no adapter or DB credentials. Production role separation and append-only

@@ -5,6 +5,9 @@ from uuid import UUID
 MAX_RETENTION_SECONDS = 365 * 86400
 MAX_RECALL_RECORDS = 3
 MAX_RECALL_CHARS = 1500
+MAX_SEARCH_TERMS = 32
+MAX_RANKED_CANDIDATES = 24
+RECALL_RANK_VERSION = "english-lexical-v1"
 
 
 @dataclass(frozen=True, slots=True)
