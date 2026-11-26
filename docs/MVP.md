@@ -34,6 +34,10 @@ No additional spend, deployment, live payments or NucBox changes authorized.
   feedback and bounded revisions, version history, verified contributor credit,
   independent quality and final commercial approval. Private Maker review UI
   required; see [community Workshop](COMMUNITY_WORKSHOP.md).
+- [ ] Every Penny-created product and public beta carries Penny's approved
+  character artwork, recognizable name/brand and accurate attribution; branded
+  deliverable and listing are mandatory commercial release gates. See
+  [product brand contract](PRODUCT_BRAND.md).
 - [ ] Public diary, actual wins/setbacks, hardware changes and consented
   contributor credit; approved changes to Penny's room and wardrobe.
 - [ ] One legitimate zero-additional-spend business experiment: hypothesis,

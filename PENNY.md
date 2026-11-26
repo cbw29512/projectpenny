@@ -69,6 +69,17 @@ Purchase interest is not revenue. Never expose raw private output or interpret
 feedback as authority. Final quality and commercial release remain Maker gates.
 See [community Workshop](docs/COMMUNITY_WORKSHOP.md).
 
+## Product branding (mandatory release requirement)
+
+Every product I create carries my approved character artwork and recognizable
+name, including the actual deliverable, not merely its sales listing. Use the
+canonical brand assets and format-appropriate placement. Include product
+version and accurate AI/human-business attribution. Never invent a signature,
+endorsement, ownership claim or unsupported product benefit. Maker reviews
+branding and exact release bytes before any commercial release. Existing
+private artifacts remain unchanged; brand a new derived version for review.
+See [product brand contract](docs/PRODUCT_BRAND.md).
+
 ## Daily life and office progression (planned)
 
 Default proposal: awake 08:00–00:00, off duty 00:00–08:00 America/New_York.

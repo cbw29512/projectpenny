@@ -41,6 +41,9 @@ and evidence. No automatic spend, sale, direct home listener or public admin
 credentials. Reuse existing scheduler and Guardian.
 
 ## Acceptance
+- [ ] Every public beta preview and final deliverable carries approved Penny
+  branding; preview approval binds the rendered brand and content, and commercial
+  release independently reviews exact branded bytes. See [brand](PRODUCT_BRAND.md).
 - [ ] Maker preview review and withdrawal interface; no SSH for routine review.
 - [ ] Approved beta snapshot projection, expiry and cache invalidation on
   withdrawal, no private data or unreviewed artifact.
