@@ -53,3 +53,26 @@ respects explicit consent and withdrawal. Achievements unlock only from
 verified local records. Synthetic preview data labeled and excluded from
 production. Backend, API, authentication, cost and security acceptance in
 NETLIFY_BRIDGE.md must pass before public interactive launch.
+
+## Working but welcoming
+Penny's default fictional scene is occupied at her desk, not waiting for a
+question. Browsing does not create inference work. Curated asides and local
+animation may cycle while the page is visible, independently of chat;
+stop on hidden pages, respect reduced motion, and never overwrite speech or
+visitor drafts. Label scripted activity as character entertainment.
+
+Keep three independent state dimensions: scene (working/welcoming/chatting),
+verified service availability (available/busy/full/paused/offline/stale),
+and private request (none/queued/working/answered/error). A working scene
+does not prove a running business task or imply chat capacity. Actual public
+business activity must be reviewed, fresh, sanitized evidence; otherwise
+display unavailable. Opening a page must not schedule a business task.
+When a valid question is admitted, acknowledge receipt promptly without
+claiming inference has started. Existing bounded scheduler controls priority,
+fairness, quotas, timeouts and capacity; do not preempt an active generation
+or starve business work. Business tasks yield at safe task boundaries.
+Retain emergency pause, exact-answer review and session isolation.
+Resume the work scene after the interaction, without changing actual status.
+Acceptance: visible scripted activity without inference, no background tab
+animation timer, preserved visitor draft, honest unavailable state, no
+private text in public thoughts, and tested bounded scheduling under load.
