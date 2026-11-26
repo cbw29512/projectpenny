@@ -27,6 +27,8 @@ test("home uses a fixed ordered local scene, not model-selected artwork", () => 
   // must still match the original pin after removing only those exact additions.
   const baseline = scenes[0].split("\n")
     .filter(line => !line.includes("data-world-layer=")
+      && line !== "            <img id=\"daily-shirt-art\" hidden src=\"/assets/scene/shirts/shirt-teal-slogan-v1.svg\" width=\"460\" height=\"310\" alt=\"\">"
+      && line !== "            <img id=\"daily-mug-art\" hidden src=\"/assets/scene/mugs/mug-localhost-v1.svg\" width=\"100\" height=\"100\" alt=\"\">"
       && line !== "            <canvas id=\"office-sky\" width=\"412\" height=\"304\" hidden aria-hidden=\"true\"></canvas>"
       && line !== "            <img id=\"daily-poster-frame\" data-daily-poster-frame hidden src=\"/assets/scene/posters/poster-persistence-v1.svg\" width=\"212\" height=\"122\" alt=\"\">").join("\n")
     .replace(' data-world-base="true"', "");

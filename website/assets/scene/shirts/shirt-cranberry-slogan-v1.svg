@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310">
+  <!-- Provisional vector character; identity art is not yet approved. -->
+  <path d="M165 163q-14-70 7-97 23-32 60-31 40-1 61 30 20 31 6 99l-17 35H181Z" fill="#974c36"/>
+  <path d="M187 180q-32 8-43 34l-10 40h192l-10-40q-11-27-43-34Z" fill="#a33454"/>
+  <path d="M212 158h38v38q-18 15-38 0Z" fill="#d99c82"/>
+  <ellipse cx="230" cy="115" rx="54" ry="61" fill="#f1c3a7"/>
+  <path d="M176 104q-8-60 46-69 65-13 69 61-38-5-71-39-14 33-44 47Z" fill="#b76143"/>
+  <path d="M177 105q-4 40 14 63l-17-4-12-44Z" fill="#b76143"/>
+  <ellipse cx="205" cy="116" rx="7" ry="10" fill="#253848"/>
+  <ellipse cx="256" cy="116" rx="7" ry="10" fill="#253848"/>
+  <circle cx="207" cy="113" r="2" fill="white"/>
+  <circle cx="258" cy="113" r="2" fill="white"/>
+  <path d="M195 100q9-6 18-1m35 0q9-6 18 0" fill="none" stroke="#744c3e" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="192" cy="135" rx="10" ry="5" fill="#db967e"/>
+  <ellipse cx="269" cy="135" rx="10" ry="5" fill="#db967e"/>
+  <path d="M216 144q15 14 31-3" fill="none" stroke="#9d514d" stroke-width="4" stroke-linecap="round"/>
+  <path d="M209 191l21 18 23-18" fill="none" stroke="#d1ece0" stroke-width="4"/>
+  <circle cx="231" cy="225" r="7" fill="#e2bc78"/>
+  <g id="daily-shirt-print">
+    <text x="230" y="218" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="5.5" fill="#ffffff">CTRL + ALT</text>
+    <text x="230" y="225" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="5.5" fill="#ffffff">+ COFFEE</text>
+  </g>
+</svg>

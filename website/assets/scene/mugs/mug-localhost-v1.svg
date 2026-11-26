@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M76 30H85Q98 30 95 48Q94 63 76 63" stroke="#526268" stroke-width="12" fill="none"/>
+  <path d="M76 30H85Q98 30 95 48Q94 63 76 63" stroke="#e7e4d9" stroke-width="7" fill="none"/>
+  <rect x="6" y="8" width="76" height="85" rx="9" fill="#e7e4d9" stroke="#526268" stroke-width="3"/>
+  <text x="44" y="35" text-anchor="middle" font-family="monospace" font-size="8" fill="#243b45">There is no</text>
+  <text x="44" y="45" text-anchor="middle" font-family="monospace" font-size="8" fill="#243b45">place like</text>
+  <text x="44" y="55" text-anchor="middle" font-family="monospace" font-size="8" fill="#243b45">127.0.0.1</text>
+  <text x="44" y="82" text-anchor="middle" font-size="5" fill="#243b45">PROJECT PENNY</text>
+</svg>

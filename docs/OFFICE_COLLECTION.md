@@ -104,8 +104,20 @@ used in the enlarged inspector and one fixed wall frame. Collection v3 adds
 posterId without rewriting v2 shirt/mug history. The date preview is
 explicitly not live. The reviewed snapshot consumer accepts exact known IDs
 and refuses rollback or same-date replacement in the current page. Live
-server delivery, durable daily review, shirt/mug scene art, permanent
-achievement wall and activity overlays remain pending. No sales or spending.
+server delivery, durable daily review, permanent achievement wall and
+activity overlays remain pending. Daily shirt and mug scene art is installed. No sales or spending.
+
+## Daily shirt and mug scene integration
+
+Fourteen fixed full-character shirt variants preserve all original identity
+geometry and change only garment color plus printed text. The desk remains
+in front, so slogans may be partly or fully obscured by the laptop; full
+phrases remain readable through the daily design links. A deliberate
+persistent equipped outfit takes precedence over the scheduled shirt.
+Six local mug variants share a small dedicated daily desk position rather
+than changing the persistent inventory. Date previews and reviewed snapshots
+use exactly the same allowlisted art. This is still provisional artwork;
+visual collision/readability review and authoritative delivery remain pending.
 
 ## Inspection and sales
 

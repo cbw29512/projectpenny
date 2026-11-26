@@ -29,16 +29,23 @@ test("review requires exact known designs and refuses same-date mutation or roll
 });
 test("poster frame switches registered local art; reviewed state cannot be overwritten by demo",()=>{
   const frame={hidden:true},links={shirt:{},mug:{},poster:{}},notice={};
-  const view=officePresenter(frame,links,notice);
+  const shirt={hidden:true},mug={hidden:true};
+  const view=officePresenter(frame,links,notice,shirt,mug);
   assert.equal(view.preview(date(0)),true);
   assert.equal(frame.hidden,false);
+  assert.equal(shirt.hidden,false);
+  assert.equal(mug.hidden,false);
+  assert.equal(shirt.src,"/assets/scene/shirts/"+row(0).shirtId+".svg");
+  assert.equal(mug.src,"/assets/scene/mugs/"+row(0).mugId+".svg");
   assert.equal(frame.src,"/assets/scene/posters/"+row(0).posterId+".svg");
   assert.match(notice.textContent,/not live/);
   assert.equal(links.poster.textContent,describeOffice(row(0)).poster.phrase);
   assert.equal(view.review(snapshot(row(1))),true);
-  const current=frame.src;
+  const current=frame.src, currentShirt=shirt.src,currentMug=mug.src;
   assert.equal(view.preview(date(2)),false);
   assert.equal(view.review(snapshot(row(0))),false);
   assert.equal(frame.src,current);
+  assert.equal(shirt.src,currentShirt);
+  assert.equal(mug.src,currentMug);
   assert.match(notice.textContent,/Update unavailable/);
 });
