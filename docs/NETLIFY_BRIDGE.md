@@ -96,3 +96,6 @@ See [cloud mailbox core](CLOUD_MAILBOX.md) for the closed-by-default independent
 
 ## HTTP core
 See [authenticated gateway core](GATEWAY_CORE.md). Routes are implemented as an isolated Node handler, not deployed Netlify functions. Production adapters and distributed throttling remain prerequisites.
+
+## Private transport
+See [outbound bridge transport](BRIDGE_TRANSPORT.md). Typed client implemented but not running; local durable admission and approved outbox remain prerequisites.
