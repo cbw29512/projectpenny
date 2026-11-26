@@ -41,3 +41,18 @@ security, evidence and Maker review gates cannot be bypassed. Treat nonsense
 as defer/reject, retain humorous legitimate ideas. No keyword list is proof
 of safety. Voting and consented contributor recognition follow verified
 outcomes via existing recognition contracts. Never expose raw rejected text.
+
+## First private hourly planner slice
+Migration 032 adds an immutable UTC-hour decision record. A trusted operator
+calls plan_hour with explicit confirmation and reviewer identity. Under the
+existing scheduler transaction lock, replay the same slot, check pause and
+inference gates, skip any live queue work, and select only an already
+Maker-approved and started digital-product experiment with no prior workshop
+task. Reuse workshop admission and its quotas/deadline. Commit the decision
+and queued task together; one decision per hour, even when skipped. Failed
+transactions leave no slot record and may be retried. Prior prototypes,
+including invalid outputs, require independent review, not automatic retries.
+This is a private adapter, not a timer, public board or general-purpose agent.
+No software utility implementation, new ideas, spending, publication, approval,
+measurement or external actions. Runtime permissions and timer deployment
+remain separate acceptance gates.
