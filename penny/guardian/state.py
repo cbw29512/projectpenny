@@ -44,6 +44,8 @@ class Capability(Enum):
     STAGE_BUSINESS_DRAFT = "stage_business_draft"
     REQUEST_WORKSHOP = "request_workshop"
     STAGE_WORKSHOP = "stage_workshop"
+    REVIEW_PRODUCT_CATALOG = "review_product_catalog"
+    ATTRIBUTE_PRODUCT_FINANCE = "attribute_product_finance"
     SPEND = "spend"
     CHANGE_IDENTITY = "change_identity"
     CHANGE_ENTITLEMENT = "change_entitlement"
@@ -53,4 +55,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.19"
+    policy_version: str = "guardian-v0.20"

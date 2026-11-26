@@ -26,6 +26,7 @@ class GuardianTests(unittest.TestCase):
                         Capability.RECONCILE_VAULT, Capability.REVIEW_SPEND_REQUEST,
                         Capability.REVIEW_VAULT_BUDGET, Capability.RESERVE_VAULT_FUNDS,
                         Capability.REVIEW_BUSINESS_EXPERIMENT, Capability.REQUEST_BUSINESS_DRAFT, Capability.REQUEST_WORKSHOP,
+                        Capability.REVIEW_PRODUCT_CATALOG, Capability.ATTRIBUTE_PRODUCT_FINANCE,
                     ))
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
