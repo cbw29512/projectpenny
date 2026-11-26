@@ -215,9 +215,28 @@ an admission or claim gate. The browser consumes only a fresh reviewed
 rest snapshot with a closed gate, no active work and exact 08:00 wake time
 before showing off-duty status and countdown or charging an already-owned
 Bit. Invalid/expired evidence clears the sleep claim rather than falsely
-continuing it. No operational rest producer or scheduler integration is
-installed yet. No deployment, actual monitor control or dream inference.
+continuing it. The opt-in operational gate and private projection are
+implemented below; public transport is not installed. No deployment,
+actual monitor control or dream inference.
 The artwork is provisional and requires visual review.
+
+## Installed opt-in operational rest gate
+
+Migration 039 adds a durable disabled-by-default rest flag and append-only
+operator review. The private SSH CLI rest-policy enable/disable --confirm
+changes only that flag. All new task admission, claim and inference-cycle
+entry and hourly planning use the same restriction under the scheduler
+transaction lock and database clock. Existing running fences are never
+canceled by bedtime; completed results still use the existing lease and
+fence checks. At wake the time restriction lifts without modifying manual
+pause, disabled runtime, uncertainty, entitlements or recovery state.
+Bridge stops new remote leases while resting but permits existing
+acknowledgement/reply/rejection housekeeping. New local questions are refused
+rather than silently queuing across deadlines. Existing idempotent replays
+remain readable. The private rest projection emits fresh short-lived status
+and wake time only from the locked actual state. No website transport is
+installed. Deployment, migration application, enablement, role grants
+and end-to-end validation remain separate gates.
 
 ## Acceptance before activation
 

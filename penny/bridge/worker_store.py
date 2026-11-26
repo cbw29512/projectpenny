@@ -6,6 +6,7 @@ import psycopg
 
 from penny.guardian.policy import identity_matches
 from penny.scheduler.storage_db import locked, expire_waiting
+from penny.scheduler.rest_gate import rest_closed
 from .worker_state import Action
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,9 @@ def reserve_action(dsn):
                ORDER BY r.admitted_at,r.question_id LIMIT 1""",(now,)
         ).fetchone()
         if row is None:
-            return Action("claim"),INTERVAL
+            # Do not lease new remote questions during rest. Existing replies
+            # and rejection/ack housekeeping may still complete.
+            return Action("paused" if rest_closed(control,now) else "claim"),INTERVAL
         if not row["enabled"] or not row["mapped"]:
             return Action("waiting"),INTERVAL
         if row["state"] in ("failed","expired","canceled"):

@@ -5,6 +5,7 @@ from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
 from penny.memory.review import _valid_id
 from penny.scheduler.storage_db import locked
+from penny.scheduler.rest_gate import rest_closed
 from .store import LATEST
 from .workshop_admission import _submit_locked
 from .workshop_state import PREFIX
@@ -34,6 +35,8 @@ def plan_hour(dsn, *, reviewer_id, confirmed=False):
                 outcome = "paused"
             elif not gate or not gate["enabled"] or gate["uncertain"]:
                 outcome = "blocked"
+            elif rest_closed(control,now):
+                outcome = "paused"  # Existing stable outcome; no extra task.
             elif conn.execute(
                 """SELECT 1 FROM work_task WHERE state='running'
                    OR (state='queued' AND deadline>%s) LIMIT 1""", (now,)

@@ -1,6 +1,7 @@
 """Private operational status; no model inference or conversation disclosure."""
 from penny.guardian.policy import identity_matches
 from penny.scheduler.storage_db import locked
+from penny.progress.rest import candidate_locked
 
 
 def status(dsn):
@@ -16,6 +17,8 @@ def status(dsn):
         return {
             "identity_valid":identity_matches(),
             "scheduler_paused":control["paused"],
+            "rest_enabled":control["rest_enabled"],
+            "rest":candidate_locked(conn,control,now),
             "inference_enabled":inference["enabled"],
             "inference_uncertain":inference["uncertain"],
             "inference_last_result":inference["last_result"],

@@ -11,6 +11,7 @@ from .admit import BRIDGE_PREFIX, submit_locked
 from .policy import next_task
 from .storage_db import expire_waiting, locked, snapshot, tier_for
 from .storage_state import Claim, Receipt
+from .rest_gate import rest_closed
 
 
 class TaskStore:
@@ -40,6 +41,8 @@ class TaskStore:
     def claim(self) -> Claim | None:
         with locked(self.dsn) as (conn, control, now):
             expire_waiting(conn, now)
+            if rest_closed(control, now):
+                return None
             # Changed entitlements cannot silently enter another reserved class.
             rows = conn.execute(
                 "SELECT id,member_id,tier_snapshot FROM work_task WHERE state='queued'"

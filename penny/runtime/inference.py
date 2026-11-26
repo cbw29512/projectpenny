@@ -6,6 +6,7 @@ import psycopg
 from penny.guardian.policy import identity_matches
 from penny.scheduler.storage_db import locked
 from penny.scheduler.storage import TaskStore
+from penny.scheduler.rest_gate import rest_closed
 from penny.scheduler.worker import run_once, WorkerResult
 
 logger = logging.getLogger(__name__)
@@ -30,6 +31,8 @@ def inference_tick(dsn, brain):
                 if conn.execute("SELECT 1 FROM work_task WHERE state='running'").fetchone():
                     conn.execute("UPDATE inference_runtime SET uncertain=true,last_result='interrupted' WHERE singleton")
                     return "blocked"
+                if rest_closed(control,now):
+                    return "paused"
                 conn.execute("""UPDATE inference_runtime SET uncertain=true,
                              last_started=%s,last_result='interrupted' WHERE singleton""",(now,))
             # Do not hold the scheduler transaction across model execution.

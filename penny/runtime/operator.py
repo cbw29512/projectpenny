@@ -7,6 +7,7 @@ from uuid import UUID
 from .config import load_config
 from .operator_status import status
 from .operator_control import stop,start,recover_inference,clear_bridge_block
+from penny.progress.rest import configure
 
 
 def main():
@@ -25,6 +26,9 @@ def main():
     recover.add_argument("--fence",type=UUID)
     clear=commands.add_parser("clear-bridge-block")
     clear.add_argument("--confirmed-reviewed",action="store_true")
+    rest=commands.add_parser("rest-policy")
+    rest.add_argument("mode",choices=("enable","disable"))
+    rest.add_argument("--confirm",action="store_true")
     args=parser.parse_args()
     try:
         dsn=load_config(args.config,"operator").dsn
@@ -38,6 +42,8 @@ def main():
         elif args.action=="recover-inference":
             ok=recover_inference(dsn,isolated=args.confirmed_isolated,
                                  task_id=args.task_id,fence=args.fence)
+        elif args.action=="rest-policy":
+            ok=configure(dsn,args.mode=="enable",confirmed=args.confirm)
         else:
             ok=clear_bridge_block(dsn,reviewed=args.confirmed_reviewed)
         print("Recorded." if ok else "Refused; inspect private runtime status.")

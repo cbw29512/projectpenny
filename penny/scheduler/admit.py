@@ -7,6 +7,7 @@ from .quotas import member_budget
 from .state import Admission, TaskSpec
 from .storage_db import expire_waiting, snapshot, tier_for
 from .storage_state import Receipt
+from .rest_gate import rest_closed
 
 BRIDGE_PREFIX = "bridge:"
 
@@ -26,6 +27,8 @@ def submit_locked(conn,control,now,member,key,payload,consent=None,*,deadline_ca
     if not identity_matches():
         return Receipt("identity_unavailable")
     expire_waiting(conn, now)
+    if rest_closed(control, now):
+        return Receipt("resting")
     tier = tier_for(conn, member, now)
     task_id = uuid4()
     deadline = now + (86400 if member is None else 3600)
