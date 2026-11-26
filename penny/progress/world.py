@@ -88,3 +88,16 @@ def record(dsn, *, source_ref, expected_revision, action, asset_id, slot,
     except Exception as exc:
         logger.error("World review refused (%s)", type(exc).__name__)
         raise
+
+
+def browser_candidate(dsn):
+    """Local review candidate only; do not automatically publish or export."""
+    try:
+        state = inspect(dsn)
+        if state is not None:
+            return {"schema": "penny-world-v1", "status": "reviewed_virtual_preview",
+                    "baseline": state["baseline"], "revision": state["revision"],
+                    "placements": state["placements"], "outfit": state["outfit"]}
+    except Exception as exc:
+        logger.error("World candidate unavailable (%s)", type(exc).__name__)
+    return {"schema": "penny-world-v1", "status": "unavailable"}

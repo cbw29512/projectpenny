@@ -141,6 +141,20 @@ design. No real equipment, milestone entitlement, purchase or public release
 authority is granted. Actual Maker authentication, asset approval, renderer
 and deployment permissions remain separate launch gates.
 
+## Installed provisional virtual scene renderer
+
+The local browser candidate exports only baseline, revision, placed virtual
+items and equipped outfit. Fixed HTML nodes and CSS slots render the candidate;
+no model-created URLs, HTML or styling. An alternate shirt color preserves
+every other character drawing element. Invalid or regressed snapshots leave
+the last accepted in-page scene visible with an unavailable notice. Reload
+requires the trusted snapshot to be supplied again; browser storage is not
+authority. The checked-in site has an unavailable snapshot, not fake ownership.
+Private projection is not an authorized public transport. The provisional
+plant, mug and plum shirt are development fixtures, not approved final assets.
+Actual Maker UI, reviewed snapshot delivery, cache/restore behavior across
+clients, real purchases and production authorization remain pending.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

@@ -9,9 +9,11 @@
   <link rel="stylesheet" href="/assets/base.css">
   <link rel="stylesheet" href="/assets/world.css">
   <link rel="stylesheet" href="/assets/scene/scene.css">
+  <link rel="stylesheet" href="/assets/scene/virtual-world.css">
   <link rel="stylesheet" href="/assets/progress.css">
   <link rel="stylesheet" href="/assets/board.css">
   <script type="module" src="/assets/home.mjs"></script>
+  <script type="module" src="/assets/scene/world-render.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
   <script type="module" src="/assets/timeline.mjs"></script>
   <script type="module" src="/assets/achievements.mjs"></script>
@@ -37,10 +39,18 @@
           <span class="room-label">THE FORGOTTEN OFFICE · CONCEPT</span>
           <div class="penny-scene" id="penny-scene" role="img" aria-label="Provisional illustration of Penny, a cartoon AI entrepreneur in her modest office" data-scene-version="preview-v1">
             <img src="/assets/scene/room-v1.svg" width="460" height="310" alt="">
-            <img src="/assets/scene/penny-v1.svg" width="460" height="310" alt="">
+            <img data-world-base="true" src="/assets/scene/penny-v1.svg" width="460" height="310" alt="">
+            <img data-world-layer="plum-outfit-v1" hidden src="/assets/scene/plum-outfit-v1.svg" width="460" height="310" alt="">
             <img src="/assets/scene/desk-v1.svg" width="460" height="310" alt="">
+            <img data-world-layer="plant-v1:left-shelf" hidden class="world-prop left-shelf" src="/assets/scene/plant-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="plant-v1:right-shelf" hidden class="world-prop right-shelf" src="/assets/scene/plant-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="plant-v1:desk-corner" hidden class="world-prop desk-corner" src="/assets/scene/plant-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="mug-v1:left-shelf" hidden class="world-prop left-shelf" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="mug-v1:right-shelf" hidden class="world-prop right-shelf" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="mug-v1:desk-corner" hidden class="world-prop desk-corner" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
           </div>
           <span class="room-caption">At her desk · fictional scene, not live work status</span>
+          <span id="world-notice" class="room-caption" role="status">Fixed concept scene · no reviewed world snapshot connected.</span>
         </div>
         <div class="dialogue">
           <div class="thought-bubble" aria-labelledby="thought-label">
@@ -187,5 +197,6 @@
   <script type="application/json" id="progress-snapshot">{"status":"unavailable","payload":null}</script>
   <script type="application/json" id="timeline-snapshot">{"schema":"penny-timeline-v1","status":"unavailable","events":[]}</script>
   <script type="application/json" id="achievement-snapshot">{"schema":"penny-achievements-v1","status":"unavailable","achievements":[]}</script>
+  <script type="application/json" id="world-snapshot">{"schema":"penny-world-v1","status":"unavailable"}</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ from unittest.mock import patch
 from uuid import uuid4
 
 from database_fixture import DSN, DatabaseFixture
-from penny.progress.world import inspect, record
+from penny.progress.world import browser_candidate, inspect, record
 from penny.progress.world_state import World, apply
 from penny.scheduler.storage_db import locked
 
@@ -74,3 +74,16 @@ class WorldTests(DatabaseFixture):
             with locked(self.dsn) as (conn, _, now):
                 conn.execute("DELETE FROM penny_world_event")
         self.assertEqual(inspect(self.dsn)["revision"], 1)
+
+
+    def test_browser_candidate_excludes_private_evidence_and_unplaced_items(self):
+        self.change(0, "acquire", "plant-v1")
+        self.assertEqual(browser_candidate(self.dsn)["placements"], {})
+        self.change(1, "place", "plant-v1", "left-shelf")
+        self.assertEqual(browser_candidate(self.dsn), {
+            "schema": "penny-world-v1", "status": "reviewed_virtual_preview",
+            "baseline": "preview-v1", "revision": 2,
+            "placements": {"plant-v1": "left-shelf"}, "outfit": None})
+        with patch("penny.brain.identity.SYSTEM_PROMPT", "changed"):
+            self.assertEqual(browser_candidate(self.dsn),
+                             {"schema": "penny-world-v1", "status": "unavailable"})

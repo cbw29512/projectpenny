@@ -1,0 +1,14 @@
+/* Only registered scene slots. No generated CSS or asset URLs. */
+.penny-scene { position: relative; }
+.room .penny-scene > [data-world-layer][hidden],
+.room .penny-scene > [data-world-base][hidden] { display: none !important; }
+.room .penny-scene > .world-prop {
+  position: absolute;
+  width: 8%;
+  height: auto;
+  max-width: none;
+  transform: translate(-50%, -100%);
+}
+.room .penny-scene > .left-shelf { left: 15.3%; top: 47.1%; }
+.room .penny-scene > .right-shelf { left: 81.8%; top: 59.0%; }
+.room .penny-scene > .desk-corner { left: 70.5%; top: 81.0%; }

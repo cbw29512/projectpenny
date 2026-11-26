@@ -23,7 +23,12 @@ test("home uses a fixed ordered local scene, not model-selected artwork", () => 
   const html = read("website/index.html").toString("utf8");
   const scenes = html.match(/<div class="penny-scene"[^>]*>[\s\S]*?<\/div>/g);
   assert.equal(scenes?.length, 1);
-  assert.equal(digest(scenes[0]), "a25c35b6701b1953abe0d134d230019f26acf986a15cc962553911ea4c2fd3a9");
+  // Additional static world layers are reviewed separately; canonical markup
+  // must still match the original pin after removing only those exact additions.
+  const baseline = scenes[0].split("\n")
+    .filter(line => !line.includes("data-world-layer=")).join("\n")
+    .replace(' data-world-base="true"', "");
+  assert.equal(digest(baseline), "a25c35b6701b1953abe0d134d230019f26acf986a15cc962553911ea4c2fd3a9");
   assert.match(html, /<link rel="stylesheet" href="\/assets\/scene\/scene\.css">/);
 });
 
