@@ -93,8 +93,8 @@ class MemoryIntegrationTests(DatabaseFixture):
         claim = self.store.claim()
         with psycopg.connect(self.dsn) as conn:
             # Simulate a failed write without dropping foreign-key dependencies.
-            conn.execute("""CREATE FUNCTION reject_candidate() RETURNS trigger LANGUAGE plpgsql AS $
-                            BEGIN RAISE EXCEPTION 'test write failure'; END; $""")
+            conn.execute("""CREATE FUNCTION reject_candidate() RETURNS trigger LANGUAGE plpgsql AS $candidate_test$
+                            BEGIN RAISE EXCEPTION 'test write failure'; END; $candidate_test$""")
             conn.execute("""CREATE TRIGGER reject_candidate BEFORE INSERT ON memory_candidate
                             FOR EACH ROW EXECUTE FUNCTION reject_candidate()""")
         with self.assertRaises(psycopg.Error):
