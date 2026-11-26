@@ -35,15 +35,16 @@ function boot() {
     if (timer !== null) window.clearTimeout(timer);
     timer = null;
   };
+  const canRotate = () => Boolean(thought && pause && !motion.matches && !paused && !document.hidden && pageActive);
   const syncRotation = () => {
     stopRotation();
     if (!thought || !pause) return;
     pause.textContent = paused ? "Resume rotating thoughts" : "Pause rotating thoughts";
-    if (motion.matches || paused || document.hidden || !pageActive) return;
+    if (!canRotate()) return;
     timer = window.setTimeout(() => {
       timer = null;
       try {
-        if (document.hidden || paused || motion.matches || !pageActive) return;
+        if (!canRotate()) return;
         rotateAside();
         syncRotation();
       } catch {
@@ -79,7 +80,7 @@ function boot() {
       const state = previewQuestion(question.value);
       render(state);
       // A scripted character reaction, never an answer or fake AI progress.
-      if (state.canPreview && thought && !paused) {
+      if (state.canPreview && canRotate()) {
         rotateAside();
         syncRotation();
       }
