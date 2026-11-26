@@ -17,9 +17,8 @@ must be explicitly scheduled later; full database closes admission, not
 unbounded growth. Disable member prevents new admission, reads and answers.
 Pause prevents new questions/claims, allows in-flight completion.
  
-Implementation: netlify/mailbox/001–003 SQL, tested against disposable
-PostgreSQL in CI. SQL routines use invoker privileges and revoke PUBLIC
-execution. They are NOT deployed routes, a complete authorization system, or
+Implementation: netlify/mailbox/001–004 SQL, tested against disposable
+PostgreSQL in CI. Migration 004 pins routine search paths, uses narrow SECURITY DEFINER entrypoints and revokes PUBLIC execution. They are NOT deployed routes, a complete authorization system, or
 a replacement for Netlify edge protection. Production must use a dedicated
 schema, fixed search path, scoped server roles with no direct DML where
 possible, audited role grants, authenticated member mapping and bridge
@@ -30,3 +29,6 @@ polling or costs. Actual Netlify runtime integration and compatibility,
 account quotas, private local mapping, outbox and recovery reconciliation,
 full retention, and independent response release review remain pending.
 Tests use synthetic evidence; no real members. No DDoS immunity claims.
+
+## Scoped database access
+Install in a dedicated schema owned by a non-login, non-privileged role. Preprovision three separate restricted runtime roles; use operator-only netlify/security/roles.py to grant only member submit/read, bridge claim/ack/answer/reject, or maintenance purge. No direct table access or schema CREATE. Test actual role permissions and temp-object shadowing in disposable PostgreSQL. Role creation, owner setup, provider support for distinct connections/roles, default grants and effective privilege audit are launch gates. The member service still trusts an authenticated owner argument from its server adapter; a stolen member-service credential can impersonate owners, so it must never be exposed to browsers. The bridge can submit answers for live fenced claims; local response authorization remains required. No live Netlify deployment.
