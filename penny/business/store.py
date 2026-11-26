@@ -24,13 +24,40 @@ def _text(s,limit):
         ord(c)<32 or 0xD800<=ord(c)<=0xDFFF for c in s)
 
 
+PROMOTED_PREFIX="draft:"
+
+
+def stage_locked(conn,now,key,source_ref,fields,values,review_until,policy_version):
+    """Internal helper; caller holds scheduler lock and has validated inputs."""
+    old=conn.execute("SELECT * FROM business_opportunity WHERE source_ref=%s",
+                     (source_ref,)).fetchone()
+    if old:
+        if tuple(old[k] for k in fields)!=values:
+            raise ValueError("conflicting opportunity")
+        return JournalReceipt(old["id"],True)
+    if not now<review_until<=now+MAX_REVIEW:
+        raise ValueError("invalid review deadline")
+    count=conn.execute("SELECT count(*) AS n FROM ("+LATEST+""") AS x
+        WHERE action='started' OR
+        ((action IS NULL OR action='approved') AND review_until>%s)""",(now,)).fetchone()["n"]
+    if count>=MAX_OPEN:
+        return None
+    conn.execute("""INSERT INTO business_opportunity
+        (id,source_ref,category,title,hypothesis,metric,target,duration_seconds,
+         additional_cash_cents,evidence_ref,evidence_sha256,evidence_size,
+         reviewer_id,review_until,created_at,policy_version)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+        (key,source_ref,*values,now,policy_version))
+    return JournalReceipt(key)
+
+
 def stage(dsn,*,source_ref,category,title,hypothesis,metric,target,duration_seconds,
           additional_cash_cents,evidence_ref,evidence,reviewer_id,review_until):
     try:
         decision=authorize(Actor.ADMIN,Capability.REVIEW_BUSINESS_EXPERIMENT)
         if not decision.allowed:
             return None
-        if (not _valid_ref(source_ref) or not _valid_ref(evidence_ref)
+        if (not _valid_ref(source_ref) or source_ref.startswith(PROMOTED_PREFIX) or not _valid_ref(evidence_ref)
                 or not _valid_id(reviewer_id) or type(category) is not Category
                 or type(metric) is not Metric or not _text(title,120)
                 or not _text(hypothesis,1000)
@@ -47,26 +74,7 @@ def stage(dsn,*,source_ref,category,title,hypothesis,metric,target,duration_seco
         values=(category.value,title,hypothesis,metric.value,target,duration_seconds,0,
                 evidence_ref,mark.digest,mark.byte_count,reviewer_id,review_until)
         with locked(dsn) as (conn,_,now):
-            old=conn.execute("SELECT * FROM business_opportunity WHERE source_ref=%s",
-                             (source_ref,)).fetchone()
-            if old:
-                if tuple(old[k] for k in fields)!=values:
-                    raise ValueError("conflicting opportunity")
-                return JournalReceipt(old["id"],True)
-            if not now<review_until<=now+MAX_REVIEW:
-                raise ValueError("invalid review deadline")
-            count=conn.execute("SELECT count(*) AS n FROM ("+LATEST+""") AS x
-                WHERE action='started' OR
-                ((action IS NULL OR action='approved') AND review_until>%s)""",(now,)).fetchone()["n"]
-            if count>=MAX_OPEN:
-                return None
-            conn.execute("""INSERT INTO business_opportunity
-                (id,source_ref,category,title,hypothesis,metric,target,duration_seconds,
-                 additional_cash_cents,evidence_ref,evidence_sha256,evidence_size,
-                 reviewer_id,review_until,created_at,policy_version)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (key,source_ref,*values,now,decision.policy_version))
-            return JournalReceipt(key)
+            return stage_locked(conn,now,key,source_ref,fields,values,review_until,decision.policy_version)
     except Exception as exc:
         logger.error("Business proposal refused (%s)",type(exc).__name__)
         raise

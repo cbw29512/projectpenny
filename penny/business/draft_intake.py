@@ -43,9 +43,11 @@ def draft_status(dsn,task_id):
             return None
         with locked(dsn) as (conn,_,now):
             row=conn.execute("""SELECT t.state,t.deadline,c.category,c.title,c.hypothesis,
-                c.metric,c.target,c.duration_seconds,c.additional_cash_cents,c.result_sha256
+                c.metric,c.target,c.duration_seconds,c.additional_cash_cents,c.result_sha256,
+                p.opportunity_id
                 FROM business_draft_task d JOIN work_task t ON t.id=d.task_id
                 LEFT JOIN business_draft_candidate c ON c.task_id=d.task_id
+                LEFT JOIN business_draft_promotion p ON p.task_id=d.task_id
                 WHERE d.task_id=%s AND t.member_id IS NULL""",(task_id,)).fetchone()
             if row is None:
                 return None
@@ -58,7 +60,10 @@ def draft_status(dsn,task_id):
             if state=="quarantined":
                 candidate={k:row[k] for k in ("category","title","hypothesis","metric","target",
                     "duration_seconds","additional_cash_cents","result_sha256")}
-            return {"status":state,"candidate":candidate,"authorized_cents":0}
+            result={"status":state,"candidate":candidate,"authorized_cents":0}
+            if row["opportunity_id"] is not None:
+                result.update(status="promoted",opportunity_id=row["opportunity_id"])
+            return result
     except Exception as exc:
         logger.error("Business draft status unavailable (%s)",type(exc).__name__)
         raise
