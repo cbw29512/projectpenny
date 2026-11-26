@@ -1,3 +1,4 @@
+import {runtimeFingerprint} from "./config-pin.mjs";
 // Candidate function composition; not in the deployed functions directory.
 import {loadRuntime} from "./config.mjs";
 import {createScopedQuery} from "./scoped-query.mjs";
@@ -8,12 +9,14 @@ import {createLimiter} from "../gateway/limiter.mjs";
 import {reply} from "../gateway/response.mjs";
 
 export function createRuntimeHandler({env,Pool}) {
-  let handler;
+  let handler, pinnedConfig;
   return async request=>{
     try {
+      const c=loadRuntime(env);
+      if(c===null) return reply(503,{status:"paused"},60);
+      const fingerprint=runtimeFingerprint(c);
+      if(handler && fingerprint!==pinnedConfig) throw new Error("runtime configuration changed");
       if(!handler) {
-        const c=loadRuntime(env);
-        if(c===null) return reply(503,{status:"paused"},60);
         if(typeof Pool!=="function") throw new Error("database driver unavailable");
         const options=scope=>({connectionString:c.urls[scope],
           ssl:{rejectUnauthorized:true},max:1,
@@ -27,6 +30,7 @@ export function createRuntimeHandler({env,Pool}) {
         handler=createGateway({origin:c.origin,enabled:true,
           verify:createVerifier(c),repository:createRepository(queries),
           limiter:createLimiter(queries)});
+        pinnedConfig=fingerprint;
       }
       return await handler(request);
     } catch {

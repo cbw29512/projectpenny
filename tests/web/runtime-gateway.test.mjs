@@ -66,3 +66,30 @@ test("candidate runtime composes auth, limiter and query on member pool",async()
   assert.equal(calls.length,4);assert.ok(calls.every(c=>c.role==="penny_member"));
   assert.equal(calls[1].a[0],id);
 });
+
+test("warm gateway rechecks pause and rejects configuration drift",async()=>{
+  let calls=0;
+  class Pool {
+    on(){}
+    constructor(){calls++;}
+    async connect(){return {release(){},query:async(s)=>{
+      calls++;
+      if(s.includes("current_user"))return {rows:[{role:"penny_member",login:"penny_member",unsafe:false}]};
+      if(s.includes("allow_member"))return {rows:[{ok:true}]};
+      return {rows:[{status:"accepted",question_id:id,replayed:false}]};
+    }};}
+  }
+  const config={...env};
+  const handler=createRuntimeHandler({env:config,Pool});
+  assert.equal((await handler(request())).status,202);
+  const before=calls;
+  config.PENNY_GATEWAY_ENABLED="false";
+  assert.equal((await handler(request())).status,503);
+  config.PENNY_GATEWAY_ENABLED="true";
+  config.PENNY_MEMBER_KEY_HEX="ef".repeat(32);
+  assert.equal((await handler(request())).status,503);
+  config.PENNY_MEMBER_KEY_HEX=key;
+  config.CONTEXT="deploy-preview";
+  assert.equal((await handler(request())).status,503);
+  assert.equal(calls,before);
+});

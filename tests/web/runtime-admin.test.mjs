@@ -64,3 +64,14 @@ test("stale MFA cannot reach database",async()=>{
   assert.equal((await handler(req())).status,401);
   assert.equal(calls.length,1);
 });
+
+test("warm admin refuses changed connection configuration",async()=>{
+  const {Pool,calls}=fixture();
+  const config=env();
+  const handler=createAdminRuntime({env:config,Pool,verifyAdmin,now:()=>1000});
+  assert.equal((await handler(req())).status,200);
+  const before=calls.length;
+  config.PENNY_ADMIN_DB_URL="postgresql://admin_scope:rotated@db.example/penny";
+  assert.equal((await handler(req())).status,503);
+  assert.equal(calls.length,before);
+});

@@ -1,3 +1,4 @@
+import {runtimeFingerprint} from "./config-pin.mjs";
 // Candidate only: provider-specific verified MFA adapter must be supplied.
 import {loadAdminRuntime} from "./admin-config.mjs";
 import {createScopedQuery} from "./scoped-query.mjs";
@@ -7,12 +8,14 @@ import {createAdminLimiter} from "../admin/limiter.mjs";
 import {reply} from "../gateway/response.mjs";
 
 export function createAdminRuntime({env,Pool,verifyAdmin,now}) {
-  let handler;
+  let handler, pinnedConfig;
   return async request=>{
     try {
       // Recheck the opt-in on every request, including warm instances.
       const c=loadAdminRuntime(env);
       if(c===null) return reply(503,{status:"paused"},60);
+      const fingerprint=runtimeFingerprint(c);
+      if(handler && fingerprint!==pinnedConfig) throw new Error("runtime configuration changed");
       if(typeof Pool!=="function" || typeof verifyAdmin!=="function")
         throw new Error("admin dependencies unavailable");
       if(!handler) {
@@ -23,6 +26,7 @@ export function createAdminRuntime({env,Pool,verifyAdmin,now}) {
         const query=createScopedQuery(pool,c.role);
         handler=createAdminGateway({origin:c.origin,enabled:true,verifyAdmin,now,
           repository:createAdminRepository(query),limiter:createAdminLimiter(query)});
+        pinnedConfig=fingerprint;
       }
       return await handler(request);
     } catch {

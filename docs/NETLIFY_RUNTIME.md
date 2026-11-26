@@ -32,3 +32,13 @@ admin routines. Requires an injected trusted provider verifier; missing
 verifier fails closed. No actual MFA provider or login implemented. No
 function entrypoint, driver installation, provisioning or deployment.
 Five synthetic Node tests exercise composition and failure boundaries.
+
+## Warm instance configuration safety
+Both runtime candidates revalidate production context and opt-in on every
+request. A warm handler pins a digest of its validated configuration;
+changed credentials, roles or origin fail closed rather than silently
+using the previous pool or verifier. Restart the process with approved
+configuration to rotate credentials. This is not a distributed kill
+switch: provider environment updates may require redeployment and
+already-running requests are not canceled. Persistent database admission
+pause remains independent. No configuration digest or secret is logged.
