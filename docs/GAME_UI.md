@@ -62,6 +62,15 @@ placement is persistent; the fixed daily frame, shirt and mug rotate as
 presentation only. The achievement wall is separate.
 See [office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
 
+## Window and time
+
+A locally calculated decorative Eastern Time sky overlays only the existing
+glass pane. It uses fixed fictional coordinates, approximate solar/lunar
+positions and a conservative horizon gate, with no location permission.
+Label the device-clock-derived time and sky as calculated scenery, not live
+weather or verified work. Pause updates in hidden tabs. Separate trusted
+server time and verified rest/work state remain required for operational gates.
+
 ## Interaction and state
 Home uses cached public snapshot; chat uses owner-bound private API. Anonymous
 visitors can browse without LLM calls. Signed-in member submits text and sees

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/assets/base.css">
   <link rel="stylesheet" href="/assets/world.css">
   <link rel="stylesheet" href="/assets/scene/scene.css">
+  <link rel="stylesheet" href="/assets/scene/office-sky.css">
   <link rel="stylesheet" href="/assets/scene/office-collection.css">
   <link rel="stylesheet" href="/assets/scene/virtual-world.css">
   <link rel="stylesheet" href="/assets/progress.css">
@@ -17,6 +18,7 @@
   <script type="module" src="/assets/scene/world-render.mjs"></script>
   <script type="module" src="/assets/scene/office-collection-render.mjs"></script>
   <script type="module" src="/assets/scene/daily-office-render.mjs"></script>
+  <script type="module" src="/assets/scene/office-sky-render.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
   <script type="module" src="/assets/timeline.mjs"></script>
   <script type="module" src="/assets/achievements.mjs"></script>
@@ -42,6 +44,7 @@
           <span class="room-label">THE FORGOTTEN OFFICE · CONCEPT</span>
           <div class="penny-scene" id="penny-scene" role="img" aria-label="Provisional illustration of Penny, a cartoon AI entrepreneur in her modest office" data-scene-version="preview-v1">
             <img src="/assets/scene/room-v1.svg" width="460" height="310" alt="">
+            <canvas id="office-sky" width="412" height="304" hidden aria-hidden="true"></canvas>
             <img id="daily-poster-frame" data-daily-poster-frame hidden src="/assets/scene/posters/poster-persistence-v1.svg" width="212" height="122" alt="">
             <img data-world-base="true" src="/assets/scene/penny-v1.svg" width="460" height="310" alt="">
             <img data-world-layer="plum-outfit-v1" hidden src="/assets/scene/plum-outfit-v1.svg" width="460" height="310" alt="">
@@ -54,6 +57,7 @@
             <img data-world-layer="mug-v1:desk-corner" hidden class="world-prop desk-corner" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
           </div>
           <span class="room-caption">At her desk · fictional scene, not live work status</span>
+          <span class="room-caption" id="office-sky-caption">Calculated Eastern Time sky unavailable.</span>
           <a class="room-caption" href="#office-collection">Explore Penny's Office Collection</a>
           <section class="daily-office-preview" aria-label="Daily style preview">
             <p id="daily-office-status" role="status">Daily style unavailable — choose a date to preview concepts.</p>

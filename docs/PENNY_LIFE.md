@@ -175,6 +175,27 @@ Use fixed wall slots and local versioned poster designs, with accessible
 inspection and optional future merchandise links. See
 [office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
 
+## Calculated window scenery (development)
+
+The existing glass pane has a local canvas overlay, with unchanged frame,
+room, character and furniture. Fixed fictional coordinates 35 N, 80 W
+and America/New_York are development choices, not the Maker or visitor's
+location. The display uses the device UTC clock for decorative calculation
+only, including DST-aware Eastern date/time, solar altitude, approximate
+lunar illumination, waxing/waning phase, and an approximate topocentric
+horizon gate. It does not use weather, GPS, a camera or model inference.
+Stars and projected sky positions are stylized; the model is not a precise
+ephemeris and may differ near rise/set. The moon disk is hidden below
+the conservative altitude threshold or near new moon. Updates once per
+minute while visible; hidden tabs stop work. An invalid clock hides the
+overlay and preserves the original static window. Server-authoritative
+time, independent ephemeris cross-checks, seasonal landscape and room
+lighting, physical wall clock/calendar and verified rest lighting remain
+pending. Decorative time cannot grant task, wardrobe or rest authority.
+
+References: [Schlyter's orbital formulas](https://stjarnhimlen.se/comp/ppcomp.html)
+and [NOAA solar calculation details](https://gml.noaa.gov/grad/solcalc/calcdetails.html).
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

@@ -1,0 +1,7 @@
+/* Overlay only the existing glass pane, leaving frame and room untouched. */
+.room .penny-scene > #office-sky {
+  position:absolute; left:8.695652%; top:11.290323%; width:22.391304%;
+  height:auto; max-width:none; pointer-events:none; border-radius:2px;
+}
+.room .penny-scene > #office-sky[hidden] { display:none !important; }
+#office-sky-caption { font-size:.75rem; overflow-wrap:anywhere; }
