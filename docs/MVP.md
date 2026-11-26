@@ -24,6 +24,9 @@ No additional spend, deployment, live payments or NucBox changes authorized.
   reactor). Thresholds unlock eligibility, not spending. Verified receipts,
   refunds, actual affordability and Maker approval govern purchase; evidence
   and redacted photographs distinguish fulfillment from unlock.
+- [ ] Public Command Center: hourly bounded task selection, reviewed work-board
+  projection, actual daily standup and community suggestion intake. See
+  [community work board contract](COMMUNITY_BOARD.md). No separate scheduler.
 - [ ] Public diary, actual wins/setbacks, hardware changes and consented
   contributor credit; approved changes to Penny's room and wardrobe.
 - [ ] One legitimate zero-additional-spend business experiment: hypothesis,

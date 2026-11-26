@@ -25,6 +25,8 @@ _ALLOWED = frozenset({
     (Actor.MEMBER, Capability.WITHDRAW_MEMORY_CONSENT),
     (Actor.ADMIN, Capability.ISSUE_MEMBER_SESSION),
     (Actor.WORKER, Capability.RECALL_MEMBER_MEMORY),
+    (Actor.MEMBER, Capability.SUBMIT_SUGGESTION),
+    (Actor.ADMIN, Capability.REVIEW_SUGGESTION),
     (Actor.ADMIN, Capability.VERIFY_CONTRIBUTION),
     (Actor.ADMIN, Capability.RECORD_VAULT_ENTRY),
     (Actor.ADMIN, Capability.RECONCILE_VAULT),
@@ -85,6 +87,10 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(True, "nonbinding_request_review_only")
         if capability in (Capability.RECORD_VAULT_ENTRY, Capability.RECONCILE_VAULT):
             return Decision(True, "administrator_evidence_accounting_only")
+        if capability is Capability.SUBMIT_SUGGESTION:
+            return Decision(True, "authenticated_private_suggestion_only")
+        if capability is Capability.REVIEW_SUGGESTION:
+            return Decision(True, "private_suggestion_review_only")
         if capability is Capability.VERIFY_CONTRIBUTION:
             return Decision(True, "administrator_evidence_review_only")
         if capability is Capability.MANAGE_OWN_RECOGNITION:

@@ -21,7 +21,7 @@ class GuardianTests(unittest.TestCase):
                     )) or (actor is Actor.ADMIN and capability in (
                         Capability.APPROVE_BUSINESS_MEMORY, Capability.REVOKE_BUSINESS_MEMORY,
                         Capability.REVIEW_MEMORY_MAINTENANCE, Capability.PURGE_EXPIRED_MEMORY_DRAFTS,
-                        Capability.ISSUE_MEMBER_SESSION, Capability.VERIFY_CONTRIBUTION,
+                        Capability.ISSUE_MEMBER_SESSION, Capability.VERIFY_CONTRIBUTION, Capability.REVIEW_SUGGESTION,
                         Capability.APPROVE_BRIDGE_REPLY, Capability.RECORD_VAULT_ENTRY,
                         Capability.RECONCILE_VAULT, Capability.REVIEW_SPEND_REQUEST,
                         Capability.REVIEW_VAULT_BUDGET, Capability.RESERVE_VAULT_FUNDS,
@@ -31,7 +31,7 @@ class GuardianTests(unittest.TestCase):
                     ))
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
-                        Capability.MANAGE_OWN_RECOGNITION, Capability.WITHDRAW_RECOGNITION,
+                        Capability.MANAGE_OWN_RECOGNITION, Capability.WITHDRAW_RECOGNITION, Capability.SUBMIT_SUGGESTION,
                     ))
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 

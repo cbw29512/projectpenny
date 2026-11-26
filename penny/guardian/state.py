@@ -29,6 +29,8 @@ class Capability(Enum):
     WITHDRAW_MEMORY_CONSENT = "withdraw_memory_consent"
     ISSUE_MEMBER_SESSION = "issue_member_session"
     RECALL_MEMBER_MEMORY = "recall_member_memory"
+    SUBMIT_SUGGESTION = "submit_suggestion"
+    REVIEW_SUGGESTION = "review_suggestion"
     VERIFY_CONTRIBUTION = "verify_contribution"
     MANAGE_OWN_RECOGNITION = "manage_own_recognition"
     WITHDRAW_RECOGNITION = "withdraw_recognition"
@@ -56,4 +58,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.21"
+    policy_version: str = "guardian-v0.22"
