@@ -2,6 +2,7 @@
 from uuid import UUID, uuid4
 
 from penny.memory.task import INFORMED_PREFIX
+from penny.business.draft_state import DRAFT_PREFIX
 from penny.auth.member_scope import member_scope
 from penny.memory.member_consent import active_consent
 
@@ -24,7 +25,7 @@ class TaskStore:
             or (_session_token is not None and member is not None)
             or (member is not None and not isinstance(member, UUID))
             or not isinstance(key, str) or not 1 <= len(key) <= 128
-            or key.startswith(BRIDGE_PREFIX)
+            or key.startswith((BRIDGE_PREFIX,DRAFT_PREFIX))
             or not isinstance(payload, str) or not 1 <= len(payload) <= 2000
             or not key.strip() or not payload.strip() or "\x00" in key or "\x00" in payload
         ):

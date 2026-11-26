@@ -2,6 +2,7 @@
 from uuid import UUID
 
 from penny.memory.intake import stage_from_review
+from penny.business.draft_intake import stage_from_draft
 from penny.memory.maintenance import stage_maintenance
 from penny.memory.member_recall import snapshot_valid
 
@@ -49,6 +50,7 @@ def complete(dsn: str, task_id: UUID, fence: UUID, *, success: bool, result: str
             # Candidate and its fenced source outcome commit together or not at all.
             stage_from_review(conn, row, result)
             stage_maintenance(conn, row, result, now)
+            stage_from_draft(conn,row,result)
         return True
 
 

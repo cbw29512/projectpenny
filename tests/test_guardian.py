@@ -14,7 +14,7 @@ class GuardianTests(unittest.TestCase):
             for capability in Capability:
                 with self.subTest(actor=actor, capability=capability):
                     allowed = (actor is Actor.WORKER and capability in (
-                        Capability.GENERATE_DRAFT, Capability.STORE_DRAFT,
+                        Capability.GENERATE_DRAFT, Capability.STORE_DRAFT, Capability.STAGE_BUSINESS_DRAFT,
                         Capability.READ_APPROVED_BRIDGE_REPLY,
                         Capability.STAGE_MEMORY_CANDIDATE, Capability.RECALL_BUSINESS_MEMORY,
                         Capability.STAGE_MEMORY_MAINTENANCE, Capability.RECALL_MEMBER_MEMORY,
@@ -25,7 +25,7 @@ class GuardianTests(unittest.TestCase):
                         Capability.APPROVE_BRIDGE_REPLY, Capability.RECORD_VAULT_ENTRY,
                         Capability.RECONCILE_VAULT, Capability.REVIEW_SPEND_REQUEST,
                         Capability.REVIEW_VAULT_BUDGET, Capability.RESERVE_VAULT_FUNDS,
-                        Capability.REVIEW_BUSINESS_EXPERIMENT,
+                        Capability.REVIEW_BUSINESS_EXPERIMENT, Capability.REQUEST_BUSINESS_DRAFT,
                     ))
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
