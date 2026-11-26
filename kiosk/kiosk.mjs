@@ -2,6 +2,7 @@
 const set = (id, value) => { document.getElementById(id).textContent = value; };
 const stamp = value => new Date(value * 1000).toLocaleString();
 import { reaction, expressions } from "./emotion.mjs";
+import { validSnapshot } from "./state.mjs";
 function showReaction(s) {
   const {emotion, comment} = reaction(s);
   const [brows, mouth] = expressions[emotion];
@@ -56,7 +57,9 @@ async function poll() {
   try {
     const response = await fetch("/api/state", {cache:"no-store", signal:AbortSignal.timeout(5000)});
     if (!response.ok) throw new Error("state unavailable");
-    render(await response.json());
+    const state = await response.json();
+    if (!validSnapshot(state, Math.floor(Date.now()/1000))) throw new Error("stale or invalid state");
+    render(state);
   } catch {
     document.body.dataset.offline = "true";
     set("health", "OFFLINE / STALE");
