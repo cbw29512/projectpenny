@@ -51,3 +51,17 @@
 .poster-concept.optimism { background:#805477; color:#fff3e9; }
 .poster-concept.ambition { background:#34496b; color:#f6e6c6; }
 .poster-concept.mission { background:#292e34; color:#e8c773; }
+
+/* Daily wall art occupies the original chart frame only. */
+.room .penny-scene > [data-daily-poster-frame] {
+  position:absolute; left:69.347826%; top:8.709677%; width:23.043478%;
+  height:auto; max-width:none;
+}
+.room .penny-scene > [data-daily-poster-frame][hidden] { display:none !important; }
+.poster-print-preview { display:block; width:100%; max-width:320px; height:auto; margin:.75rem auto; }
+.daily-office-preview { width:100%; max-width:460px; font-size:.85rem; }
+.daily-office-preview dl { margin:.5rem 0; }
+.daily-office-preview dt { font-weight:700; }
+.daily-office-preview dd { margin:0 0 .4rem; }
+.daily-office-preview label { display:block; }
+.daily-office-preview input, .daily-office-preview button { min-height:44px; max-width:100%; }

@@ -57,8 +57,9 @@ The permanent office should support inspectable posters, mugs, clothing,
 decorations and equipment in fixed slots. Show a consistent background
 and deliberate, recorded changes. Use separately controlled local-time
 lighting and clock, verified work status and reduced-motion-safe ambient
-animation. No synthetic activity or daily furniture resets. Poster
-placement is persistent; daily shirt/mug rotation is presentation only.
+animation. No synthetic activity or daily furniture resets. Permanent poster
+placement is persistent; the fixed daily frame, shirt and mug rotate as
+presentation only. The achievement wall is separate.
 See [office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
 
 ## Interaction and state

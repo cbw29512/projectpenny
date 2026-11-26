@@ -16,6 +16,7 @@
   <script type="module" src="/assets/home.mjs"></script>
   <script type="module" src="/assets/scene/world-render.mjs"></script>
   <script type="module" src="/assets/scene/office-collection-render.mjs"></script>
+  <script type="module" src="/assets/scene/daily-office-render.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
   <script type="module" src="/assets/timeline.mjs"></script>
   <script type="module" src="/assets/achievements.mjs"></script>
@@ -41,6 +42,7 @@
           <span class="room-label">THE FORGOTTEN OFFICE · CONCEPT</span>
           <div class="penny-scene" id="penny-scene" role="img" aria-label="Provisional illustration of Penny, a cartoon AI entrepreneur in her modest office" data-scene-version="preview-v1">
             <img src="/assets/scene/room-v1.svg" width="460" height="310" alt="">
+            <img id="daily-poster-frame" data-daily-poster-frame hidden src="/assets/scene/posters/poster-persistence-v1.svg" width="212" height="122" alt="">
             <img data-world-base="true" src="/assets/scene/penny-v1.svg" width="460" height="310" alt="">
             <img data-world-layer="plum-outfit-v1" hidden src="/assets/scene/plum-outfit-v1.svg" width="460" height="310" alt="">
             <img src="/assets/scene/desk-v1.svg" width="460" height="310" alt="">
@@ -53,6 +55,17 @@
           </div>
           <span class="room-caption">At her desk · fictional scene, not live work status</span>
           <a class="room-caption" href="#office-collection">Explore Penny's Office Collection</a>
+          <section class="daily-office-preview" aria-label="Daily style preview">
+            <p id="daily-office-status" role="status">Daily style unavailable — choose a date to preview concepts.</p>
+            <dl>
+              <dt>Shirt of the Day</dt><dd><a id="daily-shirt-link" href="#collection-shirts">Browse shirts</a></dd>
+              <dt>Mug of the Day</dt><dd><a id="daily-mug-link" href="#collection-mugs">Browse mugs</a></dd>
+              <dt>Poster of the Day</dt><dd><a id="daily-poster-link" href="#collection-posters">Browse posters</a></dd>
+            </dl>
+            <label for="daily-office-date">Preview date (Eastern calendar)</label>
+            <input id="daily-office-date" type="date" min="2000-01-01" max="2099-12-31">
+            <button id="daily-office-preview" type="button">Preview date</button>
+          </section>
           <span id="world-notice" class="room-caption" role="status">Fixed concept scene · no reviewed world snapshot connected.</span>
         </div>
         <div class="dialogue">
@@ -89,7 +102,7 @@
       <div id="collection-mugs" class="collection-grid"></div>
       <h3>Fourteen daily slogan shirt concepts</h3>
       <div id="collection-shirts" class="collection-grid"></div>
-      <h3>Motivational poster concepts</h3>
+      <h3>Thirty motivational poster concepts</h3>
       <div id="collection-posters" class="collection-grid"></div>
       <noscript><p>Enable JavaScript to inspect the design concepts. No purchases are available.</p></noscript>
     </section>
@@ -214,5 +227,6 @@
   <script type="application/json" id="timeline-snapshot">{"schema":"penny-timeline-v1","status":"unavailable","events":[]}</script>
   <script type="application/json" id="achievement-snapshot">{"schema":"penny-achievements-v1","status":"unavailable","achievements":[]}</script>
   <script type="application/json" id="world-snapshot">{"schema":"penny-world-v1","status":"unavailable"}</script>
+  <script type="application/json" id="daily-office-snapshot">{"schema":"penny-daily-office-v1","status":"unavailable"}</script>
 </body>
 </html>

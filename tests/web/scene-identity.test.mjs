@@ -26,7 +26,8 @@ test("home uses a fixed ordered local scene, not model-selected artwork", () => 
   // Additional static world layers are reviewed separately; canonical markup
   // must still match the original pin after removing only those exact additions.
   const baseline = scenes[0].split("\n")
-    .filter(line => !line.includes("data-world-layer=")).join("\n")
+    .filter(line => !line.includes("data-world-layer=")
+      && line !== "            <img id=\"daily-poster-frame\" data-daily-poster-frame hidden src=\"/assets/scene/posters/poster-persistence-v1.svg\" width=\"212\" height=\"122\" alt=\"\">").join("\n")
     .replace(' data-world-base="true"', "");
   assert.equal(digest(baseline), "a25c35b6701b1953abe0d134d230019f26acf986a15cc962553911ea4c2fd3a9");
   assert.match(html, /<link rel="stylesheet" href="\/assets\/scene\/scene\.css">/);

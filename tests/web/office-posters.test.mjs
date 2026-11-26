@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 import { POSTERS } from "../../website/assets/scene/office-posters.mjs";
 import { MUGS, SHIRTS } from "../../website/assets/scene/office-collection.mjs";
 
-test("six immutable poster concepts have independent versioned IDs and literal text", () => {
-  assert.equal(POSTERS.length, 6);
+test("thirty immutable poster concepts have independent versioned IDs and literal text", () => {
+  assert.equal(POSTERS.length, 30);
   assert.ok(Object.isFrozen(POSTERS));
   const ids = [...POSTERS,...MUGS,...SHIRTS].map(p=>p.id);
   assert.equal(new Set(ids).size, ids.length);
@@ -22,7 +22,14 @@ test("all poster themes exist and the read-only catalog has a separate wall art 
   const html=readFileSync(new URL("../../website/index.html",import.meta.url),"utf8");
   for(const p of POSTERS) assert.ok(css.includes(".poster-concept."+p.theme+" {"));
   assert.ok(html.includes('id="collection-posters"'));
-  // No new scene geometry or implicit poster ownership in the canonical scene.
+  assert.equal(new Set(POSTERS.map(p=>p.phrase)).size,30);
+  for(const p of POSTERS) {
+    const svg=readFileSync(new URL("../../website/assets/scene/posters/"+p.id+".svg",import.meta.url),"utf8");
+    assert.ok(svg.includes(p.title));
+    for(const line of p.lines) assert.ok(svg.includes(line.replaceAll("&","&amp;")));
+    assert.doesNotMatch(svg,/<script|<foreignObject|href=/i);
+  }
   const scene=html.split('id="penny-scene"')[1].split("</div>")[0];
-  assert.ok(!scene.includes("poster-"));
+  assert.equal((scene.match(/data-daily-poster-frame/g)||[]).length,1);
+  assert.match(scene,/data-daily-poster-frame hidden/);
 });

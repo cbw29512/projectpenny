@@ -11,6 +11,7 @@ function boot() {
   const cards = MUGS.map(mug => {
     const details = document.createElement("details");
     details.dataset.designId = mug.id;
+    details.id = "design-"+mug.id;
     const summary = document.createElement("summary");
     summary.textContent = mug.phrase;
     const picture = document.createElement("div");
@@ -32,6 +33,7 @@ function boot() {
   const colors = SHIRTS.map(shirt => {
     const details = document.createElement("details");
     details.dataset.designId = shirt.id;
+    details.id = "design-"+shirt.id;
     const summary = document.createElement("summary");
     summary.textContent = shirt.name + " · " + shirt.phrase;
     const picture = document.createElement("div");
@@ -55,25 +57,16 @@ function boot() {
   const wallArt = POSTERS.map(poster => {
     const details = document.createElement("details");
     details.dataset.designId = poster.id;
+    details.id = "design-"+poster.id;
     const summary = document.createElement("summary");
     summary.textContent = poster.title + " · " + poster.phrase;
-    const picture = document.createElement("div");
-    picture.classList.add("poster-concept", poster.theme);
-    picture.setAttribute("aria-hidden", "true");
-    const symbol = document.createElement("span");
-    symbol.className = "poster-symbol";
-    symbol.textContent = poster.symbol;
-    const title = document.createElement("strong");
-    title.textContent = poster.title;
-    picture.append(symbol, title);
-    for (const line of poster.lines) {
-      const span = document.createElement("span");
-      span.textContent = line;
-      picture.append(span);
-    }
-    const credit = document.createElement("small");
-    credit.textContent = "PROJECT PENNY";
-    picture.append(credit);
+    const picture = document.createElement("img");
+    picture.className = "poster-print-preview";
+    picture.src = "/assets/scene/posters/"+poster.id+".svg";
+    picture.alt = "";
+    picture.loading = "lazy";
+    picture.width = 212;
+    picture.height = 122;
     const note = document.createElement("p");
     note.textContent = "Wall art concept only — not available for purchase.";
     details.append(summary, picture, note);

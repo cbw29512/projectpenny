@@ -165,8 +165,9 @@ is not an approved live daily snapshot or commerce integration.
 
 ## Living office continuity
 
-The room should feel occupied and evolve over time. Daily clothing and
-mugs are presentation only. Wall posters, plants, books, notes, furniture,
+The room should feel occupied and evolve over time. Daily clothing,
+mugs and one dedicated Poster of the Day frame are presentation only. Other
+wall posters, plants, books, notes, furniture,
 awards and equipment retain stable positions until an authorized change.
 Clock, light and verified monitor/activity state are independent ambient
 layers. Do not invent work, purchases, achievements or background changes.

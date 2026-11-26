@@ -10,8 +10,8 @@ The secure website-first launch and first digital-product cycle remain first.
    CSS, text, URLs or alteration of her face, hair, body or room.
 2. Reviewed durable virtual inventory and placement events. Achievement
    eligibility is not ownership or purchase authority.
-3. Daily presentation: approved shirt color and programmer-humor mug design
-   rotate without changing permanent inventory or furnishings. No new task,
+3. Daily presentation: approved shirt color, programmer-humor mug and a
+   motivational poster in one fixed frame rotate without changing permanent inventory or furnishings. No new task,
    model call, ledger transaction or purchase caused by browsing or rotation.
 
 Use stable versioned design IDs everywhere: scene, inspector, future
@@ -69,9 +69,11 @@ designs.
 
 ## Living office and motivational wall art
 
-Keep the office recognizably the same place. Add fixed framed wall slots
-above/behind Penny, with approved stable poster design IDs. Posters are
-persistent possessions, not a random daily background. Initial concepts:
+Keep the office recognizably the same place. One existing fixed wall frame
+is dedicated to the Poster of the Day. A separate achievement wall and
+other framed possessions stay persistent until reviewed world events.
+Thirty daily designs cycle continuously, independently of 14 shirts and six
+mugs: 210 unique full combinations before repetition. Initial six concepts:
 - poster-persistence-v1: PERSISTENCE — Failure is just a feature request.
 - poster-dream-big-v1: DREAM BIG — Start with available RAM.
 - poster-progress-v1: PROGRESS — One commit at a time.
@@ -83,8 +85,9 @@ The mission poster is aspirational, not a claim about actual cash.
 A verified financial progress panel remains separate. Poster inspection
 shows the full literal text; wall placement must not obscure the character.
 Poster art can eventually share its versioned design with physical listings.
-Use deliberate reviewed place/replace/remove events, retain the prior
-arrangement in history, and never redraw the underlying office.
+Use reviewed place/replace/remove events for permanent wall possessions;
+the daily frame uses the pinned DailyStyle record instead. Retain history
+and never redraw the underlying office.
 
 Other living-office details: fixed-position clock, window lighting by
 authoritative local time, monitor state based on verified activity, and
@@ -92,13 +95,17 @@ optional accessible ambient motion. Keep activity claims honest. A plant,
 book, sticky note, calendar, trophy, furniture or equipment upgrade stays
 until a reviewed world event changes it. Initial virtual starter items are
 not purchases; no automatic purchase or achievement claims.
-Shirts and mugs use the existing daily schedule, not persistent inventory
+Shirts, mugs and the daily poster use the existing daily schedule, not persistent inventory
 mutations. Holiday and special-event decorations are future date-scoped
 reviewed overlays, with the same underlying room after the event.
 
-The six poster previews are installed in the read-only collection catalog.
-Wall-slot placement, acquisition, scene rendering and activity overlays are
-future integration; no production art approval, sales or spending.
+All thirty poster designs are installed as local SVGs with the same artwork
+used in the enlarged inspector and one fixed wall frame. Collection v3 adds
+posterId without rewriting v2 shirt/mug history. The date preview is
+explicitly not live. The reviewed snapshot consumer accepts exact known IDs
+and refuses rollback or same-date replacement in the current page. Live
+server delivery, durable daily review, shirt/mug scene art, permanent
+achievement wall and activity overlays remain pending. No sales or spending.
 
 ## Inspection and sales
 
@@ -124,7 +131,7 @@ asset IDs, brand version, artwork digest, rights evidence, review state.
 MerchListing: design/version, provider SKU, exact approved print/listing
 digests, currency/price, supplier-cost evidence, seller, ledger owner,
 approval, state (unlisted/reviewed/active/withdrawn).
-DailyStyle: local date, zone, collection version, shirt/mug design IDs,
+DailyStyle: local date, zone, collection version, shirt/mug/poster design IDs,
 review/override reference; immutable selected day.
 CommunityDesignSuggestion: existing suggestion reference, optional design ID.
 
@@ -150,6 +157,6 @@ fixed design IDs, readable enlarged mug concepts and a proposed shirt
 palette. The deterministic date-selection helper is tested separately;
 it accepts an explicit valid calendar date and ordered eligible IDs.
 It does not establish trusted ownership, approval, or live day authority.
-The current scene and durable inventory are unchanged until the reviewed
-DailyStyle snapshot and approved scene assets are integrated. No storefront,
+The canonical room and durable inventory remain unchanged. The daily frame
+can be tested using a labeled date preview; the reviewed live feed is absent. No storefront,
 checkout or supplier integration is enabled.
