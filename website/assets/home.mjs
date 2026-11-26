@@ -1,4 +1,3 @@
-import { nextAside } from "./character-asides.mjs";
 import { MAX_QUESTION, PREVIEW_NOTICE, questionState, previewQuestion } from "./preview-state.mjs";
 
 function boot() {
@@ -18,72 +17,10 @@ function boot() {
     try { render(questionState(question.value)); }
     catch { send.disabled = true; notice.textContent = PREVIEW_NOTICE; }
   });
-  const thought = document.getElementById("thought");
-  const pause = document.getElementById("pause-asides");
-  let asideIndex = 0;
-  let timer = null;
-  let paused = false;
-  let pageActive = true;
-  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  // Scene animation is independent of the request and service state.
-  const rotateAside = () => {
-    const aside = nextAside(asideIndex);
-    asideIndex = aside.index;
-    thought.textContent = aside.text;
-  };
-  const stopRotation = () => {
-    if (timer !== null) window.clearTimeout(timer);
-    timer = null;
-  };
-  const canRotate = () => Boolean(thought && pause && !motion.matches && !paused && !document.hidden && pageActive);
-  const syncRotation = () => {
-    stopRotation();
-    if (!thought || !pause) return;
-    pause.textContent = paused ? "Resume rotating thoughts" : "Pause rotating thoughts";
-    if (!canRotate()) return;
-    timer = window.setTimeout(() => {
-      timer = null;
-      try {
-        if (!canRotate()) return;
-        rotateAside();
-        syncRotation();
-      } catch {
-        console.error("Penny thought rotation stopped.");
-        stopRotation();
-      }
-    }, 15000);
-  };
-  if (thought && pause) {
-    // Reduced-motion users get static dialogue; all others can pause it.
-    const applyMotion = () => {
-      pause.hidden = motion.matches;
-      syncRotation();
-    };
-    pause.addEventListener("click", () => {
-      paused = !paused;
-      syncRotation();
-    });
-    motion.addEventListener("change", applyMotion);
-    document.addEventListener("visibilitychange", syncRotation);
-    window.addEventListener("pagehide", () => {
-      pageActive = false;
-      stopRotation();
-    });
-    window.addEventListener("pageshow", () => {
-      pageActive = true;
-      syncRotation();
-    });
-    applyMotion();
-  }
   send.addEventListener("click", () => {
     try {
       const state = previewQuestion(question.value);
       render(state);
-      // A scripted character reaction, never an answer or fake AI progress.
-      if (state.canPreview && canRotate()) {
-        rotateAside();
-        syncRotation();
-      }
     } catch {
       console.error("Penny local preview failed.");
       send.disabled = true;

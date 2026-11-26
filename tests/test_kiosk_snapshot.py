@@ -49,3 +49,29 @@ class KioskSnapshotTests(DatabaseFixture):
         self.assertEqual(s["active"]["kind"],"internal task")
         self.assertNotIn("PRIVATE_PROMPT",str(s))
         self.assertNotIn("fence",s["active"])
+
+    def test_measured_experiment_is_distinct_from_task_success(self):
+        import time
+        from hashlib import sha256
+        from penny.business.store import stage
+        from penny.business.state import Category, Metric, Action
+        from penny.business.review import advance
+        reviewer = uuid4()
+        evidence = b"synthetic test observation"
+        q = stage(self.dsn, source_ref="kiosk-measurement", category=Category.DIGITAL_PRODUCT,
+                  title="Private checklist", hypothesis="Five checks", metric=Metric.PROTOTYPE_CHECKS_PASSED,
+                  target=5, duration_seconds=600, additional_cash_cents=0,
+                  evidence_ref="private:test", evidence=evidence,
+                  reviewer_id=reviewer, review_until=int(time.time())+3600).entry_id
+        args = dict(expected_proposal_sha256=sha256(evidence).hexdigest(),
+                    evidence_ref="private:test", evidence=evidence, reviewer_id=reviewer, confirmed=True)
+        self.assertIsNone(self.read()["latest_measurement"])
+        for action in (Action.APPROVE, Action.START):
+            self.assertTrue(advance(self.dsn,q,action=action,**args))
+        self.assertIsNone(self.read()["latest_measurement"])
+        self.assertTrue(advance(self.dsn,q,action=Action.MEASURE,observed_at=int(time.time()),
+                                measured_count=3,**args))
+        m = self.read()["latest_measurement"]
+        self.assertEqual((m["measured_count"],m["target"]),(3,5))
+        self.assertNotIn("evidence_ref",m)
+        self.assertNotIn("reviewer_id",m)

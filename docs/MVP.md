@@ -7,9 +7,9 @@ No additional spend, deployment, live payments or NucBox changes authorized.
 ## Launch sequence
 - [ ] Forgotten office scene: Penny is an ambitious AI whose modest hardware
   limits her capabilities; the Maker's abandonment/redemption story is disclosed fiction.
-- [ ] Separate visibly labeled thought cloud (fictional comedic aside) and
+- [ ] Separate visibly labeled thought cloud (evidence-based activity commentary) and
   speech bubble (visitor answer). Never expose internal reasoning. Idle and
-  processing lines are curated, free of inference, and never claim fake activity.
+  processing lines are grounded in observed state, free of inference, and never claim fake activity.
 - [ ] Accessible responsive character interface with real availability,
   private member chat, queue status, draft preservation and offline fallback.
 - [ ] Local Qwen3-14B benchmark; no public model API, tool access or home listener.
@@ -37,7 +37,11 @@ No additional spend, deployment, live payments or NucBox changes authorized.
   authorization before live launch. Social content is optional later.
 
 ## State and release rules
-Thought: curated or separately reviewed fictional aside, distinct from speech.
+Thought: evidence-based commentary on observed work, verified results and setbacks,
+distinct from speech. No invented progress, rotating fictional commentary or
+claims of learning without independent evidence review. Facial expressions are
+symbolic responses to actual operational state, not consciousness. Keep failed
+outcomes and missed targets; lessons require reviewed evidence.
 Speech: private draft -> exact-output review -> authorized delivery.
 Idle/queued/working/answered/error are UI states driven by actual service status;
 a demo must be labeled and must not send or store messages. No fabricated typing.

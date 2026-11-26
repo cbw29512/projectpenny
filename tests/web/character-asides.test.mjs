@@ -25,16 +25,16 @@ test("invalid aside state fails closed", () => {
   }
 });
 
-test("homepage labels fictional thought and speech separately", () => {
+test("homepage does not invent live thought or speech", () => {
   const html = readFileSync(new URL("../../website/index.html", import.meta.url), "utf8");
   const css = readFileSync(new URL("../../website/assets/world.css", import.meta.url), "utf8");
   const home = readFileSync(new URL("../../website/assets/home.mjs", import.meta.url), "utf8");
   assert.match(html, /class="thought-bubble" aria-labelledby="thought-label"/);
-  assert.match(html, /PENNY THINKS · SCRIPTED ASIDE/);
+  assert.match(html, /PENNY THINKS · VERIFIED ACTIVITY ONLY/);
   assert.match(html, /class="bubble" aria-labelledby="speech-label"/);
-  assert.match(html, /PENNY SAYS · SCRIPTED PREVIEW/);
+  assert.match(html, /PENNY SAYS · LIVE OUTPUT UNAVAILABLE/);
   assert.match(html, /not internal AI reasoning/);
   assert.match(css, /\.thought-bubble\s*\{[^}]*dashed/);
-  assert.match(home, /thought\.textContent = aside\.text/);
+  assert.doesNotMatch(home, /nextAside|rotateAside/);
   assert.doesNotMatch(home, /\bfetch\s*\(|\.innerHTML\s*=|localStorage|sessionStorage/);
 });
