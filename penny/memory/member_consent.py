@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
-from penny.scheduler.storage_db import locked
+from penny.auth.member_scope import member_scope
 from .member_state import CONSENT_VERSION, CONSENT_SECONDS, MemberConsent
 from .review import _valid_id
 
@@ -19,14 +19,14 @@ def active_consent(conn, member_id, now):
     ).fetchone()
 
 
-def opt_in(dsn, member_id, *, accepted_version):
+def opt_in(dsn, member_id, *, accepted_version, _session_token=None):
     """Explicit member action, never inferred from chat or payment."""
     try:
-        if not _valid_id(member_id) or accepted_version != CONSENT_VERSION:
+        if (_session_token is None and not _valid_id(member_id)) or accepted_version != CONSENT_VERSION:
             raise ValueError("invalid consent request")
         if not authorize(Actor.MEMBER,Capability.MANAGE_OWN_MEMORY).allowed:
             return None
-        with locked(dsn) as (conn,_,now):
+        with member_scope(dsn,member_id,_session_token) as (conn,_,now,member_id):
             active = active_consent(conn,member_id,now)
             if active:
                 return MemberConsent(active["epoch"],active["expires_at"])
@@ -48,14 +48,14 @@ def opt_in(dsn, member_id, *, accepted_version):
         raise
 
 
-def withdraw(dsn, member_id):
+def withdraw(dsn, member_id, *, _session_token=None):
     """Disable and remove live preference rows atomically, even after expiry."""
     try:
-        if not _valid_id(member_id):
+        if (_session_token is None and not _valid_id(member_id)):
             raise ValueError("invalid member")
         if not authorize(Actor.MEMBER,Capability.WITHDRAW_MEMORY_CONSENT).allowed:
             return False
-        with locked(dsn) as (conn,_,now):
+        with member_scope(dsn,member_id,_session_token) as (conn,_,now,member_id):
             row = conn.execute(
                 "SELECT epoch,policy_version,enabled FROM member_memory_consent WHERE member_id=%s",
                 (member_id,),

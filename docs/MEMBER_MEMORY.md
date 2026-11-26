@@ -18,13 +18,12 @@ Individual owner deletion and consent withdrawal are available even if identity
 integrity fails: privacy controls cannot depend on model availability.
 
 ## Limits
-This is an internal repository API, not authentication or a public endpoint.
-UUID alone cannot prove identity; never expose these methods to model or raw
-client arguments. Database roles/RLS, session authentication, consent UI and
-production isolation remain pending. No automatic extraction from conversations,
+The raw repository is internal-only. The token-only adapter is described in
+[MEMBER_SESSION.md](MEMBER_SESSION.md). Upstream identity verification, database
+roles/RLS, consent UI and production isolation remain pending. No automatic extraction from conversations,
 no model recall, public recognition or supporter-tier effects. Preference text
 is untrusted; sensitive data/credentials must not be admitted by the future UI,
 and content filtering is not yet implemented. No claim of complete erasure:
 expired rows are inaccessible but remain until withdrawal or renewal, and
 backups/WAL and other copies need their own retention process. No personal data
-was collected or migrated. Apply migrations 001–008 in order.
+was collected or migrated. Apply migrations 001–009 in order.

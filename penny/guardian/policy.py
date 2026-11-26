@@ -21,6 +21,7 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.PURGE_EXPIRED_MEMORY_DRAFTS),
     (Actor.MEMBER, Capability.MANAGE_OWN_MEMORY),
     (Actor.MEMBER, Capability.WITHDRAW_MEMORY_CONSENT),
+    (Actor.ADMIN, Capability.ISSUE_MEMBER_SESSION),
 })
 
 
@@ -46,6 +47,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability is Capability.ISSUE_MEMBER_SESSION:
+            return Decision(True, "trusted_identity_adapter_only")
         if capability is Capability.MANAGE_OWN_MEMORY:
             return Decision(True, "authenticated_owner_memory_only")
         if capability is Capability.PURGE_EXPIRED_MEMORY_DRAFTS:

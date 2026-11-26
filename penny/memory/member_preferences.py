@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
-from penny.scheduler.storage_db import locked
+from penny.auth.member_scope import member_scope
 from .member_consent import active_consent
 from .member_state import MAX_MEMBER_MEMORIES, MAX_PREFERENCE_CHARS, MemberPreference
 from .review import _valid_id
@@ -12,9 +12,9 @@ from .review import _valid_id
 logger = logging.getLogger(__name__)
 
 
-def save_preference(dsn, member_id, epoch, preference):
+def save_preference(dsn, member_id, epoch, preference, *, _session_token=None):
     try:
-        if not _valid_id(member_id) or not _valid_id(epoch):
+        if (_session_token is None and not _valid_id(member_id)) or not _valid_id(epoch):
             raise ValueError("invalid owner or consent epoch")
         if type(preference) is not str or not 1 <= len(preference.strip()) <= MAX_PREFERENCE_CHARS or "\x00" in preference:
             raise ValueError("invalid preference")
@@ -22,7 +22,7 @@ def save_preference(dsn, member_id, epoch, preference):
         preference.encode("utf-8")
         if not authorize(Actor.MEMBER,Capability.MANAGE_OWN_MEMORY).allowed:
             return None
-        with locked(dsn) as (conn,_,now):
+        with member_scope(dsn,member_id,_session_token) as (conn,_,now,member_id):
             consent = active_consent(conn,member_id,now)
             if not consent or consent["epoch"] != epoch:
                 return None
@@ -42,13 +42,13 @@ def save_preference(dsn, member_id, epoch, preference):
         raise
 
 
-def list_preferences(dsn, member_id):
+def list_preferences(dsn, member_id, *, _session_token=None):
     try:
-        if not _valid_id(member_id):
+        if (_session_token is None and not _valid_id(member_id)):
             raise ValueError("invalid owner")
         if not authorize(Actor.MEMBER,Capability.MANAGE_OWN_MEMORY).allowed:
             return ()
-        with locked(dsn) as (conn,_,now):
+        with member_scope(dsn,member_id,_session_token) as (conn,_,now,member_id):
             consent = active_consent(conn,member_id,now)
             if not consent:
                 return ()
@@ -63,14 +63,14 @@ def list_preferences(dsn, member_id):
         raise
 
 
-def delete_preference(dsn, member_id, memory_id):
+def delete_preference(dsn, member_id, memory_id, *, _session_token=None):
     """Owner deletion works without active consent or canonical identity."""
     try:
-        if not _valid_id(member_id) or not _valid_id(memory_id):
+        if (_session_token is None and not _valid_id(member_id)) or not _valid_id(memory_id):
             raise ValueError("invalid owner or memory ID")
         if not authorize(Actor.MEMBER,Capability.WITHDRAW_MEMORY_CONSENT).allowed:
             return False
-        with locked(dsn) as (conn,_,__):
+        with member_scope(dsn,member_id,_session_token) as (conn,_,__,member_id):
             return conn.execute("DELETE FROM member_memory WHERE member_id=%s AND id=%s RETURNING id",
                                 (member_id,memory_id)).fetchone() is not None
     except Exception as exc:
