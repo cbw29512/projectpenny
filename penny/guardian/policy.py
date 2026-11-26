@@ -17,6 +17,7 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.REVOKE_BUSINESS_MEMORY),
     (Actor.WORKER, Capability.RECALL_BUSINESS_MEMORY),
     (Actor.WORKER, Capability.STAGE_MEMORY_MAINTENANCE),
+    (Actor.ADMIN, Capability.REVIEW_MEMORY_MAINTENANCE),
 })
 
 
@@ -39,6 +40,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability is Capability.REVIEW_MEMORY_MAINTENANCE:
+            return Decision(True, "administrator_maintenance_review_only")
         if capability is Capability.STAGE_MEMORY_MAINTENANCE:
             return Decision(True, "quarantined_maintenance_only")
         if capability is Capability.STAGE_MEMORY_CANDIDATE:

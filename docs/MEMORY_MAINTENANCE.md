@@ -19,10 +19,8 @@ proposal remains only a private draft. Storage errors roll back completion.
 No model permissions to approve, revoke, merge, delete or alter identity.
 
 ## Limits
-Apply migrations 001–005 in order. This is proposal intake only, not unattended
-maintenance scheduling or administrator adjudication. Contradiction detection
+Apply migrations 001–006 in order. Administrator adjudication is described in
+[MEMORY_ADJUDICATION.md](MEMORY_ADJUDICATION.md). Unattended scheduling remains pending. Contradiction detection
 is a model suggestion, not verified fact. No semantic guarantee, no retention
 purge, no new external actions. Lexical recall can miss useful records and
-duplicate suppression may hide near-identical candidates. Reviewer UI,
-independent evidence and atomic application of accepted proposals remain
-pending. Internal task admission must be authenticated and isolated in deployment.
+duplicate suppression may hide near-identical candidates. Reviewer UI and authenticated administrative access remain pending. Internal task admission must be authenticated and isolated in deployment.
