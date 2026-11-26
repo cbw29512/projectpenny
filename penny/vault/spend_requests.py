@@ -60,6 +60,8 @@ def reject(dsn, request_id, *, reviewer_id, reason):
                              (request_id,)).fetchone()
             if not row or row["expires_at"]<=now:
                 return False
+            if conn.execute("SELECT 1 FROM vault_reservation WHERE request_id=%s",(request_id,)).fetchone():
+                return False
             return conn.execute("""INSERT INTO vault_spend_rejection VALUES (%s,%s,%s,%s,%s)
                 ON CONFLICT(request_id) DO NOTHING RETURNING request_id""",
                 (request_id,reviewer_id,reason.value,now,decision.policy_version)).fetchone() is not None
@@ -73,14 +75,18 @@ def status(dsn, request_id):
         if not _valid_id(request_id):
             raise ValueError("invalid request")
         with locked(dsn) as (conn,_,now):
-            row=conn.execute("""SELECT q.cents,q.expires_at,r.reason
+            row=conn.execute("""SELECT q.cents,q.expires_at,r.reason,h.request_id AS hold,x.request_id AS released
                 FROM vault_spend_request q LEFT JOIN vault_spend_rejection r ON r.request_id=q.id
+                LEFT JOIN vault_reservation h ON h.request_id=q.id
+                LEFT JOIN vault_reservation_release x ON x.request_id=q.id
                 WHERE q.id=%s""",(request_id,)).fetchone()
             if not row:
                 return None
             state="rejected" if row["reason"] else "expired" if row["expires_at"]<=now else "pending"
+            if row["hold"]:
+                state="released" if row["released"] else "reserved_expired" if row["expires_at"]<=now else "reserved"
             return {"status":state,"requested_cents":row["cents"],"reason":row["reason"],
-                    "authorized_cents":0,"reserved_cents":0}
+                    "authorized_cents":0,"reserved_cents":row["cents"] if row["hold"] and not row["released"] else 0}
     except Exception as exc:
         logger.error("Spend status unavailable (%s)",type(exc).__name__)
         raise

@@ -29,6 +29,8 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.RECORD_VAULT_ENTRY),
     (Actor.ADMIN, Capability.RECONCILE_VAULT),
     (Actor.ADMIN, Capability.REVIEW_SPEND_REQUEST),
+    (Actor.ADMIN, Capability.REVIEW_VAULT_BUDGET),
+    (Actor.ADMIN, Capability.RESERVE_VAULT_FUNDS),
     (Actor.MEMBER, Capability.MANAGE_OWN_RECOGNITION),
     (Actor.MEMBER, Capability.WITHDRAW_RECOGNITION),
 })
@@ -59,6 +61,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "capability_denied")
         if capability in (Capability.APPROVE_BRIDGE_REPLY,Capability.READ_APPROVED_BRIDGE_REPLY):
             return Decision(True, "fenced_reviewed_reply_only")
+        if capability in (Capability.REVIEW_VAULT_BUDGET,Capability.RESERVE_VAULT_FUNDS):
+            return Decision(True, "nonbinding_budget_planning_only")
         if capability is Capability.REVIEW_SPEND_REQUEST:
             return Decision(True, "nonbinding_request_review_only")
         if capability in (Capability.RECORD_VAULT_ENTRY, Capability.RECONCILE_VAULT):
