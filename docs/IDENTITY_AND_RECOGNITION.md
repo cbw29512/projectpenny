@@ -29,3 +29,6 @@ IdentityRegressionRun: model_version, identity_version, suite_version, results_r
 - Free and paying members receive equal factual credit for equal contribution; no payment pressure.
 - Revoked public consent removes attribution; private member data stays scoped.
 - Follow-ups respect notification consent, bounded capacity and active task protection.
+
+## Implementation slices
+Private outcome and contributor attribution are implemented in [CONTRIBUTOR_RECOGNITION.md](CONTRIBUTOR_RECOGNITION.md). Public recognition, proposal linkage and outcome corrections remain pending.

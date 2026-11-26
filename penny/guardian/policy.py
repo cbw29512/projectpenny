@@ -23,6 +23,9 @@ _ALLOWED = frozenset({
     (Actor.MEMBER, Capability.WITHDRAW_MEMORY_CONSENT),
     (Actor.ADMIN, Capability.ISSUE_MEMBER_SESSION),
     (Actor.WORKER, Capability.RECALL_MEMBER_MEMORY),
+    (Actor.ADMIN, Capability.VERIFY_CONTRIBUTION),
+    (Actor.MEMBER, Capability.MANAGE_OWN_RECOGNITION),
+    (Actor.MEMBER, Capability.WITHDRAW_RECOGNITION),
 })
 
 
@@ -42,12 +45,17 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
         if type(actor) is not Actor or type(capability) is not Capability:
             return Decision(False, "invalid_policy_input")
         # Privacy withdrawal must remain available even during identity failure.
-        if actor is Actor.MEMBER and capability is Capability.WITHDRAW_MEMORY_CONSENT:
+        if actor is Actor.MEMBER and capability in (
+            Capability.WITHDRAW_MEMORY_CONSENT,Capability.WITHDRAW_RECOGNITION):
             return Decision(True, "authenticated_owner_privacy_only")
         if not identity_matches():
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability is Capability.VERIFY_CONTRIBUTION:
+            return Decision(True, "administrator_evidence_review_only")
+        if capability is Capability.MANAGE_OWN_RECOGNITION:
+            return Decision(True, "authenticated_owner_recognition_only")
         if capability is Capability.RECALL_MEMBER_MEMORY:
             return Decision(True, "fenced_owner_consent_recall_only")
         if capability is Capability.ISSUE_MEMBER_SESSION:
