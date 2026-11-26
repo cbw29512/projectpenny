@@ -1,32 +1,50 @@
-# MVP / Definition of Done — social-first launch
-Approved direction: launch Penny through social platforms before interactive web infrastructure.
-Retain existing core, security contracts and canonical constitution. Zero additional spend.
-Repository changes do not authorize deployment, broadcasts, credentials or spending.
+# MVP / Definition of Done — website-first launch
+Approved direction: Penny's Forgotten Website is the initial product. Social
+broadcasts and platform adapters are deferred until the website is proven.
+Retain the existing tested core, canonical constitution and security contracts.
+No additional spend, deployment, live payments or NucBox changes authorized.
 
 ## Launch sequence
-- [ ] Twitch chat adapter using official authenticated outbound transport; simulator, deduplication, reconnect and bounded queue.
-- [ ] Local inference benchmark on existing NucBox; pinned persona, Guardian, output review, no unrestricted tools.
-- [ ] Local voice and original avatar, OBS overlay, captions, private operator controls and emergency stop.
-- [ ] Community proposals and deterministic votes; approved options, recorded outcome, evidence and opted-in recognition. No paid votes or policy override.
-- [ ] Persistent state, verified Vault, separate founder ledger, actual costs and receipts only; approved Twitch entertainment revenue dedicated to Penny.
-- [ ] One supervised end-to-end private rehearsal, then owner-approved public Twitch broadcast.
-- [ ] YouTube and Discord adapters with verified platform permissions, shared scheduler and moderation; staged release after Twitch.
-- [ ] Local clip preparation and approved publication to Shorts, TikTok, Instagram and Facebook; manual upload acceptable initially.
-- [ ] Static public progress page, source-backed milestones, availability and links; no public private-chat mailbox required for initial launch.
-- [ ] At least one legitimate, owner-approved business experiment with documented costs, outcome and community input.
-- [ ] Backup/restore, overload, prompt injection, duplicate event, reconnect and emergency-stop tests; platform policy, rights and monetization eligibility checks.
+- [ ] Forgotten office scene: Penny is an ambitious AI whose modest hardware
+  limits her capabilities; the Maker's abandonment/redemption story is disclosed fiction.
+- [ ] Separate visibly labeled thought cloud (fictional comedic aside) and
+  speech bubble (visitor answer). Never expose internal reasoning. Idle and
+  processing lines are curated, free of inference, and never claim fake activity.
+- [ ] Accessible responsive character interface with real availability,
+  private member chat, queue status, draft preservation and offline fallback.
+- [ ] Local Qwen3-14B benchmark; no public model API, tool access or home listener.
+- [ ] Netlify static frontend, authenticated mailbox and outbound-only NucBox
+  bridge; Guardian, review, quotas, bounded queues and emergency stop retained.
+- [ ] Verified vault: lifetime net commercial receipts, expenses and current
+  reviewed cash separately. Opening target $0 for new activity; do not publish
+  zero as an observed balance without reconciliation. Historical Maker
+  equipment is a separate inventory, never an invented debt or operating cash.
+- [ ] Reward ladder combines real and humorous goals ($1 outfit, $10 fan,
+  $50 community choice, $5,000 computer, $10,000 GPU fund, $1M collectible
+  reactor). Thresholds unlock eligibility, not spending. Verified receipts,
+  refunds, actual affordability and Maker approval govern purchase; evidence
+  and redacted photographs distinguish fulfillment from unlock.
+- [ ] Public diary, actual wins/setbacks, hardware changes and consented
+  contributor credit; approved changes to Penny's room and wardrobe.
+- [ ] One legitimate zero-additional-spend business experiment: hypothesis,
+  approval, actual costs, outcome and community input. No invented revenue.
+- [ ] Private business worker isolated from public chat; proposes changes only.
+  Hermes is a candidate, not a public endpoint or trusted security boundary.
+- [ ] Private end-to-end rehearsal and adversarial tests; explicit Maker
+  authorization before live launch. Social content is optional later.
 
-## State and boundaries
-Canonical local PostgreSQL: platform event (platform, channel, event ID, actor ID, timestamp, consent, moderation state), proposal, ballot (one per eligible platform identity per poll; cross-platform uniqueness not assumed), decision, content outbox, broadcast session, financial evidence and contributor consent.
-Event: received -> validated -> moderated -> queued -> processed or rejected/expired.
-Publication: draft -> reviewed -> approved -> sent or failed; uncertain sends require reconciliation.
-Poll: draft -> approved -> open -> closed -> recorded -> implemented or vetoed with reason.
-Votes and cached status do not invoke inference. Bound all queues and retries. No public home-network listener.
-No autonomous public publishing, live payments, binding commitments, paid scaling or changes to existing NucBox services without owner approval.
-Twitch is the first interactive platform; other platforms are staged, not simultaneous launch blockers.
+## State and release rules
+Thought: curated or separately reviewed fictional aside, distinct from speech.
+Speech: private draft -> exact-output review -> authorized delivery.
+Idle/queued/working/answered/error are UI states driven by actual service status;
+a demo must be labeled and must not send or store messages. No fabricated typing.
+Milestones: planned -> eligible -> approved -> fulfilled (or withdrawn).
+Room/wardrobe changes require approved verified fulfillment. Keep financial
+and identity authority outside the model. Preserve existing quota and review
+rules rather than replacing them with provisional UI limits. Final artwork,
+purchase amounts, metric definitions and production configuration need review.
 
-## Deferred interactive website
-The previous full web MVP is retained below as a later phase; its security requirements still apply whenever those surfaces are enabled.
+## Retained implementation contracts
 
 # MVP / Definition of Done
 Scope agreed; implementation pending. Detailed configuration thresholds remain provisional.
