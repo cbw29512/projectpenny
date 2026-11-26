@@ -21,9 +21,9 @@ integrity fails: privacy controls cannot depend on model availability.
 The raw repository is internal-only. The token-only adapter is described in
 [MEMBER_SESSION.md](MEMBER_SESSION.md). Upstream identity verification, database
 roles/RLS, consent UI and production isolation remain pending. No automatic extraction from conversations,
-no model recall, public recognition or supporter-tier effects. Preference text
+personal recall only via explicit per-task opt-in (see [MEMBER_RECALL.md](MEMBER_RECALL.md)); no public recognition or supporter-tier effects. Preference text
 is untrusted; sensitive data/credentials must not be admitted by the future UI,
 and content filtering is not yet implemented. No claim of complete erasure:
 expired rows are inaccessible but remain until withdrawal or renewal, and
 backups/WAL and other copies need their own retention process. No personal data
-was collected or migrated. Apply migrations 001–009 in order.
+was collected or migrated. Apply migrations 001–010 in order.

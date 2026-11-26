@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from .request import MAX_WIRE_BYTES, memory_request, render_request
+from .personal_request import personal_request
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,9 @@ class LocalBrain:
 
     def generate_with_memory(self, prompt: str, timeout: float, memories) -> str:
         return self._invoke(memory_request(prompt, memories), timeout)
+
+    def generate_with_preferences(self,prompt: str,timeout: float,preferences) -> str:
+        return self._invoke(personal_request(prompt,preferences),timeout)
 
     def _invoke(self, request, timeout: float) -> str:
         try:

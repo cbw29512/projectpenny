@@ -5,6 +5,7 @@ from uuid import UUID
 
 from penny.memory.review_state import MAX_RECALL_CHARS, MAX_RECALL_RECORDS, ReviewedMemory
 from penny.memory.state import MAX_CONTENT, MemoryKind
+from .personal_request import render_personal
 
 logger = logging.getLogger(__name__)
 MAX_WIRE_BYTES = 48000
@@ -19,6 +20,11 @@ def render_request(request: object) -> str:
                 raise ValueError("invalid task text")
             request.encode("utf-8")
             return request
+        if type(request) is dict and set(request) == {"task","preferences"}:
+            rendered = render_personal(request["task"],request["preferences"])
+            if len(rendered) > MAX_CONTEXT_CHARS:
+                raise ValueError("rendered personal context budget exceeded")
+            return rendered
         if type(request) is not dict or set(request) != {"task", "memories"}:
             raise ValueError("invalid request envelope")
         task = request["task"]

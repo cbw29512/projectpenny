@@ -17,3 +17,4 @@ class Claim:
     payload: str
     lease_until: int
     memory_enabled: bool = False
+    personal_memory_enabled: bool = False

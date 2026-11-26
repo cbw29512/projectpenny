@@ -26,6 +26,7 @@ class Capability(Enum):
     MANAGE_OWN_MEMORY = "manage_own_memory"
     WITHDRAW_MEMORY_CONSENT = "withdraw_memory_consent"
     ISSUE_MEMBER_SESSION = "issue_member_session"
+    RECALL_MEMBER_MEMORY = "recall_member_memory"
     NETWORK = "network"
     SHELL = "shell"
     SPEND = "spend"
@@ -37,4 +38,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.8"
+    policy_version: str = "guardian-v0.9"

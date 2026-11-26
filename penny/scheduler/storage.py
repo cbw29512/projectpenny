@@ -2,6 +2,8 @@
 from uuid import UUID, uuid4
 
 from penny.memory.task import INFORMED_PREFIX
+from penny.auth.member_scope import member_scope
+from penny.memory.member_consent import active_consent
 
 from .policy import admission, next_task
 from .state import Admission, TaskSpec
@@ -13,23 +15,31 @@ class TaskStore:
     def __init__(self, dsn: str):
         self.dsn = dsn
 
-    def submit(self, member: UUID | None, key: str, payload: str) -> Receipt:
+    def submit(self, member: UUID | None, key: str, payload: str, *,
+               _session_token=None, use_personal_memory=False) -> Receipt:
         # The caller must authenticate the member; None is internal-only.
         if (
-            (member is not None and not isinstance(member, UUID))
+            type(use_personal_memory) is not bool
+            or (use_personal_memory and _session_token is None)
+            or (_session_token is not None and member is not None)
+            or             (member is not None and not isinstance(member, UUID))
             or not isinstance(key, str) or not 1 <= len(key) <= 128
             or not isinstance(payload, str) or not 1 <= len(payload) <= 2000
             or not key.strip() or not payload.strip() or "\x00" in key or "\x00" in payload
         ):
             return Receipt("invalid")
-        with locked(self.dsn) as (conn, control, now):
+        with member_scope(self.dsn,member,_session_token) as (conn,control,now,member):
+            consent = active_consent(conn,member,now) if use_personal_memory else None
+            if use_personal_memory and not consent:
+                return Receipt("memory_consent_required")
             previous = conn.execute(
-                """SELECT id,payload FROM work_task
-                WHERE member_id IS NOT DISTINCT FROM %s::uuid AND idempotency_key=%s""",
+                """SELECT t.id,t.payload,s.epoch FROM work_task t
+                LEFT JOIN member_recall_scope s ON s.task_id=t.id
+                WHERE t.member_id IS NOT DISTINCT FROM %s::uuid AND t.idempotency_key=%s""",
                 (member, key),
             ).fetchone()
             if previous:
-                if previous["payload"] != payload:
+                if previous["payload"] != payload or previous["epoch"] != (consent["epoch"] if consent else None):
                     return Receipt("idempotency_conflict")
                 return Receipt("accept", previous["id"], True)
             expire_waiting(conn, now)
@@ -46,6 +56,9 @@ class TaskStore:
                 VALUES (%s,%s,%s,%s,%s,%s,%s,'queued')""",
                 (task_id, member, int(tier) if tier is not None else None, key, payload, now, deadline),
             )
+            if consent:
+                conn.execute("INSERT INTO member_recall_scope VALUES (%s,%s,%s)",
+                             (task_id,member,consent["epoch"]))
             return Receipt("accept", task_id)
 
     def claim(self) -> Claim | None:
@@ -77,7 +90,11 @@ class TaskStore:
                 raise RuntimeError("claimed task disappeared")
             informed = (row["member_id"] is None and
                         row["idempotency_key"].startswith(INFORMED_PREFIX))
-            return Claim(row["id"], fence, row["payload"], lease, informed)
+            personal = row["member_id"] is not None and conn.execute(
+                "SELECT 1 FROM member_recall_scope WHERE task_id=%s AND member_id=%s",
+                (row["id"],row["member_id"]),
+            ).fetchone() is not None
+            return Claim(row["id"], fence, row["payload"], lease, informed, personal)
 
     def set_paused(self, paused: bool) -> None:
         if type(paused) is not bool:

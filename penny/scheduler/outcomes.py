@@ -3,6 +3,7 @@ from uuid import UUID
 
 from penny.memory.intake import stage_from_review
 from penny.memory.maintenance import stage_maintenance
+from penny.memory.member_recall import snapshot_valid
 
 from .storage_db import locked
 
@@ -38,6 +39,10 @@ def complete(dsn: str, task_id: UUID, fence: UUID, *, success: bool, result: str
     with locked(dsn) as (conn, _, now):
         row = _running(conn, task_id, fence)
         if not row or now >= row["lease_until"]:
+            return False
+        if success and not snapshot_valid(conn,row,now):
+            # Never persist a generated draft from withdrawn/deleted preferences.
+            _finalize(conn,row,"canceled","personal memory permission changed",now)
             return False
         _finalize(conn, row, "succeeded" if success else "failed", result, now)
         if success:
