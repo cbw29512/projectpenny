@@ -35,3 +35,14 @@ test("every reaction has a face; no pretend planning",()=>{
   for(const r of [reaction(base),reaction(null),reaction({...base,paused:true})])
     assert.ok(expressions[r.emotion]);
 });
+
+test("optimism does not erase setbacks or blockers",()=>{
+  const missed = reaction({...base,latest_measurement:{recorded_at:999,target:5,measured_count:3}});
+  assert.match(missed.comment,/3 of 5/);
+  assert.match(missed.comment,/Target missed/);
+  assert.match(missed.comment,/The mission stays/);
+  assert.match(reaction({...base,uncertain:true}).comment,/verified recovery/);
+  assert.match(reaction({...base,paused:true}).comment,/authorization/);
+  assert.match(reaction(null).comment,/No new progress can be confirmed/);
+  assert.match(reaction({...base,recent:[draft]}).comment,/not yet/);
+});

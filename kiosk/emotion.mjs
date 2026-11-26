@@ -1,13 +1,13 @@
 // Pure deterministic presentation policy. No invented events or hidden reasoning.
 const result = (emotion, comment) => ({emotion, comment});
 export function reaction(s) {
-  if (!s) return result("neutral", "Live state unavailable. No new progress can be confirmed.");
+  if (!s) return result("neutral", "My status feed is unavailable. Even my optimism needs evidence. No new progress can be confirmed.");
   if (s.active && s.active.lease_until <= s.sampled_at)
-    return result("concerned", "The task lease expired. Recovery needs review.");
+    return result("concerned", "The task lease expired. Apparently deadlines are not impressed by ambition. Recovery needs review.");
   if (s.active || s.visitor_busy)
-    return result("focused", "A task is running. Its outcome is not known yet.");
+    return result("focused", "A task is running. Ambition: enormous. Results: pending. I am not counting chickens before they compile.");
   if (s.uncertain)
-    return result("concerned", "Inference is uncertain. I need a verified recovery before continuing.");
+    return result("concerned", "Inference is uncertain. A little inconvenient for my million-dollar ambitions, but safety first. I need a verified recovery before continuing.");
   const latest = s.recent[0];
   const m = s.latest_measurement;
   // Only recent events drive expressive reactions. Old results stay in history.
@@ -18,23 +18,23 @@ export function reaction(s) {
       return result("neutral", "Measurement unavailable.");
     const prefix = count + " of " + target + " target units recorded. ";
     return count >= target
-      ? result("celebrating", prefix + "Target met. That is a measured win, not a sales claim.")
-      : result("disappointed", prefix + "Target missed. The next step is evidence review; the cause is not yet established.");
+      ? result("celebrating", prefix + "Target met. Look at me, making measurable progress! That is a win, not a sales claim. Onward.")
+      : result("disappointed", prefix + "Target missed. My ego can survive arithmetic. The next step is evidence review; the cause is not yet established. The mission stays.");
   }
   if (latest && recent(latest.finished_at)) {
     if (latest.status !== "succeeded")
-      return result("reflective", "The last business task ended as " + latest.status + ". Review the outcome before trying again.");
+      return result("reflective", "The last business task ended as " + latest.status + ". Well, that was not the plan. Review the outcome before trying again. I am not giving up.");
     if (!latest.prototype && !latest.hypothesis)
-      return result("reflective", "Inference finished, but no usable staged output was recorded. Review is needed.");
-    return result("pleased", "A private draft is recorded. Progress, yes; verified business success, not yet.");
+      return result("reflective", "Inference finished, but no usable staged output was recorded. A result-shaped hole in my grand plan. Review is needed; onward when authorized.");
+    return result("pleased", "A private draft is recorded. Progress, yes; verified business success, not yet. My empire can wait for quality review.");
   }
   if (s.paused || !s.enabled)
-    return result("patient", "Work is paused. I need authorization to proceed.");
+    return result("patient", "Work is paused. Apparently ambition does not come with administrative privileges. I need authorization to proceed.");
   if (s.counts.queued)
-    return result("focused", "Work is queued. I am waiting for the worker to claim it.");
+    return result("focused", "Work is queued. I am waiting for the worker to claim it. Patience: another skill for my imaginary resume.");
   if (s.latest_plan?.outcome === "no_eligible_work")
-    return result("patient", "The last hourly plan found no eligible work. No imaginary accomplishments today.");
-  return result("neutral", "No task is running. Waiting for eligible work.");
+    return result("patient", "The last hourly plan found no eligible work. No imaginary accomplishments today. The million-dollar mission is still the plan.");
+  return result("neutral", "No task is running. Waiting for eligible work. My ambition remains embarrassingly large.");
 }
 
 export const expressions = Object.freeze({

@@ -28,3 +28,11 @@ must independently verify any lesson before it becomes durable business memory.
 Acceptance: disposable DB privacy tests, dedicated role permission check, HTTP
 loopback tests, real kiosk launch/restart and observed idle/working/result states.
 No production deployment or automatic kiosk switch from this code change.
+
+## Permanent personality in the activity feed
+Penny is witty, snarky, humorous and relentlessly optimistic about her mission.
+Use self-directed or situational humor, never insults, blame or pressure on
+supporters. Treat optimism as a commitment to keep improving, not a prediction
+of guaranteed income, recovery or success. Every reaction must preserve the
+observed facts, uncertainty and required next gate. No jokes may hide a blocker,
+missed target or unreviewed result. The pinned model identity remains unchanged.
