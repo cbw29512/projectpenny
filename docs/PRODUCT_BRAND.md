@@ -38,6 +38,14 @@ branded deliverable, listing and approved brand version. Historical private
 artifacts and quality-review digests remain intact. New branding creates a
 derived edition requiring its own review, not a mutation of old records.
 
+## Office Collection
+
+Virtual items may become physical merchandise using stable design/version
+IDs and exact reviewed print editions. Preserve canonical Penny artwork,
+name and honest seller attribution; separate founder merchandise accounting
+from Penny's business proceeds. No sale authority from a scene display or
+community vote. See [office collection](OFFICE_COLLECTION.md).
+
 ## Release flow
 
 Private prototype -> independent content review / separate safe beta review ->

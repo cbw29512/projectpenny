@@ -1,0 +1,13 @@
+/* Read-only merchandise concepts, separate from the canonical scene. */
+.collection-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-top:1rem; }
+.collection-grid details { border:1px solid var(--line); border-radius:.8rem; padding:.75rem; }
+.collection-grid summary { cursor:pointer; font-weight:700; min-height:44px; }
+.mug-concept { position:relative; isolation:isolate; box-sizing:border-box; width:calc(100% - 24px); max-width:220px; min-height:132px; margin:1rem auto; border:2px solid #526268; border-radius:12px; background:#e7e4d9; color:#243b45; display:grid; place-content:center; text-align:center; padding:.8rem .4rem; font:700 .85rem/1.2 monospace; overflow-wrap:anywhere; }
+.mug-concept::after { content:""; position:absolute; z-index:-1; right:-23px; top:26%; width:24px; height:48%; border:6px solid #526268; border-left:0; border-radius:0 20px 20px 0; }
+.mug-concept.charcoal { background:#263238; color:#c4efe5; }
+.mug-concept.sand { background:#f4e5d0; color:#573d32; }
+.mug-concept.navy { background:#345161; color:white; }
+.mug-concept.plum { background:#ded0df; color:#533b59; }
+.mug-concept small { margin-top:.6rem; font:.65rem/1.2 sans-serif; letter-spacing:.04em; }
+.collection-palette { display:flex; flex-wrap:wrap; gap:.55rem; padding:0; list-style:none; }
+.collection-palette li { border:1px solid var(--line); border-radius:.5rem; padding:.4rem .65rem; }

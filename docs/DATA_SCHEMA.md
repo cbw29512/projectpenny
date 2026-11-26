@@ -41,6 +41,10 @@ Proposed relational contract; not implemented DDL. UUID identifiers, UTC timesta
 | recognition_event | id, attribution_id nullable, member_id, reason_code, evidence_ref, milestone_ref nullable, created_at, dedupe_key, publication_consent, correction_of |
 | identity_regression_run | model_version, identity_version, suite_version, results_ref, verdict, reviewer, tested_at |
 
+| merch_design (planned) | stable design ID/version, kind, phrase/color, asset IDs, brand version, artwork digest, rights review, state |
+| merch_listing (planned) | design/version, provider SKU, exact print/listing digests, currency/price, seller, ledger owner, approval, state |
+| daily_style (planned) | local date, timezone, collection version, shirt/mug IDs, review/override reference |
+
 ## Transitions
 Task: submitted -> queued -> running -> succeeded/failed/canceled/expired. Running -> checkpointed -> queued only with reserved bounded capacity. Leases and fencing reject stale workers; external effects require idempotency and reconciliation.
 Memory: candidate -> quarantined -> validated -> approved -> active -> superseded/revoked. Consent and deletion rules override recall.

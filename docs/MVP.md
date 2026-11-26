@@ -57,6 +57,10 @@ hourly planner or secure website connection to implement these enhancements.
 - [ ] Persistent office inventory and wishlist: start modestly, add virtual
   furnishings and achievement displays only from verified fulfillment records.
   Distinguish free digital rewards from actual purchases and compute upgrades.
+- [ ] Penny's Office Collection: daily approved shirt and programmer-humor
+  mug variants, persistent design IDs, accessible inspection and future
+  reviewed merchandise listings with separate accounting. No initial live
+  sales. See [office collection](OFFICE_COLLECTION.md).
 - [ ] Configurable eight-hour off-duty period (proposed midnight–8 AM Eastern).
   Drain active work safely; no new business or chat generation while asleep.
   Essential services, backups and bounded message intake remain available.

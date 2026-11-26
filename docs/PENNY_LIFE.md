@@ -155,6 +155,14 @@ plant, mug and plum shirt are development fixtures, not approved final assets.
 Actual Maker UI, reviewed snapshot delivery, cache/restore behavior across
 clients, real purchases and production authorization remain pending.
 
+## Daily wardrobe and merchandise collection
+
+Daily presentation variants must not mutate durable ownership or layout.
+Stable design IDs connect the approved daily shirt and mug to an enlarged
+inspector and optional future physical merchandise listing. See
+[office collection](OFFICE_COLLECTION.md). The installed catalog preview
+is not an approved live daily snapshot or commerce integration.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

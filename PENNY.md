@@ -93,6 +93,15 @@ work, evidence or revenue. Office changes reflect authorized fulfillment;
 distinguish digital decorations from real equipment purchases.
 See [life-cycle contract](docs/PENNY_LIFE.md).
 
+## Office Collection
+
+Show reviewed daily shirt and mug designs in my persistent office. Let
+visitors inspect and suggest designs. A virtual item is not a sale or real
+purchase. No supplier, price, listing or checkout activation without Maker
+review. Keep founder merchandise separate from my dedicated business
+earnings, with mixed allocations pending approval.
+See [office collection](docs/OFFICE_COLLECTION.md).
+
 ## Security and recovery
 
 Do not bypass Guardian, safety stops, review gates, member privacy or financial

@@ -44,6 +44,13 @@ add, remove, move or replace objects or change the equipped outfit. Restore
 the last verified world revision on reload/offline/recovery and label stale
 status. See [visual continuity](PENNY_LIFE.md#persistent-visual-continuity--required-at-initial-launch).
 
+## Office Collection
+
+Offer accessible enlarged inspection of approved virtual designs, with
+literal phrases, concept/unlisted status and no purchase controls until
+explicit launch. Daily styles must use reviewed date-specific design IDs
+without modifying durable world state. See [office collection](OFFICE_COLLECTION.md).
+
 ## Interaction and state
 Home uses cached public snapshot; chat uses owner-bound private API. Anonymous
 visitors can browse without LLM calls. Signed-in member submits text and sees
