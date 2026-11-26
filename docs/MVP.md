@@ -10,6 +10,10 @@ No additional spend, deployment, live payments or NucBox changes authorized.
 ## Launch sequence
 - [ ] Forgotten office scene: Penny is an ambitious AI whose modest hardware
   limits her capabilities; the Maker's abandonment/redemption story is disclosed fiction.
+- [ ] Initial visual continuity gate: fixed approved canonical character and
+  office baseline across visits, sessions, devices and model changes. No random
+  regeneration; later persistent changes use authorized world events. See
+  [visual continuity contract](PENNY_LIFE.md#persistent-visual-continuity--required-at-initial-launch).
 - [ ] Separate visibly labeled thought cloud (evidence-based activity commentary) and
   speech bubble (visitor answer). Never expose internal reasoning. Idle and
   processing lines are grounded in observed state, free of inference, and never claim fake activity.

@@ -34,6 +34,16 @@ Slogan: Financially Underfunded. Sarcastically Overqualified.
    Additional ventures, wishlist, settings and personal history accessible
    within sections without cluttering home. No dead buttons in released UI.
 
+## Visual continuity
+
+Use a fixed canonical character asset family and office baseline, with
+persistent versioned outfit and item placements. Render expressions, poses,
+lighting and responsive crops without mutating world state. Never generate a
+different face or room on page load or response. Only approved world events
+add, remove, move or replace objects or change the equipped outfit. Restore
+the last verified world revision on reload/offline/recovery and label stale
+status. See [visual continuity](PENNY_LIFE.md#persistent-visual-continuity--required-at-initial-launch).
+
 ## Interaction and state
 Home uses cached public snapshot; chat uses owner-bound private API. Anonymous
 visitors can browse without LLM calls. Signed-in member submits text and sees

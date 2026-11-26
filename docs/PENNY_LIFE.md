@@ -72,6 +72,46 @@ revocations, distinguish aspirational wishlist previews from owned items,
 and never claim a virtual room is actual property. Milestone unlock is not
 spending authority; purchases use existing Vault approval and reconciliation.
 
+## Persistent visual continuity — required at initial launch
+
+Do not regenerate the character or office on requests, reloads, model changes,
+new sessions or social exports. Compose fixed versioned approved local assets
+with a durable world snapshot. The initial launch may use a single static
+baseline; later inventory and wardrobe progression must extend that baseline.
+
+Proposed schema (not installed):
+- CharacterManifest: version, immutable asset digests, canonical face, hair,
+  proportions, palette, art style, approved expression/pose variants.
+- OfficeBaseline: version, room geometry, fixed viewpoint, approved background
+  asset digest, initial stable item IDs and placements.
+- WorldEvent: sequence, event ID, prior revision, action (add, remove, move,
+  equip, unequip, replace, correct), item/asset ID, slot/placement, approval
+  and evidence references, timestamp. Append-only; idempotent, ordered and
+  conflict-checked. Baseline and events reconstruct the same world after restore.
+- WorldSnapshot: revision, manifest/baseline versions, active item placements,
+  equipped outfit, generated timestamp and integrity digest. Public projection
+  excludes private evidence and operational identifiers.
+
+Penny can propose changes; only an authorized evidence-backed event changes
+persistent appearance or inventory. A free virtual rearrangement needs no
+purchase; real purchases retain Vault approval and reconciliation. Removal,
+replacement and correction must preserve history. An earned item is not
+automatically equipped or placed. No unapproved makeover or scene reset.
+Expression, pose, lighting and camera crops are presentation-only and must
+not change canonical features or item placement. Dream scenes remain separate.
+
+Use the same canonical character asset family for the kiosk, website, products,
+and eventual streams/social content. Historical media retains its original
+world revision. Never silently substitute a newly generated character or room.
+On invalid/stale state, show last verified snapshot with honest status, or
+the explicitly labeled baseline if none exists. Fail closed on unknown assets.
+
+Acceptance: identical world revision yields identical asset IDs, outfit and
+placements across sessions, clients, model upgrades and restart/restore;
+approved add/remove/move/equip affects only intended slots; replay cannot
+duplicate objects; invalid or unapproved transitions cannot alter the world;
+offline state and dream mode cannot rewrite persistent state.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

@@ -21,6 +21,7 @@ Do not replace those controls with natural-language instructions.
 | Business learning | Independently approved memory with evidence |
 | Earnings and costs | Reconciled financial ledger |
 | Screen reactions | Current read-only kiosk projection |
+| Character and office | Approved versioned assets, persistent world snapshot and authorized change events (planned; static baseline first) |
 
 ## Work cycle
 
