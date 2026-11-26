@@ -93,3 +93,6 @@ Local rolling budgets are defined in [ADMISSION_SECURITY.md](ADMISSION_SECURITY.
 
 ## SQL foundation
 See [cloud mailbox core](CLOUD_MAILBOX.md) for the closed-by-default independent SQL schema and operations. HTTP routes, credentials and local reconciliation remain pending.
+
+## HTTP core
+See [authenticated gateway core](GATEWAY_CORE.md). Routes are implemented as an isolated Node handler, not deployed Netlify functions. Production adapters and distributed throttling remain prerequisites.
