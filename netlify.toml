@@ -1,0 +1,3 @@
+# Publish only public static files. The private Python backend is not deployed.
+[build]
+  publish = "website"
