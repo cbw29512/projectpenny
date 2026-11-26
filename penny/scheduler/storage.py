@@ -5,11 +5,8 @@ from penny.memory.task import INFORMED_PREFIX
 from penny.auth.member_scope import member_scope
 from penny.memory.member_consent import active_consent
 
-from penny.guardian.policy import identity_matches
-
-from .policy import admission, next_task
-from .quotas import member_budget
-from .state import Admission, TaskSpec
+from .admit import BRIDGE_PREFIX, submit_locked
+from .policy import next_task
 from .storage_db import expire_waiting, locked, snapshot, tier_for
 from .storage_state import Claim, Receipt
 
@@ -27,6 +24,7 @@ class TaskStore:
             or (_session_token is not None and member is not None)
             or (member is not None and not isinstance(member, UUID))
             or not isinstance(key, str) or not 1 <= len(key) <= 128
+            or key.startswith(BRIDGE_PREFIX)
             or not isinstance(payload, str) or not 1 <= len(payload) <= 2000
             or not key.strip() or not payload.strip() or "\x00" in key or "\x00" in payload
         ):
@@ -35,39 +33,7 @@ class TaskStore:
             consent = active_consent(conn,member,now) if use_personal_memory else None
             if use_personal_memory and not consent:
                 return Receipt("memory_consent_required")
-            previous = conn.execute(
-                """SELECT t.id,t.payload,s.epoch FROM work_task t
-                LEFT JOIN member_recall_scope s ON s.task_id=t.id
-                WHERE t.member_id IS NOT DISTINCT FROM %s::uuid AND t.idempotency_key=%s""",
-                (member, key),
-            ).fetchone()
-            if previous:
-                if previous["payload"] != payload or previous["epoch"] != (consent["epoch"] if consent else None):
-                    return Receipt("idempotency_conflict")
-                return Receipt("accept", previous["id"], True)
-            if not identity_matches():
-                return Receipt("identity_unavailable")
-            expire_waiting(conn, now)
-            tier = tier_for(conn, member, now)
-            task_id = uuid4()
-            deadline = now + (86400 if member is None else 3600)
-            task = TaskSpec(str(task_id), str(member) if member else None, tier, now, deadline)
-            decision = admission(snapshot(conn, control, now), task, now)
-            if decision != Admission.ACCEPT:
-                return Receipt(decision.value)
-            rejection = member_budget(conn,member,tier,now)
-            if rejection:
-                return Receipt(rejection)
-            conn.execute(
-                """INSERT INTO work_task
-                (id,member_id,tier_snapshot,idempotency_key,payload,submitted_at,deadline,state)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,'queued')""",
-                (task_id, member, int(tier) if tier is not None else None, key, payload, now, deadline),
-            )
-            if consent:
-                conn.execute("INSERT INTO member_recall_scope VALUES (%s,%s,%s)",
-                             (task_id,member,consent["epoch"]))
-            return Receipt("accept", task_id)
+            return submit_locked(conn,control,now,member,key,payload,consent)
 
     def claim(self) -> Claim | None:
         with locked(self.dsn) as (conn, control, now):
