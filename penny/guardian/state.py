@@ -39,6 +39,7 @@ class Capability(Enum):
     REVIEW_SPEND_REQUEST = "review_spend_request"
     REVIEW_VAULT_BUDGET = "review_vault_budget"
     RESERVE_VAULT_FUNDS = "reserve_vault_funds"
+    REVIEW_BUSINESS_EXPERIMENT = "review_business_experiment"
     SPEND = "spend"
     CHANGE_IDENTITY = "change_identity"
     CHANGE_ENTITLEMENT = "change_entitlement"
@@ -48,4 +49,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.16"
+    policy_version: str = "guardian-v0.17"

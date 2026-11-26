@@ -25,6 +25,7 @@ class GuardianTests(unittest.TestCase):
                         Capability.APPROVE_BRIDGE_REPLY, Capability.RECORD_VAULT_ENTRY,
                         Capability.RECONCILE_VAULT, Capability.REVIEW_SPEND_REQUEST,
                         Capability.REVIEW_VAULT_BUDGET, Capability.RESERVE_VAULT_FUNDS,
+                        Capability.REVIEW_BUSINESS_EXPERIMENT,
                     ))
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
