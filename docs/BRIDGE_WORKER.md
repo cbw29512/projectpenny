@@ -20,3 +20,5 @@ supervisor, real operator interface, credit accounting, retention and actual
 provider setup remain necessary. Fixed 60-second polling is provisional:
 at most 1440 cycles/day if continuously scheduled, not a verified free-tier
 budget. No spend or live service.
+
+A second integration suite uses separate cloud/local schemas in disposable PostgreSQL, real mailbox routines, local worker and release gate, and synthetic inference. It exercises one complete private question/reply plus cross-member isolation. HTTP/TLS, scoped provider connections and actual model remain outside that test.
