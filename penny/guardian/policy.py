@@ -33,6 +33,8 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.REVIEW_BUSINESS_EXPERIMENT),
     (Actor.ADMIN, Capability.REQUEST_BUSINESS_DRAFT),
     (Actor.WORKER, Capability.STAGE_BUSINESS_DRAFT),
+    (Actor.ADMIN, Capability.REQUEST_WORKSHOP),
+    (Actor.WORKER, Capability.STAGE_WORKSHOP),
     (Actor.ADMIN, Capability.RESERVE_VAULT_FUNDS),
     (Actor.MEMBER, Capability.MANAGE_OWN_RECOGNITION),
     (Actor.MEMBER, Capability.WITHDRAW_RECOGNITION),
@@ -68,6 +70,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(True, "nonbinding_budget_planning_only")
         if capability in (Capability.REQUEST_BUSINESS_DRAFT,Capability.STAGE_BUSINESS_DRAFT):
             return Decision(True, "private_quarantined_business_draft_only")
+        if capability in (Capability.REQUEST_WORKSHOP,Capability.STAGE_WORKSHOP):
+            return Decision(True, "private_prototype_only")
         if capability is Capability.REVIEW_BUSINESS_EXPERIMENT:
             return Decision(True, "private_zero_cash_experiment_review_only")
         if capability is Capability.REVIEW_SPEND_REQUEST:

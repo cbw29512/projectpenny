@@ -9,6 +9,7 @@ from penny.memory.review import _valid_id,_valid_ref
 from penny.scheduler.storage_db import locked
 from .state import Action,MAX_COUNT
 from .store import LATEST
+from .workshop_intake import cancel_queued
 
 logger=logging.getLogger(__name__)
 
@@ -63,6 +64,8 @@ def advance(dsn,opportunity_id,*,action,expected_proposal_sha256,
                 (key,opportunity_id,action.value,reviewer_id,now,deadline,
                  observed_at,measured_count,evidence_ref,mark.digest,mark.byte_count,
                  decision.policy_version))
+            if action in (Action.STOP,Action.MEASURE):
+                cancel_queued(conn,opportunity_id,now)
             return True
     except Exception as exc:
         logger.error("Business experiment transition refused (%s)",type(exc).__name__)

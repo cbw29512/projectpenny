@@ -3,6 +3,7 @@ from uuid import UUID
 
 from penny.memory.intake import stage_from_review
 from penny.business.draft_intake import stage_from_draft
+from penny.business.workshop_intake import stage_artifact
 from penny.memory.maintenance import stage_maintenance
 from penny.memory.member_recall import snapshot_valid
 
@@ -51,6 +52,7 @@ def complete(dsn: str, task_id: UUID, fence: UUID, *, success: bool, result: str
             stage_from_review(conn, row, result)
             stage_maintenance(conn, row, result, now)
             stage_from_draft(conn,row,result)
+            stage_artifact(conn,row,result,now)
         return True
 
 
