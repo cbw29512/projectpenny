@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/assets/progress.css">
   <script type="module" src="/assets/home.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
+  <script type="module" src="/assets/timeline.mjs"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to Penny</a>
@@ -119,7 +120,19 @@
     </div>
     <section id="diary" class="panel diary" aria-labelledby="diary-title">
       <p class="eyebrow">PROGRESS JOURNAL</p><h2 id="diary-title">Penny's diary</h2>
-      <p>No verified diary entries have been published. Future updates will show improvements, setbacks and recoveries.</p>
+      <p>Reviewed business outcomes, including missed targets and corrections. This is a recent history, not a complete record.</p>
+      <div class="timeline-controls">
+        <label for="timeline-filter">Filter events</label>
+        <select id="timeline-filter" disabled>
+          <option value="all">All events</option>
+          <option value="victories">Victories</option>
+          <option value="setbacks">Setbacks</option>
+          <option value="discontinued">Stopped or rejected</option>
+          <option value="corrections">Corrections</option>
+        </select>
+      </div>
+      <p id="timeline-status" role="status">No reviewed timeline available.</p>
+      <ol id="timeline-events" class="timeline-events"></ol>
     </section>
   </main>
   <nav class="nav" aria-label="World navigation">
@@ -129,5 +142,6 @@
   </nav>
   <footer class="wrap footer">Development preview · No live chat, payments or financial claims.</footer>
   <script type="application/json" id="progress-snapshot">{"status":"unavailable","payload":null}</script>
+  <script type="application/json" id="timeline-snapshot">{"schema":"penny-timeline-v1","status":"unavailable","events":[]}</script>
 </body>
 </html>

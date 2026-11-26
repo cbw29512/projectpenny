@@ -7,3 +7,11 @@
 #snapshot-status { font-weight:650; }
 @media(max-width:760px) { .life-columns { grid-template-columns:1fr; } }
 @media(max-width:360px) { .metrics { grid-template-columns:1fr; } }
+
+.timeline-controls { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; margin-top:1rem; }
+.timeline-controls label { font-weight:650; }
+.timeline-controls select { font:inherit; color:var(--ink); background:white; min-height:44px; border:1px solid #9ca9a7; border-radius:.5rem; padding:.4rem .7rem; max-width:100%; }
+.timeline-events { list-style:none; padding:0 0 0 .8rem; margin:1rem 0 0; }
+.timeline-events li { border-left:2px solid var(--line); padding:.3rem .8rem .8rem; overflow-wrap:anywhere; }
+.timeline-events time { font-size:.75rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+.timeline-events li p { color:var(--ink); margin-top:.2rem; }

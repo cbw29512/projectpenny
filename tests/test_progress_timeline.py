@@ -107,3 +107,17 @@ class TimelineTests(DatabaseFixture):
             with self.assertRaises(psycopg.errors.RaiseException):
                 conn.execute("DELETE FROM progress_timeline_event")
             conn.rollback()
+
+    def test_browser_candidate_expiry_and_correction(self):
+        from penny.progress.timeline_read import browser_candidate
+        self.assertEqual(browser_candidate(self.dsn),recent(self.dsn))
+        event=self.experiment(Action.MEASURE,0)
+        receipt=self.review(event)
+        candidate=browser_candidate(self.dsn)
+        self.assertEqual(candidate["status"],"reviewed")
+        self.assertEqual(candidate["expires_at"]-candidate["generated_at"],3600)
+        self.assertEqual(candidate["events"][0]["kind"],"target_missed")
+        self.assertTrue(suppress(self.dsn,receipt.entry_id,reviewer_id=self.reviewer,
+            evidence_ref="private:correction",evidence=b"synthetic",confirmed=True))
+        self.assertEqual(browser_candidate(self.dsn)["events"][0]["kind"],"corrected")
+        self.assertNotIn("private",str(candidate))

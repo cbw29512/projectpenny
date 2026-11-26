@@ -19,3 +19,17 @@ withdrawn by local suppression alone. Guardian reuses existing private
 progress review capability. Tests synthetic, no deployment. Next: build
 timeline browser consumer and approved cached transport; later add typed
 upgrade/incident/milestone source records and completeness controls.
+
+## Static browser consumer
+The local browser_candidate function builds a sanitized envelope under the
+same transaction lock, with generated/expiry times (one hour provisional).
+The static diary defaults to unavailable; no fixture or production records
+are committed. Browser validates the exact closed schema, ordered UTC-day
+timestamps, allowed event kinds, 20-event limit and freshness; malformed
+or expired data are hidden. Fixed labels and text-only DOM rendering.
+Filters default to all outcomes, including setbacks and corrections.
+No fetch, storage, polling or changed CSP. Expiry is checked locally and
+on resume; no server-side delivery or real-time correction guarantee.
+Future approved transport must enforce expiry, version/suppression and
+source review outside Git. Current data is recent reviewed history only.
+Real browser layout/accessibility and production transport unverified.
