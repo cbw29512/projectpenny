@@ -16,3 +16,6 @@ Availability: AVAILABLE, BUSY, FULL by admission class, PAUSED/DO_NOT_DISTURB. D
 
 ## Acceptance tests
 Concurrent caps, duplicate submission, tier preference, no preemption, free/business fairness, per-user caps, spoofed/refunded entitlement, checkpoint bounds, fenced crash recovery, deadline exhaustion, notification dedupe, no model calls for busy/poll, no duplicated external effects. Use injected clock and model stub before live tests.
+
+## Implemented rolling admission limits
+See [ADMISSION_SECURITY.md](ADMISSION_SECURITY.md) for provisional member and aggregate budgets and required public edge defenses.

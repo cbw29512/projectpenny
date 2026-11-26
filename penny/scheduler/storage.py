@@ -5,7 +5,10 @@ from penny.memory.task import INFORMED_PREFIX
 from penny.auth.member_scope import member_scope
 from penny.memory.member_consent import active_consent
 
+from penny.guardian.policy import identity_matches
+
 from .policy import admission, next_task
+from .quotas import member_budget
 from .state import Admission, TaskSpec
 from .storage_db import expire_waiting, locked, snapshot, tier_for
 from .storage_state import Claim, Receipt
@@ -42,6 +45,8 @@ class TaskStore:
                 if previous["payload"] != payload or previous["epoch"] != (consent["epoch"] if consent else None):
                     return Receipt("idempotency_conflict")
                 return Receipt("accept", previous["id"], True)
+            if not identity_matches():
+                return Receipt("identity_unavailable")
             expire_waiting(conn, now)
             tier = tier_for(conn, member, now)
             task_id = uuid4()
@@ -50,6 +55,9 @@ class TaskStore:
             decision = admission(snapshot(conn, control, now), task, now)
             if decision != Admission.ACCEPT:
                 return Receipt(decision.value)
+            rejection = member_budget(conn,member,tier,now)
+            if rejection:
+                return Receipt(rejection)
             conn.execute(
                 """INSERT INTO work_task
                 (id,member_id,tier_snapshot,idempotency_key,payload,submitted_at,deadline,state)

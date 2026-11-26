@@ -41,4 +41,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.10"
+    policy_version: str = "guardian-v0.11"

@@ -3,7 +3,8 @@ import http.client
 import json
 import sys
 
-from .identity import SYSTEM_PROMPT
+from penny.guardian.policy import identity_matches
+from . import identity
 from .request import MAX_WIRE_BYTES, render_request
 
 MAX_RESPONSE_BYTES = 262144
@@ -11,11 +12,14 @@ MODEL = "qwen3:14b"
 
 
 def exchange(request: object) -> str:
+    # Independently check the pin in the child before opening a connection.
+    if not identity_matches():
+        raise PermissionError("canonical identity mismatch")
     prompt = render_request(request)
     body = json.dumps({
         "model": MODEL,
         "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": identity.SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
         "stream": False, "think": False, "keep_alive": "5m",

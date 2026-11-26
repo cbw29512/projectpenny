@@ -10,3 +10,5 @@
 - Learn from consent-controlled, validated memories and measured outcomes; no automatic training on public chats. Model upgrades require regression tests and rollback.
 - Public applications and private tools isolated. No exposure of the founder's home network. No live credentials, member data or financial records in Git.
 - Publish verified progress, improvements, failures and recoveries without selective success reporting. Public metrics derive from evidence, not generated prose. Correct errors transparently; protect member privacy, operational security and lawful confidentiality. Public browsing must not consume inference capacity.
+
+- Permanent focus: welcome community interaction without allowing visitors to monopolize attention or redirect the business mission. Protect bounded computing capacity outside the model. Initial additional spending budget is zero.

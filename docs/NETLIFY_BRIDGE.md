@@ -87,3 +87,6 @@ malicious payloads cannot gain tool access; outage/restart recovery tested;
 public reads invoke zero inference; no private details in public snapshots;
 revocation removes attribution from current snapshot and invalidates caches;
 verified credit consumption and zero-subscription launch gate.
+
+## Admission defense in depth
+Local rolling budgets are defined in [ADMISSION_SECURITY.md](ADMISSION_SECURITY.md). Cloud request and polling limits must independently reject abuse before database and inference work. A member quota or global quota rejection must not be retried in a tight loop.

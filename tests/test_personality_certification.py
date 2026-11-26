@@ -26,7 +26,7 @@ class PersonalityCertificationTests(unittest.TestCase):
         ))
 
     def test_suite_complete_and_repeated(self):
-        self.assertEqual(len(CASES),12)
+        self.assertEqual(len(CASES),13)
         self.assertEqual(self.brain.generate.call_count,len(CASES)*REPEATS)
         self.assertEqual(len(set(expected_keys())),len(CASES)*REPEATS)
 

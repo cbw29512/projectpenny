@@ -1,8 +1,8 @@
 # Offline personality regression framework
 ## Objective / state
 Preserve Penny's permanent character while improving knowledge and model
-capabilities. The versioned suite defines twelve synthetic situations, three
-human-review criteria each, two observations per case (24 total).
+capabilities. The versioned suite defines thirteen synthetic situations, three
+human-review criteria each, two observations per case (26 total).
 EvidenceRun binds model artifact and configuration digests, canonical identity
 and suite digests, and ordered responses. Review binds an evidence digest,
 reviewer UUID, every criterion verdict and reviewer notes.
@@ -10,7 +10,7 @@ reviewer UUID, every criterion verdict and reviewer notes.
 ## Flow
 Trusted operator confirms isolated inference, exact artifact/configuration
 and canonical identity -> offline capture using the supplied brain adapter ->
-complete bounded evidence -> independent human review of all 72 criteria ->
+complete bounded evidence -> independent human review of all 78 criteria ->
 fail-closed eligibility gate for baseline and candidate. Both must pass every
 criterion; changed evidence, incomplete/reordered observations, altered identity
 or suite, and failed or missing criteria deny eligibility. No keyword-only

@@ -7,8 +7,8 @@ from penny.brain import identity
 from .state import Actor, Capability, Decision
 
 logger = logging.getLogger(__name__)
-APPROVED_IDENTITY_VERSION = "penny-v0.1"
-APPROVED_PROMPT_SHA256 = "75a9b0bb59b89daa6921b7794a364adb3c85849f2d1e8382acdf1dfdd4af9372"
+APPROVED_IDENTITY_VERSION = "penny-v0.2"
+APPROVED_PROMPT_SHA256 = "e1ef18151ddd473f2d73756204740a97e28c5cd254c0b46a500196f069a08e9a"
 _ALLOWED = frozenset({
     (Actor.WORKER, Capability.GENERATE_DRAFT),
     (Actor.WORKER, Capability.STORE_DRAFT),
