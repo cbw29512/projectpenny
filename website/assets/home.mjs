@@ -1,3 +1,4 @@
+import { nextAside } from "./character-asides.mjs";
 import { MAX_QUESTION, PREVIEW_NOTICE, questionState, previewQuestion } from "./preview-state.mjs";
 
 function boot() {
@@ -17,9 +18,23 @@ function boot() {
     try { render(questionState(question.value)); }
     catch { send.disabled = true; notice.textContent = PREVIEW_NOTICE; }
   });
+  const thought = document.getElementById("thought");
+  let asideIndex = 0;
   send.addEventListener("click", () => {
-    try { render(previewQuestion(question.value)); }
-    catch { send.disabled = true; notice.textContent = "Preview unavailable. Nothing was sent."; }
+    try {
+      const state = previewQuestion(question.value);
+      render(state);
+      // A scripted character reaction, never an answer or fake AI progress.
+      if (state.canPreview && thought) {
+        const aside = nextAside(asideIndex);
+        asideIndex = aside.index;
+        thought.textContent = aside.text;
+      }
+    } catch {
+      console.error("Penny local preview failed.");
+      send.disabled = true;
+      notice.textContent = "Preview unavailable. Nothing was sent.";
+    }
   });
   render(questionState(question.value));
   question.disabled = false;
