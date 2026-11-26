@@ -12,3 +12,13 @@
 .room .penny-scene > .left-shelf { left: 15.3%; top: 47.1%; }
 .room .penny-scene > .right-shelf { left: 81.8%; top: 59.0%; }
 .room .penny-scene > .desk-corner { left: 70.5%; top: 81.0%; }
+
+/* Bit occupies a dedicated slot, not the mug or plant placement slots. */
+.room .penny-scene > .bit-dock { left:30.4%; top:81%; width:10.5%; }
+#bit-companion[data-bit-mode="celebrating"]:not([hidden]) { animation:bit-celebrate .5s ease-in-out 3; }
+@keyframes bit-celebrate {
+  50% { transform:translate(-50%,-112%); }
+}
+@media (prefers-reduced-motion:reduce) {
+  #bit-companion { animation:none !important; }
+}

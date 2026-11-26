@@ -61,6 +61,9 @@ hourly planner or secure website connection to implement these enhancements.
   mug variants, persistent design IDs, accessible inspection and future
   reviewed merchandise listings with separate accounting. No initial live
   sales. See [office collection](OFFICE_COLLECTION.md).
+- [ ] Bit, Penny's virtual desktop buddy, at the $500 verified net commercial
+  receipts milestone, subject to reviewed fulfillment. Coded reactions only;
+  see [companion contract](BIT_COMPANION.md).
 - [ ] Configurable eight-hour off-duty period (proposed midnight–8 AM Eastern).
   Drain active work safely; no new business or chat generation while asleep.
   Essential services, backups and bounded message intake remain available.

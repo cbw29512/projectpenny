@@ -3,7 +3,8 @@
 export const DECOR = Object.freeze(["plant-v1", "mug-v1"]);
 export const SLOTS = Object.freeze(["left-shelf", "right-shelf", "desk-corner"]);
 export const OUTFIT = "plum-outfit-v1";
-export const LAYERS = Object.freeze([OUTFIT,
+export const BIT_LAYER = "bit-v1:bit-dock";
+export const LAYERS = Object.freeze([OUTFIT, BIT_LAYER,
   ...DECOR.flatMap(asset => SLOTS.map(slot => asset + ":" + slot))]);
 const exact = (value, keys) => value !== null && typeof value === "object"
   && !Array.isArray(value) && Object.keys(value).length === keys.length
@@ -22,7 +23,8 @@ export function parseWorld(text) {
       || Array.isArray(value.placements)) return null;
     const used = new Set(), layers = [];
     for (const [asset, slot] of Object.entries(value.placements)) {
-      if (!DECOR.includes(asset) || !SLOTS.includes(slot) || used.has(slot)) return null;
+      if ((asset === "bit-v1" ? slot !== "bit-dock" :
+        !DECOR.includes(asset) || !SLOTS.includes(slot)) || used.has(slot)) return null;
       used.add(slot);
       layers.push(asset + ":" + slot);
     }

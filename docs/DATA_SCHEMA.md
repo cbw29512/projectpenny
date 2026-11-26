@@ -45,6 +45,8 @@ Proposed relational contract; not implemented DDL. UUID identifiers, UTC timesta
 | merch_listing (planned) | design/version, provider SKU, exact print/listing digests, currency/price, seller, ledger owner, approval, state |
 | daily_style (planned) | local date, timezone, collection version, shirt/mug/poster IDs, review/override reference |
 
+| world reward binding | existing penny_world_event reward_source_sha256, required for Bit acquisition; exact verified financial source, immutable |
+
 ## Transitions
 Task: submitted -> queued -> running -> succeeded/failed/canceled/expired. Running -> checkpointed -> queued only with reserved bounded capacity. Leases and fencing reject stale workers; external effects require idempotency and reconciliation.
 Memory: candidate -> quarantined -> validated -> approved -> active -> superseded/revoked. Consent and deletion rules override recall.

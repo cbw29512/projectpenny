@@ -7,6 +7,8 @@ BASELINE = "preview-v1"
 MAX_EVENTS = 2048
 # These are provisional virtual item identifiers, not approved or rendered art.
 DECOR = frozenset(("plant-v1", "mug-v1"))
+BIT = "bit-v1"
+BIT_SLOT = "bit-dock"
 OUTFITS = frozenset(("plum-outfit-v1",))
 SLOTS = frozenset(("left-shelf", "right-shelf", "desk-corner"))
 ACTIONS = frozenset(("acquire", "place", "move", "store", "equip", "unequip", "remove"))
@@ -22,9 +24,10 @@ class World:
 
 def valid_command(action, asset_id, slot):
     return (type(action) is str and action in ACTIONS
-            and type(asset_id) is str and asset_id in DECOR | OUTFITS
-            and (slot is None or type(slot) is str and slot in SLOTS | {"outfit"})
-            and (slot in SLOTS if action in ("place", "move") else
+            and type(asset_id) is str and asset_id in DECOR | OUTFITS | {BIT}
+            and (slot is None or type(slot) is str and slot in SLOTS | {"outfit", BIT_SLOT})
+            and ((slot == BIT_SLOT if asset_id == BIT else slot in SLOTS)
+                 if action in ("place", "move") else
                  slot == "outfit" if action == "equip" else slot is None))
 
 
@@ -43,7 +46,7 @@ def apply(world, action, asset_id, slot):
         elif asset_id not in owned:
             return None
         elif action in ("place", "move"):
-            if (asset_id not in DECOR or slot in placed.values()
+            if (asset_id not in DECOR | {BIT} or slot in placed.values()
                     or (asset_id in placed) != (action == "move")):
                 return None
             placed[asset_id] = slot

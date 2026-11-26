@@ -196,6 +196,13 @@ pending. Decorative time cannot grant task, wardrobe or rest authority.
 References: [Schlyter's orbital formulas](https://stjarnhimlen.se/comp/ppcomp.html)
 and [NOAA solar calculation details](https://gml.noaa.gov/grad/solcalc/calcdetails.html).
 
+## Bit — permanent desktop companion
+
+Bit joins only through the reviewed $500 reward and persistent placement.
+No separate LLM, independent work or fictional revenue. Fixed local art and
+coded verified-state reactions are separate from permanent ownership.
+See [companion contract](BIT_COMPANION.md).
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

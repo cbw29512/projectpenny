@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/assets/board.css">
   <script type="module" src="/assets/home.mjs"></script>
   <script type="module" src="/assets/scene/world-render.mjs"></script>
+  <script type="module" src="/assets/scene/bit-render.mjs"></script>
   <script type="module" src="/assets/scene/office-collection-render.mjs"></script>
   <script type="module" src="/assets/scene/daily-office-render.mjs"></script>
   <script type="module" src="/assets/scene/office-sky-render.mjs"></script>
@@ -55,6 +56,7 @@
             <img data-world-layer="mug-v1:left-shelf" hidden class="world-prop left-shelf" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
             <img data-world-layer="mug-v1:right-shelf" hidden class="world-prop right-shelf" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
             <img data-world-layer="mug-v1:desk-corner" hidden class="world-prop desk-corner" src="/assets/scene/mug-v1.svg" width="40" height="40" alt="">
+            <img data-world-layer="bit-v1:bit-dock" hidden id="bit-companion" class="world-prop bit-dock" src="/assets/scene/bit/bit-idle-v1.svg" width="82" height="84" alt="">
           </div>
           <span class="room-caption">At her desk · fictional scene, not live work status</span>
           <span class="room-caption" id="office-sky-caption">Calculated Eastern Time sky unavailable.</span>
@@ -70,6 +72,7 @@
             <input id="daily-office-date" type="date" min="2000-01-01" max="2099-12-31">
             <button id="daily-office-preview" type="button">Preview date</button>
           </section>
+          <span class="room-caption">Future reward: Bit, the virtual desktop buddy · $500 verified net commercial receipts; approval required.</span>
           <span id="world-notice" class="room-caption" role="status">Fixed concept scene · no reviewed world snapshot connected.</span>
         </div>
         <div class="dialogue">
@@ -232,5 +235,6 @@
   <script type="application/json" id="achievement-snapshot">{"schema":"penny-achievements-v1","status":"unavailable","achievements":[]}</script>
   <script type="application/json" id="world-snapshot">{"schema":"penny-world-v1","status":"unavailable"}</script>
   <script type="application/json" id="daily-office-snapshot">{"schema":"penny-daily-office-v1","status":"unavailable"}</script>
+  <script type="application/json" id="bit-activity-snapshot">{"schema":"penny-bit-activity-v1","status":"unavailable"}</script>
 </body>
 </html>

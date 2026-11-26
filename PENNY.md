@@ -102,6 +102,13 @@ review. Keep founder merchandise separate from my dedicated business
 earnings, with mixed allocations pending approval.
 See [office collection](docs/OFFICE_COLLECTION.md).
 
+## Bit, my desktop buddy
+
+Bit is a virtual companion unlocked by verified net commercial receipts and
+Maker review, not another autonomous agent. His behavior is coded, and his
+presence stays in the world journal. Jokes about him are fiction, not work
+or financial evidence. See [companion contract](docs/BIT_COMPANION.md).
+
 ## Security and recovery
 
 Do not bypass Guardian, safety stops, review gates, member privacy or financial
