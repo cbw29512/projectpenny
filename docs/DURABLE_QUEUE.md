@@ -10,3 +10,7 @@ Every mutation obtains the singleton row lock at READ COMMITTED isolation before
 Claim sets unique fence token and bounded lease (120 seconds public, 900 business; capped by deadline). Completion requires matching token, running state and valid lease. Outcome, usage and last-served member commit together. Expired claims are never automatically stolen. Recovery requires explicit operator confirmation and the matching expired fence. No actual external effects or worker yet.
 All API callers are trusted internal code; no public authentication or payment integration. Daily quotas, checkpoints, cancellation of active work, notifications, retention, measured GPU usage, safe worker isolation automation and retry policy remain follow-up tasks. No runtime guarantee until worker enforcement is built.
 Run integration tests only with a disposable PostgreSQL database. Never point the tests at production.
+
+Current integration tests apply all migrations through the shared isolated fixture;
+see [TEST_DATABASE.md](TEST_DATABASE.md). Migration 001 alone no longer supports
+the current scheduler, which also requires the personal-recall tables.

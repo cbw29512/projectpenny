@@ -34,3 +34,6 @@ correction/revocation. Candidate text may contain false claims, personal data or
 prompt injection; do not feed it into active context. Deployment must restrict
 database and process privileges; this module is not OS isolation. Do not run
 unattended review admission before quotas and retention are in place.
+
+Current integration tests apply the complete ordered migration set; see
+[TEST_DATABASE.md](TEST_DATABASE.md). Partial schemas are not supported for the current worker.

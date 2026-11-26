@@ -1,13 +1,10 @@
 """Private intake tests; PostgreSQL tests use an isolated disposable schema."""
-import os
 import unittest
-from pathlib import Path
 from unittest.mock import Mock, patch
 from uuid import uuid4
 
 import psycopg
-from psycopg import sql
-from psycopg.conninfo import make_conninfo
+from database_fixture import DSN, DatabaseFixture
 
 from penny.guardian.state import Decision
 from penny.memory.intake import parse_candidate, submit_review
@@ -16,7 +13,6 @@ from penny.scheduler.outcomes import complete
 from penny.scheduler.storage import TaskStore
 from penny.scheduler.worker import run_once, WorkerResult
 
-DSN = os.environ.get("PENNY_TEST_DSN")
 VALID = '{"kind":"lesson","content":"Compare observed results."}'
 
 
@@ -51,24 +47,7 @@ class CandidateTests(unittest.TestCase):
 
 
 @unittest.skipUnless(DSN, "disposable PostgreSQL not configured")
-class MemoryIntegrationTests(unittest.TestCase):
-    def setUp(self):
-        self.schema = "memory_test_" + uuid4().hex
-        with psycopg.connect(DSN, autocommit=True) as conn:
-            if conn.info.dbname != "penny_test":
-                raise RuntimeError("expected disposable penny_test database")
-            conn.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(self.schema)))
-        self.addCleanup(self.drop_schema)
-        self.dsn = make_conninfo(DSN, options="-c search_path=" + self.schema)
-        with psycopg.connect(self.dsn, autocommit=True) as conn:
-            for name in ("001_scheduler.sql", "002_memory_candidates.sql"):
-                conn.execute(Path("migrations", name).read_text())
-        self.store = TaskStore(self.dsn)
-
-    def drop_schema(self):
-        with psycopg.connect(DSN, autocommit=True) as conn:
-            conn.execute(sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(self.schema)))
-
+class MemoryIntegrationTests(DatabaseFixture):
     def candidates(self):
         with psycopg.connect(self.dsn) as conn:
             return conn.execute(
@@ -113,7 +92,11 @@ class MemoryIntegrationTests(unittest.TestCase):
         submit_review(self.store, "a", "Observed result")
         claim = self.store.claim()
         with psycopg.connect(self.dsn) as conn:
-            conn.execute("DROP TABLE memory_candidate")
+            # Simulate a failed write without dropping foreign-key dependencies.
+            conn.execute("""CREATE FUNCTION reject_candidate() RETURNS trigger LANGUAGE plpgsql AS $
+                            BEGIN RAISE EXCEPTION 'test write failure'; END; $""")
+            conn.execute("""CREATE TRIGGER reject_candidate BEFORE INSERT ON memory_candidate
+                            FOR EACH ROW EXECUTE FUNCTION reject_candidate()""")
         with self.assertRaises(psycopg.Error):
             complete(self.dsn, claim.task_id, claim.fence, success=True, result=VALID)
         with psycopg.connect(self.dsn) as conn:

@@ -22,7 +22,7 @@ class TaskStore:
             type(use_personal_memory) is not bool
             or (use_personal_memory and _session_token is None)
             or (_session_token is not None and member is not None)
-            or             (member is not None and not isinstance(member, UUID))
+            or (member is not None and not isinstance(member, UUID))
             or not isinstance(key, str) or not 1 <= len(key) <= 128
             or not isinstance(payload, str) or not 1 <= len(payload) <= 2000
             or not key.strip() or not payload.strip() or "\x00" in key or "\x00" in payload

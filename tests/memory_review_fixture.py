@@ -1,41 +1,18 @@
-"""Review lifecycle integration tests in a disposable isolated schema."""
-import os
-import unittest
-from pathlib import Path
+"""Shared memory lifecycle helpers on the migration-complete test database."""
 from uuid import uuid4
 
-import psycopg
-from psycopg import sql
-from psycopg.conninfo import make_conninfo
-
+from database_fixture import DSN, DatabaseFixture
 from penny.memory.intake import submit_review
-from penny.memory.recall import recall
-from penny.memory.review import approve, revoke
+from penny.memory.review import approve
 from penny.scheduler.outcomes import complete
-from penny.scheduler.storage import TaskStore
 
-DSN = os.environ.get("PENNY_TEST_DSN")
 CONTENT = "Measure outcomes first."
 
 
-class ReviewFixture(unittest.TestCase):
+class ReviewFixture(DatabaseFixture):
     def setUp(self):
-        self.schema = "review_test_" + uuid4().hex
-        with psycopg.connect(DSN, autocommit=True) as conn:
-            if conn.info.dbname != "penny_test":
-                raise RuntimeError("expected disposable penny_test database")
-            conn.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(self.schema)))
-        self.addCleanup(self.drop_schema)
-        self.dsn = make_conninfo(DSN, options="-c search_path=" + self.schema)
-        with psycopg.connect(self.dsn, autocommit=True) as conn:
-            for path in sorted(Path("migrations").glob("*.sql")):
-                conn.execute(path.read_text())
-        self.store = TaskStore(self.dsn)
+        super().setUp()
         self.reviewer = uuid4()
-
-    def drop_schema(self):
-        with psycopg.connect(DSN, autocommit=True) as conn:
-            conn.execute(sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(self.schema)))
 
     def candidate(self, key="a", content=CONTENT):
         import json
