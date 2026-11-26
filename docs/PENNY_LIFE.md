@@ -238,6 +238,16 @@ and wake time only from the locked actual state. No website transport is
 installed. Deployment, migration application, enablement, role grants
 and end-to-end validation remain separate gates.
 
+## Simplified sleep presentation
+
+Maker direction: show ZZZZZ and a short clearly fictional dream while
+verified asleep, rather than elaborate sleeping animations or a countdown.
+Seven fixed whimsical dream lines reuse the weekly pajama selection.
+No inference, network request, business claim, or private content. The
+preview is explicitly fictional; stale or awake state clears the dream.
+The operational rest policy is unchanged. Defer further sleep decoration
+in favor of website connection, business rehearsal and launch gates.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

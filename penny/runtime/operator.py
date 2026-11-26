@@ -8,6 +8,8 @@ from .config import load_config
 from .operator_status import status
 from .operator_control import stop,start,recover_inference,clear_bridge_block
 from penny.progress.rest import configure
+from penny.progress.activity import browser_candidate as activity_candidate
+from penny.progress.rest import browser_candidate as rest_candidate
 
 
 def main():
@@ -16,6 +18,8 @@ def main():
     parser.add_argument("--config",required=True)
     commands=parser.add_subparsers(dest="action",required=True)
     commands.add_parser("status")
+    commands.add_parser("activity-candidate")
+    commands.add_parser("rest-candidate")
     commands.add_parser("stop")
     enable=commands.add_parser("start")
     enable.add_argument("kind",choices=("inference","bridge"))
@@ -34,6 +38,10 @@ def main():
         dsn=load_config(args.config,"operator").dsn
         if args.action=="status":
             print(json.dumps(status(dsn),indent=2,sort_keys=True))
+            return 0
+        if args.action in ("activity-candidate","rest-candidate"):
+            candidate=activity_candidate if args.action=="activity-candidate" else rest_candidate
+            print(json.dumps(candidate(dsn),sort_keys=True))
             return 0
         if args.action=="stop":
             ok=stop(dsn)

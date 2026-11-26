@@ -73,6 +73,17 @@ hourly planner or secure website connection to implement these enhancements.
 - [ ] Actual bedtime and morning reports, wake countdown, safe recovery and
   daylight-saving tests. See [life-cycle contract](PENNY_LIFE.md).
 
+## Current launch focus
+
+Freeze additional office decoration work after the simple ZZZZZ / fictional
+dream presentation. Next: verify CI, private business rehearsal, secure
+website transport and Maker review; no additional spend or live deployment.
+The coarse private activity candidate and homepage consumer use fixed
+status phrases and a 15-second expiry; no private work titles, member
+information, drafts or fake progress. Private SSH operator commands
+activity-candidate and rest-candidate emit only these local candidates;
+neither publishes or establishes public chat availability.
+
 ## State and release rules
 Thought: evidence-based commentary on observed work, verified results and setbacks,
 distinct from speech. No invented progress, rotating fictional commentary or

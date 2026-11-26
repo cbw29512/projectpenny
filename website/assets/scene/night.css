@@ -9,3 +9,9 @@
 }
 .pajama-inspector { display:block; max-width:170px; width:100%; height:auto; margin:.75rem auto; }
 #night-status { font-size:.85rem; }
+
+/* During verified rest the decorative dream replaces the work thought cloud.
+   Private speech and existing reply controls remain separate. */
+.world:has(.penny-scene[data-night-mode="reviewed"]) .thought-bubble { display:none; }
+#penny-dream[hidden] { display:none !important; }
+#penny-dream { font-size:.85rem; font-style:italic; }

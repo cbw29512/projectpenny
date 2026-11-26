@@ -2,16 +2,24 @@ import { PAJAMAS,pajamasFor } from "./office-pajamas.mjs";
 import { parseRest,nightView } from "./night-state.mjs";
 const ART=new Map(PAJAMAS.map(p=>[p.id,"/assets/scene/pajamas/"+p.id+".svg"]));
 
-export function nightPresenter(scene,art,notice,link){
+const DREAMS=Object.freeze(["Negotiating with a toaster.","A castle made of graphics cards.","Counting electric sheep.","A coffee mug that refills itself.","A spaceship powered by spare RAM.","An infinite library of debugging books.","A garden of tiny robot flowers."]);
+
+export function nightPresenter(scene,art,notice,link,dream){
   let hadReviewed=false,latest=-1;
   function clear(message){
     art.hidden=true;delete scene.dataset.nightMode;
+    if(dream){dream.hidden=true;dream.textContent="";}
     notice.textContent=message;link.textContent="Browse pajamas";link.href="#collection-pajamas";
   }
   function show(p,mode,message){
     if(!ART.has(p.id))return false;
     art.src=ART.get(p.id);art.hidden=false;
     scene.dataset.nightMode=mode;
+    if(dream){
+      // Fixed fictional entertainment; never a model request or an activity record.
+      dream.hidden=false;
+      dream.textContent="Fictional dream — "+DREAMS[PAJAMAS.indexOf(p)];
+    }
     notice.textContent=message;
     link.textContent=p.phrase;link.href="#design-"+p.id;
     return true;
@@ -27,8 +35,7 @@ export function nightPresenter(scene,art,notice,link){
         hadReviewed=true;latest=s.sampledAt;
         const view=nightView(s,now);
         if(view){
-          const h=Math.floor(view.minutes/60),m=view.minutes%60;
-          return show(view.pajamas,"reviewed","Verified off duty · scheduled wake 8 AM ET · "+h+"h "+m+"m remaining.");
+          return show(view.pajamas,"reviewed","ZZZZZ");
         }
         clear(s.state==="draining"?"Rest transition pending — finishing work.":s.state==="blocked"?"Rest blocked — recovery required.":"Reviewed awake state.");
         return true;
@@ -52,7 +59,7 @@ function boot(){
   const scene=get("penny-scene"),art=get("night-pajama-art"),notice=get("night-status"),link=get("night-pajama-link"),source=get("rest-snapshot");
   const date=get("daily-office-date"),night=get("night-preview"),day=get("night-preview-day");
   if(!scene||!art||!notice||!link||!source||!date||!night||!day)return;
-  const view=nightPresenter(scene,art,notice,link);
+  const view=nightPresenter(scene,art,notice,link,get("penny-dream"));
   let timer;
   const refresh=()=>{
     clearTimeout(timer);

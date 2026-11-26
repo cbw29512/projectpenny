@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/assets/progress.css">
   <link rel="stylesheet" href="/assets/board.css">
   <script type="module" src="/assets/home.mjs"></script>
+  <script type="module" src="/assets/activity-render.mjs"></script>
   <script type="module" src="/assets/scene/world-render.mjs"></script>
   <script type="module" src="/assets/scene/bit-render.mjs"></script>
   <script type="module" src="/assets/scene/office-collection-render.mjs"></script>
@@ -41,7 +42,7 @@
         <div><p class="eyebrow">CHAPTER 01 / THE FORGOTTEN WEBSITE</p>
         <h1 id="home-title">Meet Penny.</h1>
         <p class="slogan">Financially Underfunded. Sarcastically Overqualified.</p></div>
-        <span class="label">Live AI not connected</span>
+        <span class="label" id="activity-label">Live AI not connected</span>
       </div>
       <div class="world">
         <div class="room">
@@ -80,6 +81,7 @@
             <button id="night-preview" type="button">Preview pajamas</button>
             <button id="night-preview-day" type="button">Return to day preview</button>
             <p id="night-status" role="status">No verified rest state connected.</p>
+            <p id="penny-dream" hidden></p>
             <a id="night-pajama-link" href="#collection-pajamas">Browse pajamas</a>
           </section>
           <span class="room-caption">Future reward: Bit, the virtual desktop buddy · $500 verified net commercial receipts; approval required.</span>
@@ -249,5 +251,6 @@
   <script type="application/json" id="daily-office-snapshot">{"schema":"penny-daily-office-v1","status":"unavailable"}</script>
   <script type="application/json" id="bit-activity-snapshot">{"schema":"penny-bit-activity-v1","status":"unavailable"}</script>
   <script type="application/json" id="rest-snapshot">{"schema":"penny-rest-v1","status":"unavailable"}</script>
+  <script type="application/json" id="activity-snapshot">{"schema":"penny-activity-v1","status":"unavailable"}</script>
 </body>
 </html>

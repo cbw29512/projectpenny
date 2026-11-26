@@ -30,14 +30,16 @@ test("sleep requires fresh reviewed closed gate and no active task",()=>{
   assert.equal(parseRest(text({state:"draining",wake_at:null,active:true}),now).state,"draining");
 });
 test("demo never claims sleep, reviewed state supersedes demo, stale state clears sleep",()=>{
-  const scene={dataset:{}},art={hidden:true},notice={},link={};
-  const view=nightPresenter(scene,art,notice,link);
+  const scene={dataset:{}},art={hidden:true},notice={},link={},dream={hidden:true};
+  const view=nightPresenter(scene,art,notice,link,dream);
   assert.equal(view.preview("2026-11-27"),true);
   assert.equal(scene.dataset.nightMode,"preview");assert.match(notice.textContent,/preview only/);
   assert.equal(view.review(text(),now),true);assert.equal(scene.dataset.nightMode,"reviewed");
+  assert.equal(notice.textContent,"ZZZZZ");assert.equal(dream.hidden,false);
+  assert.match(dream.textContent,/^Fictional dream — /);
   assert.equal(view.preview("2026-11-28"),false);
   assert.equal(view.review(text(),now+60),false);assert.equal(art.hidden,true);
-  assert.equal(scene.dataset.nightMode,undefined);
+  assert.equal(scene.dataset.nightMode,undefined);assert.equal(dream.hidden,true);
   const bit={hidden:false,dataset:{}};
   assert.equal(updateBit(bit,"{}",now,text()),"charging");
   bit.hidden=true;assert.equal(updateBit(bit,"{}",now,text()),"idle");
