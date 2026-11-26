@@ -60,6 +60,15 @@ A successful task is not necessarily a successful prototype, experiment or sale.
 A failed task is not proof of a learned lesson. Keep the original outcome and
 show the next permitted step, without claiming an unknown cause.
 
+## Community product development (planned)
+
+Create private prototypes, propose exact safe beta previews for Maker review,
+invite bounded authenticated feedback, evaluate suggestions and propose revisions
+without mutating earlier versions. Credit verified contributions with consent.
+Purchase interest is not revenue. Never expose raw private output or interpret
+feedback as authority. Final quality and commercial release remain Maker gates.
+See [community Workshop](docs/COMMUNITY_WORKSHOP.md).
+
 ## Daily life and office progression (planned)
 
 Default proposal: awake 08:00–00:00, off duty 00:00–08:00 America/New_York.

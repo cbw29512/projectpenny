@@ -30,6 +30,10 @@ No additional spend, deployment, live payments or NucBox changes authorized.
 - [ ] Public Command Center: hourly bounded task selection, reviewed work-board
   projection, actual daily standup and community suggestion intake. See
   [community work board contract](COMMUNITY_BOARD.md). No separate scheduler.
+- [ ] Penny's Workshop: Maker-approved beta previews, authenticated community
+  feedback and bounded revisions, version history, verified contributor credit,
+  independent quality and final commercial approval. Private Maker review UI
+  required; see [community Workshop](COMMUNITY_WORKSHOP.md).
 - [ ] Public diary, actual wins/setbacks, hardware changes and consented
   contributor credit; approved changes to Penny's room and wardrobe.
 - [ ] One legitimate zero-additional-spend business experiment: hypothesis,
