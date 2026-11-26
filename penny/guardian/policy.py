@@ -26,6 +26,7 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.ISSUE_MEMBER_SESSION),
     (Actor.WORKER, Capability.RECALL_MEMBER_MEMORY),
     (Actor.ADMIN, Capability.VERIFY_CONTRIBUTION),
+    (Actor.ADMIN, Capability.RECORD_VAULT_ENTRY),
     (Actor.MEMBER, Capability.MANAGE_OWN_RECOGNITION),
     (Actor.MEMBER, Capability.WITHDRAW_RECOGNITION),
 })
@@ -56,6 +57,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "capability_denied")
         if capability in (Capability.APPROVE_BRIDGE_REPLY,Capability.READ_APPROVED_BRIDGE_REPLY):
             return Decision(True, "fenced_reviewed_reply_only")
+        if capability is Capability.RECORD_VAULT_ENTRY:
+            return Decision(True, "administrator_evidence_accounting_only")
         if capability is Capability.VERIFY_CONTRIBUTION:
             return Decision(True, "administrator_evidence_review_only")
         if capability is Capability.MANAGE_OWN_RECOGNITION:
