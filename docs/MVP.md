@@ -2,6 +2,9 @@
 Approved direction: Penny's Forgotten Website is the initial product. Social
 broadcasts and platform adapters are deferred until the website is proven.
 Retain the existing tested core, canonical constitution and security contracts.
+Maker-directed operating references: [SOUL](../SOUL.md), [GOALS](../GOALS.md),
+[PENNY](../PENNY.md). They document the pinned identity and approved work
+priorities; runtime authority remains in Guardian and durable state.
 No additional spend, deployment, live payments or NucBox changes authorized.
 
 ## Launch sequence
