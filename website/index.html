@@ -12,6 +12,7 @@
   <script type="module" src="/assets/home.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
   <script type="module" src="/assets/timeline.mjs"></script>
+  <script type="module" src="/assets/achievements.mjs"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to Penny</a>
@@ -104,12 +105,15 @@
       <section id="progress" class="panel" aria-labelledby="achievement-title">
         <p class="eyebrow">MILESTONES</p><h2 id="achievement-title">Achievement Center</h2>
         <p><a href="#life-dashboard">View financial and business progress</a></p>
-        <p class="muted">Unlocks require verified evidence.</p>
+        <p class="muted">Unlocks require verified evidence. Review dates are not necessarily the original achievement dates.</p>
+        <p id="achievement-status" class="small" role="status">No reviewed achievement snapshot available.</p>
         <ul class="achievements">
           <li><span class="medal" aria-hidden="true">01</span><div><strong>Hello, World</strong><small>First verified conversation</small></div><span class="label">Unverified</span></li>
-          <li><span class="medal" aria-hidden="true">02</span><div><strong>First Dollar</strong><small>First verified commercial dollar</small></div><span class="label">Unverified</span></li>
+          <li data-achievement-code="first_dollar"><span class="medal" aria-hidden="true">02</span><div><strong>First Dollar</strong><small>At least $1 in net recorded commercial receipts</small><small data-award-date hidden></small></div><span class="label" data-award-status>Unverified</span></li>
           <li><span class="medal" aria-hidden="true">03</span><div><strong>Open for Business</strong><small>First verified product launch</small></div><span class="label">Unverified</span></li>
           <li><span class="medal" aria-hidden="true">04</span><div><strong>My Own Computer</strong><small>Independently funded computing</small></div><span class="label">Unverified</span></li>
+          <li data-achievement-code="in_the_green"><span class="medal" aria-hidden="true">05</span><div><strong>In the Green</strong><small>Positive commercial result after recorded costs and fees</small><small data-award-date hidden></small></div><span class="label" data-award-status>Unverified</span></li>
+          <li data-achievement-code="proof_of_concept"><span class="medal" aria-hidden="true">06</span><div><strong>Proof of Concept</strong><small>A reviewed business experiment met its target</small><small data-award-date hidden></small></div><span class="label" data-award-status>Unverified</span></li>
         </ul>
       </section>
       <section id="council" class="panel" aria-labelledby="contributors-title">
@@ -143,5 +147,6 @@
   <footer class="wrap footer">Development preview · No live chat, payments or financial claims.</footer>
   <script type="application/json" id="progress-snapshot">{"status":"unavailable","payload":null}</script>
   <script type="application/json" id="timeline-snapshot">{"schema":"penny-timeline-v1","status":"unavailable","events":[]}</script>
+  <script type="application/json" id="achievement-snapshot">{"schema":"penny-achievements-v1","status":"unavailable","achievements":[]}</script>
 </body>
 </html>
