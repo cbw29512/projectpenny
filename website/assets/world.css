@@ -44,3 +44,12 @@ button:not(:disabled):hover { background: #10554f; }
   .medal { width: 30px; height: 30px; }
   .wrap { width: calc(100% - 1rem); }
 }
+
+/* Fictional thoughts must look distinct from the visitor's spoken reply. */
+.room { background: #493e33; }
+.thought-bubble { border: 2px dashed #998c79; background: #f4efe5; color: #51473b; padding: 1rem 1.15rem; border-radius: 2rem; overflow-wrap: anywhere; }
+.thought-bubble p:last-child { font-style: italic; }
+.bubble-kind { display: block; font-size: .72rem; font-weight: 750; letter-spacing: .07em; margin-bottom: .45rem; }
+.thought-bubble .bubble-kind { color: #675744; }
+.bubble .bubble-kind { color: #245c50; }
+.scene-note { color: var(--muted); font-size: .78rem; }
