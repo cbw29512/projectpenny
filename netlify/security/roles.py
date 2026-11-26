@@ -7,9 +7,11 @@ from psycopg import sql
 logger = logging.getLogger(__name__)
 # Fixed signatures, not supplied by a request or the model.
 SCOPES = {
-    "member": ("mailbox_submit(uuid,uuid,text)","mailbox_read(uuid,uuid)"),
+    "member": ("mailbox_submit(uuid,uuid,text)","mailbox_read(uuid,uuid)",
+               "mailbox_allow_member(uuid,text)"),
     "bridge": ("mailbox_claim()","mailbox_ack(uuid,uuid,uuid)",
-               "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)"),
+               "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)",
+               "mailbox_allow_bridge(text)"),
     "maintenance": ("mailbox_purge()",),
 }
 HELPER = "mailbox_expire(timestamptz)"

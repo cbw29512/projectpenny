@@ -16,8 +16,7 @@ separate query adapters using fixed penny_mailbox schema. No external package.
 Tests: node --test tests/web/*.test.mjs.
 This core is not in a Netlify functions directory and no endpoint is live.
 Netlify runtime adapter, actual separate DB credentials, token provisioning,
-distributed attempt/read limiter and provider-level edge controls remain
-required. In-memory rate limiting would not protect serverless instances.
+provider-level edge controls remain required. Shared SQL attempt/read limiter is implemented separately; see [throttle contract](GATEWAY_THROTTLE.md). It does not cap all HTTP or DB requests.
 HMAC bearer theft permits replay until expiry; per-member disable at DB,
 key rotation, local bridge replay mapping and proper identity provider needed
 before public use. Need bounded connection/statement/body read timeouts at
