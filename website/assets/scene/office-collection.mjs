@@ -1,5 +1,5 @@
 // Fixed development concepts only; no purchase, ownership or publication authority.
-export const COLLECTION_VERSION = "office-concept-v1";
+export const COLLECTION_VERSION = "office-concept-v2";
 export const MUGS = Object.freeze([
   {
     "id": "mug-localhost-v1",
@@ -59,36 +59,8 @@ export const MUGS = Object.freeze([
     "color": "sand"
   }
 ].map(m => Object.freeze({...m,lines:Object.freeze(m.lines)})));
-export const SHIRTS = Object.freeze([
-  {
-    "id": "shirt-teal-v1",
-    "color": "teal"
-  },
-  {
-    "id": "shirt-plum-v1",
-    "color": "plum"
-  },
-  {
-    "id": "shirt-blue-v1",
-    "color": "blue"
-  },
-  {
-    "id": "shirt-forest-v1",
-    "color": "forest"
-  },
-  {
-    "id": "shirt-maroon-v1",
-    "color": "maroon"
-  },
-  {
-    "id": "shirt-mustard-v1",
-    "color": "mustard"
-  },
-  {
-    "id": "shirt-charcoal-v1",
-    "color": "charcoal"
-  }
-].map(Object.freeze));
+export { SHIRTS } from "./office-shirts.mjs";
+import { SHIRTS } from "./office-shirts.mjs";
 
 // Accept a trusted calendar date, not a browser clock. Date arithmetic uses
 // UTC only as a stable civil-day index; timezone resolution happens upstream.

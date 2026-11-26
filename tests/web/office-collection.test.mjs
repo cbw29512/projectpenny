@@ -29,3 +29,21 @@ test("refuses invalid dates, unknown or duplicate IDs and empty pools",()=>{
   assert.equal(dailyStyle("2026-11-26",[shirts[0],shirts[0]],mugs),null);
   assert.equal(dailyStyle("2026-11-26",[shirts[0]],[mugs[0]]).mugId,mugs[0]);
 });
+
+test("all fourteen distinct slogan shirts rotate once before repeating",()=>{
+  assert.equal(SHIRTS.length,14);
+  assert.equal(new Set(SHIRTS.map(s=>s.color)).size,14);
+  assert.equal(new Set(SHIRTS.map(s=>s.phrase)).size,14);
+  assert.ok(SHIRTS.every(s=>s.phrase===s.lines.join(" ") && Object.isFrozen(s.lines)));
+  const styles=Array.from({length:43},(_,i)=>{
+    const date=new Date(Date.UTC(2026,10,26+i)).toISOString().slice(0,10);
+    return dailyStyle(date,shirts,mugs);
+  });
+  assert.equal(new Set(styles.slice(0,14).map(s=>s.shirtId)).size,14);
+  assert.equal(styles[0].shirtId,styles[14].shirtId);
+  assert.equal(new Set(styles.slice(0,42).map(s=>s.shirtId+"|"+s.mugId)).size,42);
+  assert.equal(styles[0].shirtId,styles[42].shirtId);
+  assert.equal(styles[0].mugId,styles[42].mugId);
+  assert.equal(styles[0].collectionVersion,"office-concept-v2");
+  assert.equal(dailyStyle("2026-11-26",["shirt-teal-v1"],mugs),null);
+});

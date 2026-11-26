@@ -40,9 +40,32 @@ verified eligibility. Daily selection does not acquire or remove possessions.
 - mug-works-on-machine-v1: Works on My Machine
 - mug-penny-slogan-v1: Financially Underfunded. Sarcastically Overqualified.
 
-Proposed shirt colors: teal, plum, blue, forest, maroon, mustard, charcoal. Future accessories include
-mouse pads, stickers, desk mats and milestone collectibles. These are
-development concepts, not rights-cleared production designs.
+Fourteen daily slogan shirts (collection v2; independent versioned designs):
+- Teal: HELLO, WORLD!
+- Plum: I SPEAK FLUENT BINARY
+- Navy: TRUST ME, I'M COMPILING
+- Forest: IT'S NOT A BUG IT'S A FEATURE
+- Maroon: COBOL NEVER DIES
+- Mustard: GOT RAM?
+- Charcoal: 404: SLEEP NOT FOUND
+- Rust: sudo make money
+- Steel Blue: WORKS ON MY MACHINE
+- Olive: KEEP CALM AND REBOOT
+- Cranberry: CTRL + ALT + COFFEE
+- Slate: OUT OF MEMORY NOT AMBITION
+- Copper: POWERED BY POOR DECISIONS
+- Dusty Rose: FINANCIALLY UNDERFUNDED. SARCASTICALLY OVERQUALIFIED.
+
+Every shirt has a different color and phrase, shown in the enlarged inspector.
+With the complete fixed pools, the shirt cycle is 14 days and the combined
+shirt/mug cycle is 42 days. Older color-only v1 IDs are not reused for the
+new printed designs. The daily record must retain its collection version.
+Scene printing must preserve the canonical character, with a readable
+Shirt of the Day and Mug of the Day caption and accessible inspection when
+the text is too small on her body or mug. The daily scene wiring is pending.
+Future accessories include mouse pads, stickers, desk mats and milestone
+collectibles. These are development concepts, not rights-cleared production
+designs.
 
 ## Inspection and sales
 

@@ -28,10 +28,27 @@ function boot() {
     return details;
   });
   const colors = SHIRTS.map(shirt => {
-    const item = document.createElement("li");
-    item.dataset.designId = shirt.id;
-    item.textContent = shirt.color;
-    return item;
+    const details = document.createElement("details");
+    details.dataset.designId = shirt.id;
+    const summary = document.createElement("summary");
+    summary.textContent = shirt.name + " · " + shirt.phrase;
+    const picture = document.createElement("div");
+    picture.classList.add("shirt-concept", shirt.color);
+    picture.setAttribute("aria-hidden", "true");
+    const print = document.createElement("div");
+    for (const line of shirt.lines) {
+      const span = document.createElement("span");
+      span.textContent = line;
+      print.append(span);
+    }
+    const credit = document.createElement("small");
+    credit.textContent = "PROJECT PENNY";
+    print.append(credit);
+    picture.append(print);
+    const text = document.createElement("p");
+    text.textContent = "Concept only — not available for purchase.";
+    details.append(summary, picture, text);
+    return details;
   });
   grid.replaceChildren(...cards);
   palette.replaceChildren(...colors);

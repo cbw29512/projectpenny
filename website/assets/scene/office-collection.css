@@ -11,3 +11,26 @@
 .mug-concept small { margin-top:.6rem; font:.65rem/1.2 sans-serif; letter-spacing:.04em; }
 .collection-palette { display:flex; flex-wrap:wrap; gap:.55rem; padding:0; list-style:none; }
 .collection-palette li { border:1px solid var(--line); border-radius:.5rem; padding:.4rem .65rem; }
+
+/* Enlarged shirt inspector uses static color classes, not model-provided styles. */
+.shirt-concept {
+  width:100%; max-width:240px; aspect-ratio:1.12; margin:.75rem auto;
+  display:grid; place-items:center; text-align:center; background:#429285;
+  color:#132c28; clip-path:polygon(32% 3%,42% 11%,58% 11%,68% 3%,98% 22%,85% 46%,73% 39%,73% 98%,27% 98%,27% 39%,15% 46%,2% 22%);
+}
+.shirt-concept > div { width:44%; display:grid; gap:.18rem; font:700 clamp(.58rem,1.6vw,.78rem)/1.18 monospace; overflow-wrap:anywhere; }
+.shirt-concept small { margin-top:.5rem; font:.52rem/1.15 sans-serif; }
+.shirt-concept.teal { background:#429285; color:#132c28; }
+.shirt-concept.plum { background:#805477; color:#ffffff; }
+.shirt-concept.navy { background:#263e60; color:#ffffff; }
+.shirt-concept.forest { background:#41634b; color:#ffffff; }
+.shirt-concept.maroon { background:#803f4a; color:#ffffff; }
+.shirt-concept.mustard { background:#d1ac48; color:#252525; }
+.shirt-concept.charcoal { background:#42464d; color:#ffffff; }
+.shirt-concept.rust { background:#a35434; color:#ffffff; }
+.shirt-concept.steel-blue { background:#517b96; color:#101d25; }
+.shirt-concept.olive { background:#777c41; color:#10150d; }
+.shirt-concept.cranberry { background:#a33454; color:#ffffff; }
+.shirt-concept.slate { background:#616c80; color:#ffffff; }
+.shirt-concept.copper { background:#ad744c; color:#201409; }
+.shirt-concept.dusty-rose { background:#c58c9d; color:#392333; }
