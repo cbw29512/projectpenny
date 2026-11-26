@@ -1,3 +1,33 @@
+# MVP / Definition of Done — social-first launch
+Approved direction: launch Penny through social platforms before interactive web infrastructure.
+Retain existing core, security contracts and canonical constitution. Zero additional spend.
+Repository changes do not authorize deployment, broadcasts, credentials or spending.
+
+## Launch sequence
+- [ ] Twitch chat adapter using official authenticated outbound transport; simulator, deduplication, reconnect and bounded queue.
+- [ ] Local inference benchmark on existing NucBox; pinned persona, Guardian, output review, no unrestricted tools.
+- [ ] Local voice and original avatar, OBS overlay, captions, private operator controls and emergency stop.
+- [ ] Community proposals and deterministic votes; approved options, recorded outcome, evidence and opted-in recognition. No paid votes or policy override.
+- [ ] Persistent state, verified Vault, separate founder ledger, actual costs and receipts only; approved Twitch entertainment revenue dedicated to Penny.
+- [ ] One supervised end-to-end private rehearsal, then owner-approved public Twitch broadcast.
+- [ ] YouTube and Discord adapters with verified platform permissions, shared scheduler and moderation; staged release after Twitch.
+- [ ] Local clip preparation and approved publication to Shorts, TikTok, Instagram and Facebook; manual upload acceptable initially.
+- [ ] Static public progress page, source-backed milestones, availability and links; no public private-chat mailbox required for initial launch.
+- [ ] At least one legitimate, owner-approved business experiment with documented costs, outcome and community input.
+- [ ] Backup/restore, overload, prompt injection, duplicate event, reconnect and emergency-stop tests; platform policy, rights and monetization eligibility checks.
+
+## State and boundaries
+Canonical local PostgreSQL: platform event (platform, channel, event ID, actor ID, timestamp, consent, moderation state), proposal, ballot (one per eligible platform identity per poll; cross-platform uniqueness not assumed), decision, content outbox, broadcast session, financial evidence and contributor consent.
+Event: received -> validated -> moderated -> queued -> processed or rejected/expired.
+Publication: draft -> reviewed -> approved -> sent or failed; uncertain sends require reconciliation.
+Poll: draft -> approved -> open -> closed -> recorded -> implemented or vetoed with reason.
+Votes and cached status do not invoke inference. Bound all queues and retries. No public home-network listener.
+No autonomous public publishing, live payments, binding commitments, paid scaling or changes to existing NucBox services without owner approval.
+Twitch is the first interactive platform; other platforms are staged, not simultaneous launch blockers.
+
+## Deferred interactive website
+The previous full web MVP is retained below as a later phase; its security requirements still apply whenever those surfaces are enabled.
+
 # MVP / Definition of Done
 Scope agreed; implementation pending. Detailed configuration thresholds remain provisional.
 
