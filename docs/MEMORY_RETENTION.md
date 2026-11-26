@@ -21,8 +21,8 @@ remain reserved; replaying an original redacted payload will conflict.
 Logical redaction only, not physical deletion. PostgreSQL MVCC/WAL, backups,
 external evidence, other derived copies, malformed outputs without candidates,
 decided proposals and approved histories require separate retention policy.
-No personal member memories or consent workflow yet; do not admit member data
-into business memory. No automatic cleanup scheduler, no public/admin HTTP
+Separate explicit member preferences and consent repository are described in
+[MEMBER_MEMORY.md](MEMBER_MEMORY.md); do not admit member data into business memory. No automatic cleanup scheduler, no public/admin HTTP
 endpoint or database role isolation yet. The trusted admin adapter must
 authenticate the reviewer; UUID alone is not authentication. No production
 data was modified. Apply migrations 001–007 in order.

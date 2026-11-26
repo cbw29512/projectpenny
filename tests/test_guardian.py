@@ -21,6 +21,9 @@ class GuardianTests(unittest.TestCase):
                         Capability.APPROVE_BUSINESS_MEMORY, Capability.REVOKE_BUSINESS_MEMORY,
                         Capability.REVIEW_MEMORY_MAINTENANCE, Capability.PURGE_EXPIRED_MEMORY_DRAFTS,
                     ))
+                    allowed = allowed or (actor is Actor.MEMBER and capability in (
+                        Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
+                    ))
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 
     def test_untrusted_strings_and_unknown_values(self):

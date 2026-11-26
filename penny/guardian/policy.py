@@ -19,6 +19,8 @@ _ALLOWED = frozenset({
     (Actor.WORKER, Capability.STAGE_MEMORY_MAINTENANCE),
     (Actor.ADMIN, Capability.REVIEW_MEMORY_MAINTENANCE),
     (Actor.ADMIN, Capability.PURGE_EXPIRED_MEMORY_DRAFTS),
+    (Actor.MEMBER, Capability.MANAGE_OWN_MEMORY),
+    (Actor.MEMBER, Capability.WITHDRAW_MEMORY_CONSENT),
 })
 
 
@@ -37,10 +39,15 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
     try:
         if type(actor) is not Actor or type(capability) is not Capability:
             return Decision(False, "invalid_policy_input")
+        # Privacy withdrawal must remain available even during identity failure.
+        if actor is Actor.MEMBER and capability is Capability.WITHDRAW_MEMORY_CONSENT:
+            return Decision(True, "authenticated_owner_privacy_only")
         if not identity_matches():
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability is Capability.MANAGE_OWN_MEMORY:
+            return Decision(True, "authenticated_owner_memory_only")
         if capability is Capability.PURGE_EXPIRED_MEMORY_DRAFTS:
             return Decision(True, "administrator_expired_draft_purge_only")
         if capability is Capability.REVIEW_MEMORY_MAINTENANCE:

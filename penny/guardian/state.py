@@ -23,6 +23,8 @@ class Capability(Enum):
     STAGE_MEMORY_MAINTENANCE = "stage_memory_maintenance"
     REVIEW_MEMORY_MAINTENANCE = "review_memory_maintenance"
     PURGE_EXPIRED_MEMORY_DRAFTS = "purge_expired_memory_drafts"
+    MANAGE_OWN_MEMORY = "manage_own_memory"
+    WITHDRAW_MEMORY_CONSENT = "withdraw_memory_consent"
     NETWORK = "network"
     SHELL = "shell"
     SPEND = "spend"
@@ -34,4 +36,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.6"
+    policy_version: str = "guardian-v0.7"
