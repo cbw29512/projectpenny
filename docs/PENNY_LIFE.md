@@ -163,6 +163,17 @@ inspector and optional future physical merchandise listing. See
 [office collection](OFFICE_COLLECTION.md). The installed catalog preview
 is not an approved live daily snapshot or commerce integration.
 
+## Living office continuity
+
+The room should feel occupied and evolve over time. Daily clothing and
+mugs are presentation only. Wall posters, plants, books, notes, furniture,
+awards and equipment retain stable positions until an authorized change.
+Clock, light and verified monitor/activity state are independent ambient
+layers. Do not invent work, purchases, achievements or background changes.
+Use fixed wall slots and local versioned poster designs, with accessible
+inspection and optional future merchandise links. See
+[office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

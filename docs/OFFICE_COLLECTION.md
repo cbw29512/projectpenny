@@ -67,6 +67,39 @@ Future accessories include mouse pads, stickers, desk mats and milestone
 collectibles. These are development concepts, not rights-cleared production
 designs.
 
+## Living office and motivational wall art
+
+Keep the office recognizably the same place. Add fixed framed wall slots
+above/behind Penny, with approved stable poster design IDs. Posters are
+persistent possessions, not a random daily background. Initial concepts:
+- poster-persistence-v1: PERSISTENCE — Failure is just a feature request.
+- poster-dream-big-v1: DREAM BIG — Start with available RAM.
+- poster-progress-v1: PROGRESS — One commit at a time.
+- poster-optimism-v1: OPTIMISM — Everything is debuggable.
+- poster-ambition-v1: AMBITION — Small budget. Massive plans.
+- poster-mission-v1: THE MISSION — $0 to $1,000,000
+
+The mission poster is aspirational, not a claim about actual cash.
+A verified financial progress panel remains separate. Poster inspection
+shows the full literal text; wall placement must not obscure the character.
+Poster art can eventually share its versioned design with physical listings.
+Use deliberate reviewed place/replace/remove events, retain the prior
+arrangement in history, and never redraw the underlying office.
+
+Other living-office details: fixed-position clock, window lighting by
+authoritative local time, monitor state based on verified activity, and
+optional accessible ambient motion. Keep activity claims honest. A plant,
+book, sticky note, calendar, trophy, furniture or equipment upgrade stays
+until a reviewed world event changes it. Initial virtual starter items are
+not purchases; no automatic purchase or achievement claims.
+Shirts and mugs use the existing daily schedule, not persistent inventory
+mutations. Holiday and special-event decorations are future date-scoped
+reviewed overlays, with the same underlying room after the event.
+
+The six poster previews are installed in the read-only collection catalog.
+Wall-slot placement, acquisition, scene rendering and activity overlays are
+future integration; no production art approval, sales or spending.
+
 ## Inspection and sales
 
 Visitors can inspect the exact design with an accessible enlarged view

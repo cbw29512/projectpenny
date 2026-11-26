@@ -51,6 +51,16 @@ literal phrases, concept/unlisted status and no purchase controls until
 explicit launch. Daily styles must use reviewed date-specific design IDs
 without modifying durable world state. See [office collection](OFFICE_COLLECTION.md).
 
+## Living office
+
+The permanent office should support inspectable posters, mugs, clothing,
+decorations and equipment in fixed slots. Show a consistent background
+and deliberate, recorded changes. Use separately controlled local-time
+lighting and clock, verified work status and reduced-motion-safe ambient
+animation. No synthetic activity or daily furniture resets. Poster
+placement is persistent; daily shirt/mug rotation is presentation only.
+See [office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
+
 ## Interaction and state
 Home uses cached public snapshot; chat uses owner-bound private API. Anonymous
 visitors can browse without LLM calls. Signed-in member submits text and sees
