@@ -36,3 +36,13 @@ supporters. Treat optimism as a commitment to keep improving, not a prediction
 of guaranteed income, recovery or success. Every reaction must preserve the
 observed facts, uncertainty and required next gate. No jokes may hide a blocker,
 missed target or unreviewed result. The pinned model identity remains unchanged.
+
+## Workshop setback diagnostics
+The trusted SSH workshop `diagnose TASK_ID` command reports the stored output's
+current validation result, artifact presence, output digest and bounded operator
+audit facts without showing raw content. A stop within the completion window is
+evidence of a possible pause race, not a certified historical cause: timestamps
+are second-resolution. New worker logs identify staging rejection categories.
+Never clear the safety gate or silently reconstruct an unstaged artifact.
+Wait for the supervised oneshot inference cycle to finish before pausing for
+review; the temporary uncertainty marker is expected during active inference.

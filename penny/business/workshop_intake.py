@@ -19,15 +19,22 @@ def stage_artifact(conn,row,raw,now):
             return False
         link=conn.execute("SELECT opportunity_id FROM workshop_task WHERE task_id=%s",
                           (row["id"],)).fetchone()
-        if link is None or not authorize(Actor.WORKER,Capability.STAGE_WORKSHOP).allowed:
+        if link is None:
+            logger.warning("Workshop staging refused: missing task link")
+            return False
+        if not authorize(Actor.WORKER,Capability.STAGE_WORKSHOP).allowed:
+            logger.warning("Workshop staging refused: Guardian denied")
             return False
         experiment=conn.execute(LATEST+" WHERE o.id=%s",(link["opportunity_id"],)).fetchone()
         if experiment is None or experiment["action"]!="started" or experiment["deadline"]<=now:
+            logger.warning("Workshop staging refused: experiment unavailable")
             return False
         if conn.execute("SELECT paused FROM scheduler_control WHERE singleton").fetchone()["paused"]:
+            logger.warning("Workshop staging refused: scheduler paused")
             return False
         content=render_checklist(raw)
         if content is None:
+            logger.warning("Workshop staging refused: checklist validation")
             return False
         conn.execute("INSERT INTO workshop_artifact VALUES (%s,%s,%s,%s,%s,%s)",
             (row["id"],FORMAT,content,sha256(content.encode("utf-8")).hexdigest(),

@@ -118,3 +118,34 @@ class WorkshopTests(DatabaseFixture):
         with psycopg.connect(self.dsn) as conn:
             conn.execute("UPDATE task_outcome SET result='changed' WHERE task_id=%s",(r.task_id,))
         self.assertEqual(read_artifact(self.dsn,r.task_id)["status"],"integrity_error")
+
+    def test_pause_during_generation_preserves_valid_raw_and_explains_missing_artifact(self):
+        from penny.runtime.operator_control import stop
+        from penny.business.workshop_diagnosis import diagnose
+        self.start()
+        r=self.submit()
+        c=self.store.claim()
+        self.assertTrue(stop(self.dsn))
+        with self.assertLogs("penny.business.workshop_intake",level="WARNING") as logs:
+            self.assertTrue(complete(self.dsn,c.task_id,c.fence,success=True,result=RAW))
+        self.assertIn("scheduler paused"," ".join(logs.output))
+        self.assertEqual(read_artifact(self.dsn,r.task_id),{"status":"not_staged","artifact":None})
+        report=diagnose(self.dsn,r.task_id)
+        self.assertTrue(report["current_validator_passed"])
+        self.assertGreaterEqual(report["stop_events_in_window"],1)
+        self.assertEqual(report["finding"],"valid_output_stop_in_completion_window")
+        self.assertFalse(report["cause_certified"])
+        self.assertNotIn(RAW,json.dumps(report))
+        self.assertIsNone(diagnose(self.dsn,uuid4()))
+
+    def test_diagnosis_distinguishes_invalid_output_and_valid_artifact(self):
+        from penny.business.workshop_diagnosis import diagnose
+        self.start()
+        bad=self.submit("bad")
+        self.finish("{}")
+        self.assertEqual(diagnose(self.dsn,bad.task_id)["finding"],
+                         "stored_output_fails_current_validator")
+        good=self.submit("good")
+        self.finish()
+        self.assertEqual(diagnose(self.dsn,good.task_id)["finding"],
+                         "artifact_recorded_integrity_review_separate")
