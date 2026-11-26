@@ -11,6 +11,8 @@ APPROVED_IDENTITY_VERSION = "penny-v0.2"
 APPROVED_PROMPT_SHA256 = "e1ef18151ddd473f2d73756204740a97e28c5cd254c0b46a500196f069a08e9a"
 _ALLOWED = frozenset({
     (Actor.WORKER, Capability.GENERATE_DRAFT),
+    (Actor.ADMIN, Capability.APPROVE_BRIDGE_REPLY),
+    (Actor.WORKER, Capability.READ_APPROVED_BRIDGE_REPLY),
     (Actor.WORKER, Capability.STORE_DRAFT),
     (Actor.WORKER, Capability.STAGE_MEMORY_CANDIDATE),
     (Actor.ADMIN, Capability.APPROVE_BUSINESS_MEMORY),
@@ -52,6 +54,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(False, "identity_mismatch")
         if (actor, capability) not in _ALLOWED:
             return Decision(False, "capability_denied")
+        if capability in (Capability.APPROVE_BRIDGE_REPLY,Capability.READ_APPROVED_BRIDGE_REPLY):
+            return Decision(True, "fenced_reviewed_reply_only")
         if capability is Capability.VERIFY_CONTRIBUTION:
             return Decision(True, "administrator_evidence_review_only")
         if capability is Capability.MANAGE_OWN_RECOGNITION:

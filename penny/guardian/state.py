@@ -13,6 +13,8 @@ class Actor(Enum):
 class Capability(Enum):
     GENERATE_DRAFT = "generate_draft"
     STORE_DRAFT = "store_draft"
+    APPROVE_BRIDGE_REPLY = "approve_bridge_reply"
+    READ_APPROVED_BRIDGE_REPLY = "read_approved_bridge_reply"
     PUBLISH = "publish"
     READ_PRIVATE_MEMORY = "read_private_memory"
     WRITE_MEMORY = "write_memory"
@@ -41,4 +43,4 @@ class Capability(Enum):
 class Decision:
     allowed: bool
     reason: str
-    policy_version: str = "guardian-v0.11"
+    policy_version: str = "guardian-v0.12"
