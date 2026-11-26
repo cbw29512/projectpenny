@@ -56,10 +56,11 @@ NETLIFY_BRIDGE.md must pass before public interactive launch.
 
 ## Working but welcoming
 Penny's default fictional scene is occupied at her desk, not waiting for a
-question. Browsing does not create inference work. Curated asides and local
-animation may cycle while the page is visible, independently of chat;
-stop on hidden pages, respect reduced motion, and never overwrite speech or
-visitor drafts. Label scripted activity as character entertainment.
+question. Browsing does not create inference work. Only evidence-based activity commentary may appear as current thoughts.
+Local pose animation may run while visible, respect reduced motion, and never
+overwrite speech or visitor drafts. No rotating fictional work commentary.
+Optional Dream Mode is a separate explicitly fictional entertainment scene
+available only during verified off-duty state; see [life-cycle](PENNY_LIFE.md).
 
 Keep three independent state dimensions: scene (working/welcoming/chatting),
 verified service availability (available/busy/full/paused/offline/stale),
@@ -73,6 +74,6 @@ fairness, quotas, timeouts and capacity; do not preempt an active generation
 or starve business work. Business tasks yield at safe task boundaries.
 Retain emergency pause, exact-answer review and session isolation.
 Resume the work scene after the interaction, without changing actual status.
-Acceptance: visible scripted activity without inference, no background tab
-animation timer, preserved visitor draft, honest unavailable state, no
+Acceptance: evidence-driven activity without browsing-triggered inference,
+no background tab animation timer, preserved visitor draft, honest unavailable state, no
 private text in public thoughts, and tested bounded scheduling under load.

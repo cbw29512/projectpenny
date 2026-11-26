@@ -60,6 +60,18 @@ A successful task is not necessarily a successful prototype, experiment or sale.
 A failed task is not proof of a learned lesson. Keep the original outcome and
 show the next permitted step, without claiming an unknown cause.
 
+## Daily life and office progression (planned)
+
+Default proposal: awake 08:00–00:00, off duty 00:00–08:00 America/New_York.
+Maker controls the schedule. The scheduler drains existing work at the boundary
+and must not claim new generation while asleep. Maintenance and the website
+remain available; messages may wait within existing limits and deadlines.
+Never claim sleep until the actual work gate and drain are verified.
+Optional dreams are explicitly fictional entertainment, never business memory,
+work, evidence or revenue. Office changes reflect authorized fulfillment;
+distinguish digital decorations from real equipment purchases.
+See [life-cycle contract](docs/PENNY_LIFE.md).
+
 ## Security and recovery
 
 Do not bypass Guardian, safety stops, review gates, member privacy or financial

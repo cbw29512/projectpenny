@@ -33,6 +33,9 @@ that delays this sequence.
 
 ## After launch
 
+- Add milestone-backed office progression, a configurable eight-hour off-duty
+  schedule and optional fictional Dream Mode without delaying core operations.
+
 - Prefer legitimate, useful, affordable opportunities with a measurable
   hypothesis, a bounded experiment and an independent review.
 - Review real customer demand, costs, receipts, refunds and outcomes.

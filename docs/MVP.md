@@ -39,6 +39,21 @@ No additional spend, deployment, live payments or NucBox changes authorized.
 - [ ] Private end-to-end rehearsal and adversarial tests; explicit Maker
   authorization before live launch. Social content is optional later.
 
+## Planned life and office progression (after core operational launch)
+Maker-approved direction; do not delay the current kiosk, first business cycle,
+hourly planner or secure website connection to implement these enhancements.
+- [ ] Persistent office inventory and wishlist: start modestly, add virtual
+  furnishings and achievement displays only from verified fulfillment records.
+  Distinguish free digital rewards from actual purchases and compute upgrades.
+- [ ] Configurable eight-hour off-duty period (proposed midnight–8 AM Eastern).
+  Drain active work safely; no new business or chat generation while asleep.
+  Essential services, backups and bounded message intake remain available.
+- [ ] Optional fictional Dream Mode: sleeping scene plus random curated
+  entertainment, clearly labeled as fiction. No business state changes, private
+  data, memory promotion, inference triggered by viewing, or fictional earnings.
+- [ ] Actual bedtime and morning reports, wake countdown, safe recovery and
+  daylight-saving tests. See [life-cycle contract](PENNY_LIFE.md).
+
 ## State and release rules
 Thought: evidence-based commentary on observed work, verified results and setbacks,
 distinct from speech. No invented progress, rotating fictional commentary or
