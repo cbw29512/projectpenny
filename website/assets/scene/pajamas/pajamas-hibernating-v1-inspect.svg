@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 175">
+  <path d="M43 10L13 27L5 83L25 88L36 47V96H104V47L115 88L135 83L127 27L97 10Q70 32 43 10Z" fill="#41634b"/>
+  <path d="M43 10L70 32L97 10M70 32V47" stroke="#f4eedb" stroke-width="2" fill="none" opacity=".5"/>
+  <text x="70" y="49" font-size="16" text-anchor="middle" fill="#f4eedb">⏻</text>
+  <text x="70" y="66" font-size="7.5" font-family="monospace" text-anchor="middle" font-weight="bold" fill="#f4eedb">SYSTEM</text>
+  <text x="70" y="76" font-size="7.5" font-family="monospace" text-anchor="middle" font-weight="bold" fill="#f4eedb">HIBERNATING</text>
+  <path d="M37 104H103L108 167H76L70 126L64 167H32Z" fill="#41634b"/>
+  <path d="M48 116h4m38 0h4m-46 22h4m38 0h4m-46 19h4m38 0h4" stroke="#f4eedb" opacity=".5"/>
+</svg>

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/assets/scene/office-sky.css">
   <link rel="stylesheet" href="/assets/scene/office-collection.css">
   <link rel="stylesheet" href="/assets/scene/daily-style.css">
+  <link rel="stylesheet" href="/assets/scene/night.css">
   <link rel="stylesheet" href="/assets/scene/virtual-world.css">
   <link rel="stylesheet" href="/assets/progress.css">
   <link rel="stylesheet" href="/assets/board.css">
@@ -20,6 +21,7 @@
   <script type="module" src="/assets/scene/bit-render.mjs"></script>
   <script type="module" src="/assets/scene/office-collection-render.mjs"></script>
   <script type="module" src="/assets/scene/daily-office-render.mjs"></script>
+  <script type="module" src="/assets/scene/night-render.mjs"></script>
   <script type="module" src="/assets/scene/office-sky-render.mjs"></script>
   <script type="module" src="/assets/progress.mjs"></script>
   <script type="module" src="/assets/timeline.mjs"></script>
@@ -51,6 +53,7 @@
             <img data-world-base="true" src="/assets/scene/penny-v1.svg" width="460" height="310" alt="">
             <img data-world-layer="plum-outfit-v1" hidden src="/assets/scene/plum-outfit-v1.svg" width="460" height="310" alt="">
             <img id="daily-shirt-art" hidden src="/assets/scene/shirts/shirt-teal-slogan-v1.svg" width="460" height="310" alt="">
+            <img id="night-pajama-art" hidden src="/assets/scene/pajamas/pajamas-sleep-mode-v1.svg" width="460" height="310" alt="">
             <img src="/assets/scene/desk-v1.svg" width="460" height="310" alt="">
             <img id="daily-mug-art" hidden src="/assets/scene/mugs/mug-localhost-v1.svg" width="100" height="100" alt="">
             <img data-world-layer="plant-v1:left-shelf" hidden class="world-prop left-shelf" src="/assets/scene/plant-v1.svg" width="40" height="40" alt="">
@@ -74,6 +77,10 @@
             <label for="daily-office-date">Preview date (Eastern calendar)</label>
             <input id="daily-office-date" type="date" min="2000-01-01" max="2099-12-31">
             <button id="daily-office-preview" type="button">Preview date</button>
+            <button id="night-preview" type="button">Preview pajamas</button>
+            <button id="night-preview-day" type="button">Return to day preview</button>
+            <p id="night-status" role="status">No verified rest state connected.</p>
+            <a id="night-pajama-link" href="#collection-pajamas">Browse pajamas</a>
           </section>
           <span class="room-caption">Future reward: Bit, the virtual desktop buddy · $500 verified net commercial receipts; approval required.</span>
           <span id="world-notice" class="room-caption" role="status">Fixed concept scene · no reviewed world snapshot connected.</span>
@@ -112,6 +119,8 @@
       <div id="collection-mugs" class="collection-grid"></div>
       <h3>Fourteen daily slogan shirt concepts</h3>
       <div id="collection-shirts" class="collection-grid"></div>
+      <h3>Seven nighttime pajama concepts</h3>
+      <div id="collection-pajamas" class="collection-grid"></div>
       <h3>Thirty motivational poster concepts</h3>
       <div id="collection-posters" class="collection-grid"></div>
       <noscript><p>Enable JavaScript to inspect the design concepts. No purchases are available.</p></noscript>
@@ -239,5 +248,6 @@
   <script type="application/json" id="world-snapshot">{"schema":"penny-world-v1","status":"unavailable"}</script>
   <script type="application/json" id="daily-office-snapshot">{"schema":"penny-daily-office-v1","status":"unavailable"}</script>
   <script type="application/json" id="bit-activity-snapshot">{"schema":"penny-bit-activity-v1","status":"unavailable"}</script>
+  <script type="application/json" id="rest-snapshot">{"schema":"penny-rest-v1","status":"unavailable"}</script>
 </body>
 </html>

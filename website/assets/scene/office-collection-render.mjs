@@ -1,5 +1,6 @@
 import { MUGS, SHIRTS } from "./office-collection.mjs";
 import { POSTERS } from "./office-posters.mjs";
+import { PAJAMAS } from "./office-pajamas.mjs";
 
 function boot() {
   const grid = document.getElementById("collection-mugs");
@@ -72,6 +73,17 @@ function boot() {
     details.append(summary, picture, note);
     return details;
   });
+  const pajamas=document.getElementById("collection-pajamas");
+  if(pajamas) pajamas.replaceChildren(...PAJAMAS.map(p=>{
+    const details=document.createElement("details"),summary=document.createElement("summary");
+    details.id="design-"+p.id;details.dataset.designId=p.id;
+    summary.textContent=p.name+" · "+p.phrase;
+    const img=document.createElement("img");
+    img.className="pajama-inspector";img.src="/assets/scene/pajamas/"+p.id+"-inspect.svg";
+    img.alt="";img.loading="lazy";img.width=140;img.height=175;
+    const note=document.createElement("p");note.textContent="Concept only — not available for purchase.";
+    details.append(summary,img,note);return details;
+  }));
   posters.replaceChildren(...wallArt);
   grid.replaceChildren(...cards);
   palette.replaceChildren(...colors);

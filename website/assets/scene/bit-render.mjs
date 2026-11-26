@@ -1,9 +1,11 @@
 import { bitReaction } from "./bit-state.mjs";
+import { parseRest } from "./night-state.mjs";
 const MODES=Object.freeze(["idle","attentive","celebrating","confused","charging"]);
 const ART=Object.freeze(Object.fromEntries(MODES.map(m=>[m,"/assets/scene/bit/bit-"+m+"-v1.svg"])));
-export function updateBit(node,text,now){
+export function updateBit(node,text,now,restText){
   try{
-    const mode=node.hidden?"idle":bitReaction(text,now);
+    const rest=parseRest(restText,now);
+    const mode=node.hidden?"idle":rest?.state==="asleep"?"charging":bitReaction(text,now);
     node.src=ART[mode];
     node.dataset.bitMode=mode;
     return mode;
@@ -17,7 +19,7 @@ function boot(){
   const refresh=()=>{
     clearTimeout(timer);
     if(document.visibilityState==="hidden"||node.hidden)return;
-    updateBit(node,source.textContent,Math.floor(Date.now()/1000));
+    updateBit(node,source.textContent,Math.floor(Date.now()/1000),document.getElementById("rest-snapshot")?.textContent);
     timer=setTimeout(refresh,5000);
   };
   new MutationObserver(refresh).observe(node,{attributes:true,attributeFilter:["hidden"]});

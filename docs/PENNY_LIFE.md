@@ -203,6 +203,22 @@ No separate LLM, independent work or fictional revenue. Fixed local art and
 coded verified-state reactions are separate from permanent ownership.
 See [companion contract](BIT_COMPANION.md).
 
+## Night wardrobe development slice
+
+Seven fixed pajama designs rotate by Eastern civil date (Monday through
+Sunday). The baseline face, hair and silhouette remain identical. A
+deliberate equipped outfit overrides the pajama and daily shirt layers.
+The existing mug, poster, window and furniture stay in place. A labeled
+night artwork preview dims the scene but never claims operational rest.
+The pure server schedule helper handles midnight–08:00 and DST; it is not
+an admission or claim gate. The browser consumes only a fresh reviewed
+rest snapshot with a closed gate, no active work and exact 08:00 wake time
+before showing off-duty status and countdown or charging an already-owned
+Bit. Invalid/expired evidence clears the sleep claim rather than falsely
+continuing it. No operational rest producer or scheduler integration is
+installed yet. No deployment, actual monitor control or dream inference.
+The artwork is provisional and requires visual review.
+
 ## Acceptance before activation
 
 - [ ] Office display matches verified fulfillment and correction state;

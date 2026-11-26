@@ -119,6 +119,15 @@ than changing the persistent inventory. Date previews and reviewed snapshots
 use exactly the same allowlisted art. This is still provisional artwork;
 visual collision/readability review and authoritative delivery remain pending.
 
+## Night collection
+
+Seven local pajama designs and matching enlarged garment inspectors form
+a separate weekly collection. The scene uses the original character
+silhouette; desk occlusion remains natural. Reviewed rest state (not
+browser midnight) controls actual night presentation; a clearly labeled
+manual artwork preview is available. Permanent equipped wardrobe overrides
+both daily shirts and pajamas. No sales or rights approval yet.
+
 ## Inspection and sales
 
 Visitors can inspect the exact design with an accessible enlarged view
