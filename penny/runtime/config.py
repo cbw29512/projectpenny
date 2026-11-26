@@ -19,7 +19,7 @@ class Config:
 def load_config(path,kind):
     fd=None
     try:
-        if kind not in ("inference","bridge"):
+        if kind not in ("inference","bridge","operator"):
             raise ValueError("unknown runtime")
         # Reject links, nonregular files, other owners and group/world access.
         fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
@@ -33,7 +33,7 @@ def load_config(path,kind):
         if len(raw)>8192:
             raise ValueError("oversized config")
         data=json.loads(raw)
-        keys={"dsn"} if kind=="inference" else {"dsn","host","bridge_key_hex"}
+        keys={"dsn"} if kind in ("inference","operator") else {"dsn","host","bridge_key_hex"}
         if type(data) is not dict or set(data)!=keys or type(data["dsn"]) is not str:
             raise ValueError("invalid config")
         fields=conninfo_to_dict(data["dsn"])
@@ -41,7 +41,7 @@ def load_config(path,kind):
         if (fields.get("host")!="127.0.0.1" or fields.get("dbname")!="penny"
                 or not fields.get("user") or set(fields)-{"host","port","dbname","user","password"}):
             raise ValueError("dedicated local database required")
-        if kind=="inference":
+        if kind in ("inference","operator"):
             return Config(data["dsn"])
         if type(data["host"]) is not str or type(data["bridge_key_hex"]) is not str:
             raise ValueError("invalid bridge config")
