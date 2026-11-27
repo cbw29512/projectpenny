@@ -71,3 +71,22 @@ No complete sandbox or zero-trust certification claim.
 
 No actual users, paths, permissions, units, database grants, firewall rules,
 SSH settings or running services modified by this repository change.
+
+## First local database scope: activity publisher
+Migration 041 moves reservation, outcome recording and coarse activity inputs
+behind three SECURITY DEFINER routines, each with pinned search_path and no
+PUBLIC execute. The worker uses these fixed calls instead of scheduler/task
+or delivery-control table access. The existing Maker-only configure/recover
+operations still require separate local operator credentials, never the
+publisher role. Use a fresh restricted login with schema USAGE and EXECUTE
+on penny_activity_reserve(text), penny_activity_finish(text) and
+penny_activity_inputs() only. No table/column/sequence grants, ownership,
+role membership, CREATE, elevated flags or grant option. Provision and audit
+with a trusted DB operator; migration grants no runtime role automatically.
+Dedicated non-login trusted function owner required; verify actual effective
+privileges, search paths, other schemas and default grants. Existing broad
+roles must not be reused. The routines enforce durable attempt cap/cooldown
+and cannot enable publication or change approved limits. A compromised
+publisher could misreport public observations or exhaust its approved budget;
+no assertion of authenticity after key theft. Inference and mailbox scopes
+still require deeper refactoring. No live migration or role changes.

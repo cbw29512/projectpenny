@@ -8,6 +8,7 @@ from penny.guardian.policy import identity_matches
 from penny.scheduler.storage_db import locked
 from penny.runtime.operator_control import _exclusive
 from penny.bridge.transport import HOST
+from .activity_db import activity_call
 
 logger=logging.getLogger(__name__)
 LOCK_ID=724390581215033
@@ -49,36 +50,20 @@ def configure(config,*,enabled,limit=0,confirmed=False):
 
 
 def reserve(config):
-    with locked(config.dsn) as (conn,control,now):
-        row=conn.execute("SELECT * FROM activity_delivery_control WHERE singleton FOR UPDATE").fetchone()
-        if (not row or not row["enabled"] or control["paused"] or not identity_matches()
-                or row["config_sha256"]!=binding(config)):
-            return "paused"
-        if row["last_result"]=="interrupted":
-            return "review_required"
-        if now<row["not_before"]:
-            return "cooldown"
-        day=max(now//86400,row["day_bucket"])
-        count=row["attempts"] if day==row["day_bucket"] else 0
-        if count>=row["daily_limit"]:
-            return "budget_exhausted"
-        # Consume an attempt before external effects, even if process dies.
-        conn.execute("""UPDATE activity_delivery_control SET day_bucket=%s,
-            attempts=%s,not_before=%s,last_result='interrupted' WHERE singleton""",
-            (day,count+1,now+INTERVAL))
-        return "reserved"
+    # Python identity check remains mandatory; database owns the durable cap.
+    if not identity_matches():
+        return "paused"
+    result=activity_call(config.dsn,"reserve",(binding(config),))["result"]
+    if result not in ("reserved","paused","review_required","cooldown","budget_exhausted"):
+        raise RuntimeError("unexpected activity reservation")
+    return result
 
 
 def finish(dsn,result):
     if result not in RESULTS:
         result="uncertain"
-    with locked(dsn) as (conn,_,now):
-        # A provider throttle has no approved retry budget. Stop on any failure.
-        # Preserve emergency stop and never re-enable here.
-        conn.execute("""UPDATE activity_delivery_control SET last_result=%s,
-            enabled=enabled AND %s,not_before=greatest(not_before,%s)
-            WHERE singleton AND last_result='interrupted'""",
-            (result,result=="published",now+(86400 if result=="backoff" else INTERVAL)))
+    if activity_call(dsn,"finish",(result,))["result"] is not True:
+        raise RuntimeError("activity completion not recorded")
 
 
 def clear_interrupted(dsn,*,confirmed=False):
