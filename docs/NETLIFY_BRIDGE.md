@@ -115,3 +115,22 @@ The browser parser is isolated until the endpoint exists. Next is the
 authenticated outbound publisher and read-only HTTP adapter with separate
 credentials, explicit budget/edge controls and reviewed activation.
 No automatic Netlify provisioning, deployment or additional spending.
+
+## Authenticated activity transport candidate
+Explicit private operator CLI: python -m penny.runtime.activity_publish
+--config PRIVATE_PROJECTION_CONFIG --confirm (one invocation; no timer).
+Config uses protected local penny DSN, approved Netlify hostname and separate
+projection_key_hex (32–64 bytes). It sends only sample epoch and enum with
+a domain-separated HMAC covering both, no bridge/member signing key.
+The candidate HTTP adapter accepts POST /api/v1/bridge/activity and GET
+/api/v1/activity, exact origin, no redirect, short sample age, distinct
+writer/reader roles, fixed routines and mandatory injected admission gate.
+Configuration defaults closed, production-only, separate credentials and
+warm configuration pinning; no ambient DB credentials. Responses no-store
+until edge/cache budget is verified. Uncertain publication is not retried
+by the client. SQL still enforces monotonic, spaced writes and expiry.
+No provider admission gate implementation, function entrypoint, deployed
+DB role, publisher timer, browser fetch wiring or actual publication.
+Manual invocations are not a persistent local attempt limiter; automated
+publication requires durable cooldown and reviewed credit budget. Do not
+activate before those gates, scoped role audit, HTTPS tests and Maker approval.
