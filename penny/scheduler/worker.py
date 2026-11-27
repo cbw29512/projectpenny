@@ -20,7 +20,7 @@ class WorkerResult(str, Enum):
     BLOCKED = "blocked"
 
 
-def run_once(store, brain, *, finish=complete, clock=time.time, personal_recall=None) -> WorkerResult:
+def run_once(store, brain, *, finish=complete, clock=time.time, personal_recall=None, business_recall=None) -> WorkerResult:
     """Trusted internal entry point; output is a draft, not a public reply."""
     try:
         permission = authorize(Actor.WORKER, Capability.GENERATE_DRAFT)
@@ -45,7 +45,8 @@ def run_once(store, brain, *, finish=complete, clock=time.time, personal_recall=
             text = (brain.generate_with_preferences(claim.payload,budget,preferences)
                     if preferences else brain.generate(claim.payload,budget))
         elif claim.memory_enabled:
-            memories = recall(store.dsn, claim.task_id, claim.fence)
+            reader=recall if business_recall is None else business_recall
+            memories = reader(store.dsn, claim.task_id, claim.fence)
             # Recall takes time too; never give inference the old lease budget.
             budget = min(90.0, claim.lease_until - clock() - 5.0)
             if budget <= 0:

@@ -7,6 +7,7 @@ import psycopg
 from penny.guardian.policy import identity_matches
 from .claim_store import ScopedClaimStore
 from .personal_recall import ScopedPersonalRecall
+from .business_recall import ScopedBusinessRecall
 from penny.scheduler.worker import run_once, WorkerResult
 from .inference_db import gate_call
 
@@ -31,7 +32,8 @@ def inference_tick(dsn,brain):
             if status!="reserved" or type(token) is not UUID or token.int==0:
                 raise RuntimeError("invalid inference cycle reservation")
             # No transaction is held across model execution.
-            result=run_once(ScopedClaimStore(dsn,token),brain,personal_recall=ScopedPersonalRecall(token))
+            result=run_once(ScopedClaimStore(dsn,token),brain,personal_recall=ScopedPersonalRecall(token),
+                            business_recall=ScopedBusinessRecall(token))
             outcome=result.value if type(result) is WorkerResult else "blocked"
             finished=gate_call(dsn,"finish",(token,outcome))["status"]
             if finished not in ("idle","completed","blocked"):

@@ -190,3 +190,18 @@ Legacy trusted recall is retained for local/test workflows, not the supervised
 worker. Existing Python completion and business recall are still unscoped.
 Do not deploy an execute-only inference role until those are addressed.
 No production grants or migration applied; CI and privacy-race rehearsal pending.
+
+## Business recall scope (migration 048)
+The supervised worker calls penny_inference_business_recall(uuid,uuid,uuid)
+with current cycle/task/fence. Only live explicitly memory-informed internal
+work can read reviewed, unrevoked, unexpired business records. Search derives
+from stored task text (maintenance topic only); no arbitrary query parameter.
+Bounded 32 lexical terms, 24 ranked candidates inside SQL, at most 3 full
+records/1500 characters returned. Source audit committed with the result;
+empty recall is recorded and consumes the one permitted attempt. No raw
+memory-table grants or memory approval authority. SQL rank version is
+english-lexical-v2-sql: PostgreSQL lower/whitespace semantics may differ from
+Python Unicode casefold/split, so Unicode and ranking parity require testing.
+Trusted local recall remains separate. Completion and candidate intake still
+need isolation before full EXECUTE-only inference deployment. No live migration,
+role changes or production certification.
