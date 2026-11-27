@@ -121,3 +121,28 @@ class QualityTests(DatabaseFixture):
         with patch("penny.brain.identity.SYSTEM_PROMPT","changed"):
             self.assertIsNone(recent(self.dsn))
             self.assertIsNone(inspect(self.dsn,self.task))
+
+    def test_branded_edition_requires_current_quality_and_active_exact_art(self):
+        from penny.business.brand import approve,revoke
+        from penny.business.edition import build_private
+        from test_printable import png_fixture
+        artwork=png_fixture()
+        review_id=self.review().entry_id
+        args=dict(review_id=review_id,source_sha256=self.digest,
+                  brand_version="synthetic-v1",artwork=artwork)
+        def build(**changes):
+            return build_private(self.dsn,self.task,**(args|changes))
+        self.assertIsNone(build())
+        self.assertTrue(approve(self.dsn,"synthetic-v1",artwork=artwork,
+            expected_sha256=sha256(artwork).hexdigest(),reviewer_id=self.reviewer,
+            rights_ref="test:rights",evidence=b"synthetic",confirmed=True))
+        proof=build()
+        self.assertIsNotNone(proof)
+        self.assertEqual(proof.content,build().content)
+        self.assertEqual(sha256(proof.content).hexdigest(),proof.edition_sha256)
+        self.assertFalse(proof.manifest()["commercial_release_authorized"])
+        self.assertIsNone(build(artwork=artwork+b"changed"))
+        self.assertIsNone(build(review_id=uuid4()))
+        self.assertTrue(revoke(self.dsn,"synthetic-v1",reviewer_id=self.reviewer,
+            evidence_ref="test:withdraw",evidence=b"synthetic",confirmed=True))
+        self.assertIsNone(build())

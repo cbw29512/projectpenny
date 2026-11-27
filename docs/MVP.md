@@ -84,6 +84,11 @@ information, drafts or fake progress. Private SSH operator commands
 activity-candidate and rest-candidate emit only these local candidates;
 neither publishes or establishes public chat availability.
 
+The private Workshop now supports a branded printable review edition
+from exact approved PNG and passing content review. Actual artwork approval,
+rendered PDF/layout review, beta release and commercial authorization remain
+open; see [product brand](PRODUCT_BRAND.md).
+
 ## State and release rules
 Thought: evidence-based commentary on observed work, verified results and setbacks,
 distinct from speech. No invented progress, rotating fictional commentary or

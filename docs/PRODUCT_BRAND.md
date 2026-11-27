@@ -70,3 +70,25 @@ retract copies already downloaded.
 
 Status: requirement approved, implementation and final artwork approval pending.
 No product publication, sales, spending or production deployment authorized.
+
+## Installed private printable edition
+
+The trusted operator can approve a local PNG with explicit rights evidence,
+then derive an offline printable HTML proof from the exact current passing
+quality review and active matching artwork. All checks and byte rendering
+share the existing scheduler lock. A fixed template uses escaped checklist
+text and an embedded local PNG, no scripts, links, network resources or
+model-generated HTML. PNG envelope, dimensions and CRCs are bounded; this
+is not a full decoder or visual review. Manifest binds source digest,
+quality review ID, brand version, artwork digest and rendered digest.
+No DB edition approval record or commercial authorization yet. The proof
+is visibly marked PRIVATE REVIEW EDITION — NOT FOR SALE. Print to PDF
+locally after checking pagination and appearance; exact PDF bytes still
+require separate final release review. Private operator-owned files only,
+no new dependencies or actual artwork approval.
+
+From the local release, use python -m penny.runtime.brand --config
+~/.config/penny/operator.json followed by approve, revoke, inspect or
+export. Use --help for the exact flags. Inspect emits the edition manifest;
+export requires its exact edition SHA-256, --confirm and protected
+nonterminal output (umask 077, noclobber). Do not commit private proofs.
