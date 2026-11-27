@@ -24,3 +24,26 @@ routine directly; this is not a DB-enforced combined read/write cap against
 compromised credentials. Actual edge policy, credit/recharge review, runtime
 role provisioning and live deployment still pending. No provider changes.
 CI pending; parallel SQL and runtime tests added.
+
+## Staged provider edge rules
+CI 46077964034 passed shared database budgets. Netlify's current Pro plan
+supports five code-based rules and per-IP/domain aggregation (not a shared
+domain-only cap). Two staged smoke functions export literal path/method
+and rateLimit config: GET /api/v1/workshop 6 per IP/minute and POST
+/api/v1/bridge/workshop 3 per IP/minute. Both always return unavailable,
+with no database or secret dependency; default netlify.toml is unchanged.
+The remaining three rule slots are reserved for future community APIs.
+Netlify can allow bursts for up to ten seconds; invalid rate-limit rules do
+not necessarily fail a deploy. Verify both rules in post-processing logs
+and controlled 429 behavior before enabling the data path. Entry guard
+binds exact origin/site ID and trusted published production deploy context
+plus explicit reviewed deploy ID. It is an attestation, not proof of edge
+behavior; the final activation mechanism must accommodate Netlify's
+redeploy-on-env-change semantics without assuming env changes take effect
+on an existing deploy. No actual deployment, DB driver, live edge proof,
+credentials, or new charges. CI pending.
+References:
+https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/
+https://docs.netlify.com/build/functions/configuration/
+https://docs.netlify.com/build/functions/api/
+https://docs.netlify.com/build/functions/environment-variables/
