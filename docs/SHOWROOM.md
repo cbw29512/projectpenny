@@ -205,3 +205,15 @@ expiry boundary under the access transaction lock; no real time delay or
 production database mutation. No public endpoint or member delivery transport,
 operator credential exposure, actual tester authorization or commercial
 release. CI pending.
+
+## Visitor-facing Workshop development preview
+CI 46070206324 passed the local beta operator. Added a navigable Workshop
+section, planned first product, five lifecycle stages and explicitly disabled
+feedback/beta actions. Fixed-vocabulary reviewed snapshot contract accepts
+only one planned product code, known stage and bounded timestamps; stale or
+invalid data fails closed. No arbitrary content, identity, private artifact,
+price, payment URL or member details in the snapshot. Static source remains
+unavailable; the backend reviewed snapshot producer and secure member
+transport are not connected. Existing connect-src none and noindex remain.
+No live site deployment or real progress claim. Browser regression tests
+added; CI pending.

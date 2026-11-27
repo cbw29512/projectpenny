@@ -1,0 +1,8 @@
+.workshop-product{margin-top:1rem;padding:1rem;border:1px solid var(--line);border-radius:.75rem;background:var(--paper)}
+.workshop-product h3{margin:.35rem 0;overflow-wrap:anywhere}
+.workshop-product a{display:inline-block;margin-top:.65rem;color:var(--accent);font-weight:650}
+.workshop-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:.65rem;list-style-position:inside;padding:0;margin:1rem 0}
+.workshop-steps li{padding:.85rem;border:1px solid var(--line);border-radius:.65rem}
+.workshop-steps span{display:block;font-size:.85rem;color:var(--muted)}
+.workshop-actions{display:flex;flex-wrap:wrap;gap:.65rem}
+.workshop-actions button{min-height:44px;padding:.6rem .85rem;border:1px solid var(--line);border-radius:.5rem;color:var(--ink);background:var(--paper)}
