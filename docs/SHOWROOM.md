@@ -160,3 +160,17 @@ The existing compare command still reports mechanical changes only; this
 new review API is local trusted code, not yet wired into an operator command
 or public display. Terminal verdict correction policy remains future work.
 Synthetic regression added, CI pending. No live deployment.
+
+## Reviewed suggestion attribution (059)
+CI 46063255188 passed improvement review. A revision may now bind up to
+three exact eligible written suggestions at admission; existing model prompt
+contains only the approved brief and prior artifact, not suggestion text or
+member identifiers. A separate trusted recognition outcome requires current
+verified improvement and reviewed source integrity. The reserved outcome
+namespace cannot be created through generic recognition. Only actual linked
+suggestion owners may opt into private idea credit; independent attribution
+review remains required. Stale improvement hides current private recognition;
+withdrawal removes live consent and attribution. No payment/tier weighting,
+automatic causal claim, public names or publication. The reviewer must
+substantiate the actual contribution; linkage alone is not causal evidence.
+No public request routes or operator commands added in this slice. CI pending.

@@ -5,6 +5,7 @@ import re
 from hashlib import sha256
 
 from penny.community.feedback_summary import summary_locked
+from .revision_sources import validate_sources,eligible_sources,stored_sources
 from penny.guardian.policy import authorize
 from penny.guardian.state import Actor,Capability
 from penny.memory.evidence import fingerprint
@@ -54,7 +55,7 @@ def revision_basis(dsn,preview_id):
 
 
 def submit_revision(dsn,preview_id,*,expected_basis_sha256,brief,reviewer_id,
-                    evidence_ref,evidence,confirmed):
+                    evidence_ref,evidence,confirmed,suggestions=()):
     try:
         decision=authorize(Actor.ADMIN,Capability.REQUEST_WORKSHOP)
         if not decision.allowed or not authorize(Actor.ADMIN,Capability.REVIEW_SUGGESTION).allowed:
@@ -64,6 +65,7 @@ def submit_revision(dsn,preview_id,*,expected_basis_sha256,brief,reviewer_id,
                 or type(expected_basis_sha256) is not str
                 or not re.fullmatch(r"[a-f0-9]{64}",expected_basis_sha256)):
             raise ValueError("invalid revision review")
+        sources=validate_sources(suggestions)
         mark=fingerprint(preview_id,evidence)
         brief_hash=sha256(brief.encode()).hexdigest()
         with locked(dsn) as (conn,control,now):
@@ -74,10 +76,14 @@ def submit_revision(dsn,preview_id,*,expected_basis_sha256,brief,reviewer_id,
                 if tuple(prior[k] for k in keys)!=(expected_basis_sha256,brief_hash,reviewer_id,
                                                    evidence_ref,mark.digest,mark.byte_count):
                     return Receipt("idempotency_conflict")
+                if stored_sources(conn,prior["task_id"])!=sources:
+                    return Receipt("idempotency_conflict")
                 return Receipt("accept",prior["task_id"],True)
             result=_basis(conn,preview_id,now)
             if result is None or result[2]!=expected_basis_sha256:
                 return Receipt("feedback_unavailable")
+            if not eligible_sources(conn,sources,now):
+                return Receipt("suggestion_unavailable")
             parent,data,digest=result
             artifact=read_locked(conn,parent["task_id"],now)
             if not artifact or artifact["status"]!="private_prototype":
@@ -102,6 +108,9 @@ def submit_revision(dsn,preview_id,*,expected_basis_sha256,brief,reviewer_id,
                     (receipt.task_id,parent["task_id"],preview_id,parent["artifact_sha256"],
                      digest,brief_hash,reviewer_id,evidence_ref,mark.digest,mark.byte_count,now,
                      decision.policy_version))
+                for source,body_hash in sources:
+                    conn.execute("INSERT INTO workshop_revision_suggestion VALUES (%s,%s,%s)",
+                                 (receipt.task_id,source,body_hash))
             return receipt
     except Exception as exc:
         logger.error("Workshop revision admission refused (%s)",type(exc).__name__)

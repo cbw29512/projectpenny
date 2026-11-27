@@ -8,6 +8,7 @@ from penny.memory.evidence import fingerprint
 from penny.memory.review import _valid_id, _valid_ref
 from penny.scheduler.storage_db import locked
 from .state import Outcome, CONSENT_VERSION
+from .workshop import PREFIX,credit_allowed_locked
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ def record_outcome(dsn, *, outcome_ref, verdict, evidence, reviewer_id):
         decision = authorize(Actor.ADMIN,Capability.VERIFY_CONTRIBUTION)
         if not decision.allowed:
             return None
-        if not _valid_ref(outcome_ref) or not _valid_id(reviewer_id) or type(verdict) is not Outcome:
+        if not _valid_ref(outcome_ref) or outcome_ref.startswith(PREFIX) or not _valid_id(reviewer_id) or type(verdict) is not Outcome:
             raise ValueError("invalid outcome review")
         outcome_id = uuid4()
         mark = fingerprint(outcome_id,evidence)
@@ -48,9 +49,9 @@ def verify_request(dsn, request_id, *, reviewer_id, evidence_ref, evidence):
             raise ValueError("invalid attribution review")
         mark = fingerprint(request_id,evidence)
         with locked(dsn) as (conn,_,now):
-            row = conn.execute("SELECT id FROM contribution_request WHERE id=%s AND consent_version=%s",
+            row = conn.execute("SELECT id,member_id,outcome_id,role FROM contribution_request WHERE id=%s AND consent_version=%s",
                                (request_id,CONSENT_VERSION)).fetchone()
-            if not row:
+            if not row or not credit_allowed_locked(conn,row["outcome_id"],row["member_id"],row["role"],now):
                 return False
             return conn.execute(
                 """INSERT INTO contribution_recognition VALUES (%s,%s,%s,%s,%s,%s,%s)

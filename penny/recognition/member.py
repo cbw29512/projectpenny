@@ -8,6 +8,7 @@ from penny.guardian.state import Actor, Capability
 from penny.memory.review import _valid_id
 from penny.scheduler.storage_db import locked
 from .messages import appreciation
+from .workshop import credit_allowed_locked
 from .state import CONSENT_VERSION, MAX_REQUESTS, Outcome, Role, Recognition
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ def request_credit(dsn,token,outcome_id,role,*,accepted_version):
             return None
         with locked(dsn) as (conn,_,now):
             owner = resolve_member(conn,now,token)
-            if not conn.execute("SELECT 1 FROM contribution_outcome WHERE id=%s",(outcome_id,)).fetchone():
+            if not credit_allowed_locked(conn,outcome_id,owner,role.value,now):
                 return None
             old = conn.execute(
                 "SELECT id FROM contribution_request WHERE member_id=%s AND outcome_id=%s AND role=%s",
@@ -57,7 +58,8 @@ def list_credit(dsn,token):
                 (owner,CONSENT_VERSION,MAX_REQUESTS),
             ).fetchall()
             return tuple(Recognition(r["id"],r["outcome_id"],Role(r["role"]),Outcome(r["verdict"]),
-                                     appreciation(Role(r["role"]),Outcome(r["verdict"]))) for r in rows)
+                                     appreciation(Role(r["role"]),Outcome(r["verdict"]))) for r in rows
+                         if credit_allowed_locked(conn,r["outcome_id"],owner,r["role"],now))
     except Exception as exc:
         logger.error("Private recognition read failed (%s)",type(exc).__name__)
         raise

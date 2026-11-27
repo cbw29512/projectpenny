@@ -70,29 +70,34 @@ def revision_review_status(dsn,task_id):
         if not authorize(Actor.ADMIN,Capability.REVIEW_BUSINESS_EXPERIMENT).allowed:
             return None
         with locked(dsn) as (conn,_,now):
-            comparison=compare_locked(conn,task_id,now)
-            if comparison is None:
-                return None
-            row=conn.execute("SELECT * FROM workshop_revision_review WHERE task_id=%s",
-                             (task_id,)).fetchone()
-            base={"commercial_release_authorized":False,"improvement_verified":False,
-                  "recorded_verdict":row["verdict"] if row else None}
-            if not row:
-                return base|{"status":"unreviewed"}
-            quality=_latest(conn,task_id)
-            current=(comparison["status"]=="available" and quality is not None
-                     and quality["id"]==row["quality_review_id"]
-                     and comparison["before"]["sha256"]==row["parent_sha256"]
-                     and comparison["after"]["sha256"]==row["child_sha256"]
-                     and comparison["basis_sha256"]==row["basis_sha256"]
-                     and comparison["basis_current"]
-                     and comparison["before"]["quality_status"] not in ("revoked","unavailable")
-                     and comparison["after"]["quality_status"] in ("passed","failed"))
-            verified=bool(current and row["verdict"]=="improved"
-                          and comparison["after"]["quality_status"]=="passed"
-                          and comparison["comparison"]["content_changed"])
-            return base|{"status":row["verdict"] if current else "stale",
-                         "improvement_verified":verified}
+            return status_locked(conn,task_id,now)
     except Exception as exc:
         logger.error("Revision verdict status unavailable (%s)",type(exc).__name__)
         raise
+
+
+def status_locked(conn,task_id,now):
+    """Caller holds scheduler lock; current evidence only."""
+    comparison=compare_locked(conn,task_id,now)
+    if comparison is None:
+        return None
+    row=conn.execute("SELECT * FROM workshop_revision_review WHERE task_id=%s",
+                     (task_id,)).fetchone()
+    base={"commercial_release_authorized":False,"improvement_verified":False,
+          "recorded_verdict":row["verdict"] if row else None}
+    if not row:
+        return base|{"status":"unreviewed"}
+    quality=_latest(conn,task_id)
+    current=(comparison["status"]=="available" and quality is not None
+             and quality["id"]==row["quality_review_id"]
+             and comparison["before"]["sha256"]==row["parent_sha256"]
+             and comparison["after"]["sha256"]==row["child_sha256"]
+             and comparison["basis_sha256"]==row["basis_sha256"]
+             and comparison["basis_current"]
+             and comparison["before"]["quality_status"] not in ("revoked","unavailable")
+             and comparison["after"]["quality_status"] in ("passed","failed"))
+    verified=bool(current and row["verdict"]=="improved"
+                  and comparison["after"]["quality_status"]=="passed"
+                  and comparison["comparison"]["content_changed"])
+    return base|{"status":row["verdict"] if current else "stale",
+                 "improvement_verified":verified}
