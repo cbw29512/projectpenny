@@ -234,3 +234,28 @@ runtime roles. Tests cover parser parity, restricted-role staging and atomic
 rollback; PostgreSQL behavior is not yet certified. Maintenance proposals,
 business drafts and Workshop artifacts still use the explicit transitional
 legacy path. No production migration, role grants or deployment performed.
+
+## Scoped business proposals and Workshop completion (migrations 051–052)
+The supervised completion routine now stages both business draft candidates
+and printable Workshop prototypes atomically with the fenced task outcome.
+Private validators use raw JSON (duplicate keys rejected), exact fields,
+existing categories/metrics, bounded integer targets and duration, zero
+additional cash, bounded control-free text and deterministic checklist
+rendering. Business proposals require their existing admission link; Workshop
+requires an admission link, currently started unexpired experiment and
+unpaused scheduler. Both bind exact raw SHA-256; Workshop also binds rendered
+content SHA-256. No opportunity promotion, spending, financial entry, quality
+approval, branded edition, preview or commercial release authority is added.
+
+PostgreSQL 16 does not reproduce Python Unicode casefold in its lower()
+function. The new SQL Workshop validator conservatively rejects non-ASCII
+checklist item text after trimming, while retaining Unicode title/instructions.
+This is an explicit temporary restriction of the scoped path, not a change
+to the legacy Python validator. A valid non-ASCII prototype may remain
+not_staged. Full Unicode duplicate-fold parity and existing trusted read-time
+Python validation remain release gates. English ASCII item text is supported.
+Tests cover parser parity within the supported scope, zero spending, private
+prototype integrity, emergency stop and restricted-role denials. Only memory
+maintenance still requires the explicit transitional trusted completion path.
+No production role grants, migration, deployment, actual product release,
+or CI pass claimed.
