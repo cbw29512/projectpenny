@@ -300,3 +300,25 @@ role login authentication, object ownership, default grants, routine body
 integrity, host egress and local IPC remain required. Do not run on the
 existing public schema or assume migration of live data is authorized.
 Disposable PostgreSQL tests added; new CI pending.
+
+## Actual runtime login preflight
+CI 46020448156 passed the dedicated role provisioning candidate.
+Run the following read-only diagnostic under the corresponding isolated OS
+account after approved provisioning (example names; not a live command to run
+until installation is approved):
+    python -m penny.runtime.role_login_cli --scope inference --config /etc/penny-private/inference/inference.json --schema penny_core --role penny_infer
+Repeat for bridge and projection with their respective protected config and
+actual database role names. The tool checks authenticated session/current
+identity, LOGIN capability, effective search path, database CREATE/ownership
+and TEMP, other application namespace access, and existing scoped role audit.
+It does not call any worker routine or change grants, run inference or contact
+the cloud. It exits nonzero if checks fail or are unavailable. PostgreSQL
+system catalogs remain accessible. Use trusted DBA provisioning of database-
+specific role search_path to the dedicated schema (worker DSNs deliberately
+reject options); remove unneeded PUBLIC database TEMP and other application
+schema access in the dedicated Penny database only after reviewing dependencies.
+Do not grant a broad role or modify other databases to bypass a failed probe.
+No actual roles, credentials or configuration have been created. This checks
+effective access at one instant, not all other databases, OS permissions,
+network isolation, routine body authenticity or production readiness.
+Mocked regression tests added; actual connection rehearsal and CI pending.
