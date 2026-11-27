@@ -243,3 +243,17 @@ before any grant). No raw product/member data, no connection to local DB.
 No runtime composition, outbound publisher, durable local publication gate
 or browser fetch in this increment. No deployment, provisioning or live
 credentials. CI pending; synthetic SQL and handler tests only.
+
+## Local Workshop outbound sender (062)
+CI 46072825867 passed hosted projection. Trusted operator-only sender reserves
+a durable daily attempt and 60-second cooldown under the scheduler lock,
+revalidates exact snapshot, sends only four signed fields over existing
+public HTTPS transport and records result. Missing current review produces
+a signed unavailable observation; expiry is clipped to 120 seconds and
+upstream review. Interrupted/uncertain/auth failure blocks further attempts
+until stop and explicit reconciliation; stop disables Workshop gate.
+Configuration binds host/key, defaults disabled, never resets attempt
+budget. Fixed 300-second backoff on 429/503. In-flight requests may finish
+after stop; remote lease expires without renewal. No automatic timer, CLI,
+separate runtime role, deployed Netlify composition or live request yet.
+Tests synthetic, CI pending.

@@ -80,16 +80,21 @@ def browser_candidate(dsn):
         if not authorize(Actor.ADMIN,Capability.REVIEW_PROGRESS_SNAPSHOT).allowed:
             return unavailable()
         with locked(dsn) as (conn,_,now):
-            row=conn.execute("""SELECT * FROM workshop_progress_snapshot
-                ORDER BY sequence DESC LIMIT 1""").fetchone()
-            if not row or not row["generated_at"]<=now<row["expires_at"]:
-                return unavailable()
-            _validate(row["product_id"],row["stage"],row["preview_id"])
-            source=source_locked(conn,row["product_id"],row["stage"],row["preview_id"],now)
-            if not source or source[0]!=row["source_sha256"]:
-                return unavailable()
-            return {"schema":SCHEMA,"status":"reviewed","product":PRODUCT,"stage":row["stage"],
-                    "generated_at":row["generated_at"],"expires_at":row["expires_at"]}
+            return candidate_locked(conn,now)
     except Exception as exc:
         logger.error("Workshop browser candidate unavailable (%s)",type(exc).__name__)
         return unavailable()
+
+
+def candidate_locked(conn,now):
+    """Trusted caller holds scheduler lock; exact source recheck."""
+    row=conn.execute("""SELECT * FROM workshop_progress_snapshot
+        ORDER BY sequence DESC LIMIT 1""").fetchone()
+    if not row or not row["generated_at"]<=now<row["expires_at"]:
+        return unavailable()
+    _validate(row["product_id"],row["stage"],row["preview_id"])
+    source=source_locked(conn,row["product_id"],row["stage"],row["preview_id"],now)
+    if not source or source[0]!=row["source_sha256"]:
+        return unavailable()
+    return {"schema":SCHEMA,"status":"reviewed","product":PRODUCT,"stage":row["stage"],
+            "generated_at":row["generated_at"],"expires_at":row["expires_at"]}
