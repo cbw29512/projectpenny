@@ -259,3 +259,15 @@ prototype integrity, emergency stop and restricted-role denials. Only memory
 maintenance still requires the explicit transitional trusted completion path.
 No production role grants, migration, deployment, actual product release,
 or CI pass claimed.
+
+## CI repair — 2026-11-27
+Core tests run 45934389744 reported 427 Python tests / 290 errors, of
+which 287 stopped during migration 043 installation at the unparenthesized
+CASE expression in a PL/pgSQL IF. The website job passed 98/98. Correct the
+unreleased, syntactically invalid migration directly (it could not have
+committed); retain all quotas and permission checks. Explicitly qualify
+protected cloud objects in denial tests for the retired admin role, which
+has no schema USAGE. Do not restore its grants. Fixture errors now identify
+the migration filename. These changes need a fresh PostgreSQL CI run;
+subsequent failures may only become visible after schema installation succeeds.
+No production changes or certification.

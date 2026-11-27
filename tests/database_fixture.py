@@ -32,7 +32,13 @@ class DatabaseFixture(unittest.TestCase):
         self.dsn = make_conninfo(DSN,options="-c search_path="+self.schema)
         with psycopg.connect(self.dsn,autocommit=True) as conn:
             for path in migration_paths():
-                conn.execute(path.read_text())
+                try:
+                    conn.execute(path.read_text())
+                except psycopg.Error as exc:
+                    # Preserve the original SQLSTATE and traceback, but name
+                    # the failing migration instead of forcing log forensics.
+                    exc.add_note(f"Failed local schema migration: {path.name}")
+                    raise
         self.store = TaskStore(self.dsn)
 
     def drop_schema(self):

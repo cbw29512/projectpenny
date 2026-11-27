@@ -72,15 +72,15 @@ BEGIN
     THEN status:='invalid'; RETURN NEXT; RETURN; END IF;
     IF (SELECT count(*) FROM work_task w WHERE w.state='queued')>=10 OR
        (SELECT count(*) FROM work_task w WHERE w.state='queued'
-        AND CASE WHEN tier=0 THEN w.tier_snapshot=0 ELSE w.tier_snapshot>0 END)
-          >=CASE WHEN tier=0 THEN 3 ELSE 5 END
+        AND (CASE WHEN tier=0 THEN w.tier_snapshot=0 ELSE w.tier_snapshot>0 END))
+          >=(CASE WHEN tier=0 THEN 3 ELSE 5 END)
     THEN status:='full'; RETURN NEXT; RETURN; END IF;
     IF (SELECT count(*) FROM work_task w WHERE w.member_id=member
-        AND w.state IN ('queued','running'))>=CASE WHEN tier<=2 THEN 1 WHEN tier<=4 THEN 2 ELSE 3 END
+        AND w.state IN ('queued','running'))>=(CASE WHEN tier<=2 THEN 1 WHEN tier<=4 THEN 2 ELSE 3 END)
     THEN status:='member_limit'; RETURN NEXT; RETURN; END IF;
     SELECT count(*) FILTER (WHERE w.submitted_at>t-3600),count(*) INTO hourly,daily
       FROM work_task w WHERE w.member_id=member AND w.submitted_at>t-86400;
-    IF hourly>=CASE WHEN tier=0 THEN 3 ELSE 10 END OR daily>=CASE WHEN tier=0 THEN 10 ELSE 30 END
+    IF hourly>=(CASE WHEN tier=0 THEN 3 ELSE 10 END) OR daily>=(CASE WHEN tier=0 THEN 10 ELSE 30 END)
     THEN status:='member_quota'; RETURN NEXT; RETURN; END IF;
     SELECT count(*) FILTER (WHERE w.submitted_at>t-3600),count(*) INTO hourly,daily
       FROM work_task w WHERE w.member_id IS NOT NULL AND w.submitted_at>t-86400;

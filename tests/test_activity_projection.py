@@ -2,6 +2,7 @@
 import time
 import unittest
 import psycopg
+from psycopg import sql
 from database_fixture import DSN
 from cloud_role_fixture import CloudRoleFixture
 from netlify.security.audit import audit_role
@@ -51,4 +52,5 @@ class ActivityProjectionTests(CloudRoleFixture):
             self.call("projection_reader","SELECT activity_publish(%s,%s)",int(time.time()),"idle")
         for role in ("member","bridge","admin","maintenance","projection_writer"):
             with self.assertRaises(psycopg.errors.InsufficientPrivilege):
-                self.call(role,"SELECT * FROM activity_read()")
+                self.call(role,sql.SQL("SELECT * FROM {}.activity_read()").format(
+                    sql.Identifier(self.schema)))
