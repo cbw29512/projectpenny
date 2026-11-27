@@ -271,3 +271,15 @@ has no schema USAGE. Do not restore its grants. Fixture errors now identify
 the migration filename. These changes need a fresh PostgreSQL CI run;
 subsequent failures may only become visible after schema installation succeeds.
 No production changes or certification.
+
+## Scoped maintenance completion (055–056)
+The final specialized fallback is removed from supervised inference. The
+private SQL parser validates exact action, UUIDs, cardinality and text;
+staging requires all sources in one matching recall event, still active at
+completion. Invalid proposals retain only the ordinary outcome. Candidate
+and outcome commit atomically; no memory approval or mutation authority.
+The private helpers have no PUBLIC execute grant. The trusted local legacy
+workflow remains available outside the supervised worker. CI must verify
+parser parity, restricted-role denials, revoked/unrecalled sources and
+rollback. Actual OS/DB role provisioning and live isolation certification
+remain pending. No production migration or deployment performed.

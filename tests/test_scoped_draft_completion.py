@@ -68,14 +68,15 @@ class DraftCompletionTests(DatabaseFixture):
                              [("Measure first","quarantined")])
             self.assertEqual(conn.execute("SELECT count(*) FROM business_memory").fetchone()[0],0)
 
-    def test_other_specialized_route_still_refused_without_legacy(self):
+    def test_invalid_maintenance_records_outcome_without_proposal(self):
         from penny.memory.maintenance import submit_maintenance
         submit_maintenance(self.store,"lesson","Observed result")
         token,claim=self.reserve()
-        self.assertFalse(ScopedDraftCompletion(token)(self.dsn,claim.task_id,claim.fence,
+        self.assertTrue(ScopedDraftCompletion(token)(self.dsn,claim.task_id,claim.fence,
                          success=True,result="{}"))
         with psycopg.connect(self.dsn) as conn:
-            self.assertEqual(conn.execute("SELECT count(*) FROM task_outcome").fetchone()[0],0)
+            self.assertEqual(conn.execute("SELECT count(*) FROM task_outcome").fetchone()[0],1)
+            self.assertEqual(conn.execute("SELECT count(*) FROM memory_maintenance_proposal").fetchone()[0],0)
 
     def test_restricted_role_cannot_overwrite_outcome(self):
         self.store.submit(None,"ordinary","Draft a plan")

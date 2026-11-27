@@ -35,7 +35,7 @@ def inference_tick(dsn,brain):
             # No transaction is held across model execution.
             result=run_once(ScopedClaimStore(dsn,token),brain,personal_recall=ScopedPersonalRecall(token),
                             business_recall=ScopedBusinessRecall(token),
-                            finish=ScopedDraftCompletion(token,allow_legacy_specialized=True))
+                            finish=ScopedDraftCompletion(token))
             outcome=result.value if type(result) is WorkerResult else "blocked"
             finished=gate_call(dsn,"finish",(token,outcome))["status"]
             if finished not in ("idle","completed","blocked"):
