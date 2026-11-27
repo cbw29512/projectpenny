@@ -7,8 +7,10 @@ Maker-directed operating references: [SOUL](../SOUL.md), [GOALS](../GOALS.md),
 priorities; runtime authority remains in Guardian and durable state.
 No additional spend, deployment, live payments or NucBox changes authorized.
 
-Maker-only administration runs on the NucBox via trusted SSH/local UI.
-No cloud admin login, endpoint, remote command queue or inbound listener.
+Maker-only administration runs on the NucBox via direct local access or
+trusted LAN SSH from the designated Maker desktop. No WAN SSH, cloud admin
+login, endpoint, remote command queue or public management listener.
+Actual SSH source restrictions and key-only access are launch gates.
 See [NucBox-only administration](WEB_ADMIN.md). This supersedes all earlier
 website-admin proposals.
 

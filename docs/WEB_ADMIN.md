@@ -6,11 +6,19 @@ admin HTTP function, remote command queue, inbound listener, port forward,
 reverse tunnel or cloud-issued local control credential. No remote
 authorization of products, memory, spending, identity, model or services.
 
-Use existing trusted SSH operator commands and private local database.
-A future convenience dashboard must bind to loopback only and be accessed
-through an explicitly established trusted SSH session (no public exposure).
-Local OS identity and separate least-privilege operator credentials remain
-the trust boundary. No automatic installation or service changes.
+The only approved management access is direct local NucBox access or SSH
+from the Maker's designated desktop on the trusted local network. Prefer
+the existing SSH CLI or an SSH terminal dashboard; no management web listener
+is required. No WAN SSH, router forwarding, reverse tunnel, cloud relay or
+shared remote-access credentials. A future loopback-only web UI and any SSH
+local forwarding require separate explicit approval; do not enable either
+by default. Use a dedicated desktop SSH key, non-root login, least-privilege
+operator account and host-key verification. Restrict SSH to the approved
+LAN interface and desktop address (verify both before choosing rules).
+Firewall and sshd policy are deployment gates: verify a recovery path and
+an independent authorized session before any restrictive change. Do not
+modify the existing SSH service, firewall, accounts or keys automatically.
+No assumed address, no existing configuration certification.
 
 Cloud roles remain limited to public member mailbox, outbound bridge,
 maintenance and isolated reviewed projection reads/writes. No admin

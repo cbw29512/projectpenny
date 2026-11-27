@@ -55,3 +55,12 @@ as part of emergency procedure. Explicit --mode enable --daily-limit N
 --confirm closes it; --mode recover --confirm reconciles interrupted state
 without reopening. No units installed, migration applied, or cap selected
 for production. Validate actual credit budget, permissions and endpoint first.
+
+## Authorized management access
+Direct local NucBox access or trusted LAN SSH from the Maker's designated
+desktop only. Prefer SSH CLI/terminal UI rather than another listener.
+No WAN SSH or router forwarding, cloud admin or remote tunnel. Actual LAN
+interface, desktop address, key-only non-root access, host-key verification
+and firewall/sshd effective policy must be verified before release. Do not
+change live SSH/firewall rules without separate approval and a tested
+recovery path; preserve the existing access and unrelated services.
