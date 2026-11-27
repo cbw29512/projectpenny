@@ -31,7 +31,17 @@ class ScopedProductRoleTests(fixture.ScopedRevenueTests):
             self.assertEqual(conn.execute("SELECT penny_inference_complete_draft(%s,%s,%s,%s)",
                 (token,claim.task_id,claim.fence,fixture.RAW)).fetchone()[0],"completed")
             for statement in ("INSERT INTO business_opportunity SELECT * FROM business_opportunity",
-                              "INSERT INTO business_experiment_event SELECT * FROM business_experiment_event",
+                              # PostgreSQL rejects explicit GENERATED ALWAYS values
+                              # before checking permissions. Omit the identity column
+                              # and use an empty source: the statement is valid but
+                              # must still fail with insufficient privilege.
+                              "INSERT INTO business_experiment_event "
+                              "(id,opportunity_id,action,reviewer_id,recorded_at,deadline,"
+                              "observed_at,measured_count,evidence_ref,evidence_sha256,"
+                              "evidence_size,policy_version) "
+                              "SELECT id,opportunity_id,action,reviewer_id,recorded_at,deadline,"
+                              "observed_at,measured_count,evidence_ref,evidence_sha256,"
+                              "evidence_size,policy_version FROM business_experiment_event WHERE false",
                               "UPDATE workshop_artifact SET content='Forged'",
                               "INSERT INTO vault_entry SELECT * FROM vault_entry",
                               "SELECT penny_private_render_checklist('{}')"):
