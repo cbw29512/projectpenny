@@ -25,7 +25,7 @@ class CloudAuditTests(CloudRoleFixture):
         self.ddl(sql.SQL(statement).format(sql.Identifier(self.roles[role])))
 
     def test_all_scopes_pass_clean_fixture(self):
-        for scope in ("member","bridge","maintenance","admin"):
+        for scope in ("member","bridge","maintenance","projection_writer","projection_reader"):
             result=self.audit(scope)
             self.assertTrue(result.ready,result.issues)
 

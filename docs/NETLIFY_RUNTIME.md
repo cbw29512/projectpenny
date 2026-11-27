@@ -20,21 +20,15 @@ No runtime package installed, functions directory entrypoint, secrets,
 actual DB connection or deployment created. Candidate deliberately lives
 outside default functions directory. Actual driver pin/lockfile, approved
 scoped role provisioning, provider edge/credit gates, real TLS validation,
-admin MFA adapter and function configuration remain prerequisites.
+function configuration remains a prerequisite.
 Member auth is operator-issued beta tokens, not a public signup or session
-issuer. Admin routes remain disabled. No new expenditure.
+issuer. Cloud admin routes are prohibited. No new expenditure.
 
-## Admin composition candidate
-Independent production-only PENNY_ADMIN_ENABLED gate and explicit admin
-connection with role distinct from member and bridge. Reuses checked-client
-principal validation, TLS options, persistent admin limiter and existing
-admin routines. Requires an injected trusted provider verifier; missing
-verifier fails closed. No actual MFA provider or login implemented. No
-function entrypoint, driver installation, provisioning or deployment.
-Five synthetic Node tests exercise composition and failure boundaries.
+## Maker-only administration
+Cloud administration runtime removed per the [NucBox-only contract](WEB_ADMIN.md).
 
 ## Warm instance configuration safety
-Both runtime candidates revalidate production context and opt-in on every
+Runtime candidates revalidate production context and opt-in on every
 request. A warm handler pins a digest of its validated configuration;
 changed credentials, roles or origin fail closed rather than silently
 using the previous pool or verifier. Restart the process with approved

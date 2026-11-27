@@ -15,14 +15,12 @@ SCOPES = {
     "maintenance": ("mailbox_purge()",),
     "projection_writer": ("activity_publish(bigint,text)",),
     "projection_reader": ("activity_read()",),
-    "admin": ("mailbox_admin_status(uuid)","mailbox_admin_pause(uuid)",
-              "mailbox_admin_allow(uuid,text)"),
 }
 HELPER = "mailbox_expire(timestamptz)"
 NAME = re.compile(r"[a-z][a-z0-9_]{0,62}")
 
 
-def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None,
+def configure_roles(conn, schema, *, member, bridge, maintenance,
                     projection_writer=None, projection_reader=None):
     """Grant narrow execution on a dedicated schema in one transaction.
 
@@ -33,8 +31,6 @@ def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None,
     """
     try:
         mapping = dict(member=member,bridge=bridge,maintenance=maintenance)
-        if admin is not None:
-            mapping['admin'] = admin
         if (projection_writer is None) != (projection_reader is None):
             raise ValueError("separate paired projection roles required")
         if projection_writer is not None:

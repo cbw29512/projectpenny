@@ -31,7 +31,7 @@ Browser:
   private/no-store; no data leakage on foreign identifiers.
 - GET /api/v1/world: cacheable sanitized public projection and freshness.
 - GET /api/v1/progress: bounded cached timeline.
-Bridge (dedicated scoped credentials distinct from member/administrator):
+Bridge (dedicated scoped credentials distinct from member):
 - POST /api/v1/bridge/claim: claim bounded eligible work with lease/fence.
 - POST /api/v1/bridge/ack: acknowledge durable local admission, or reject
   with allowlisted status; never trust cloud-supplied membership tier.
@@ -148,3 +148,10 @@ website/index.html. Page-local interval 60s, response cap 512 bytes,
 5s abort, Retry-After and 120s expiry. No automatic network polling.
 Actual function deployment, provider budget enforcement and public activation
 remain blocked pending hosting and certification.
+
+## NucBox-only Maker control
+No cloud admin endpoints, remote command queue or admin identity provider.
+All control and review remain private on NucBox. Cloud migration 009 retires
+legacy callable administration routines. Local emergency stop prevents new
+local work; cloud admission lease/expiry is a separate future safeguard.
+See WEB_ADMIN.md for the authoritative boundary.

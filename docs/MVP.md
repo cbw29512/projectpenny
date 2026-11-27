@@ -7,6 +7,11 @@ Maker-directed operating references: [SOUL](../SOUL.md), [GOALS](../GOALS.md),
 priorities; runtime authority remains in Guardian and durable state.
 No additional spend, deployment, live payments or NucBox changes authorized.
 
+Maker-only administration runs on the NucBox via trusted SSH/local UI.
+No cloud admin login, endpoint, remote command queue or inbound listener.
+See [NucBox-only administration](WEB_ADMIN.md). This supersedes all earlier
+website-admin proposals.
+
 ## Launch sequence
 - [ ] Forgotten office scene: Penny is an ambitious AI whose modest hardware
   limits her capabilities; the Maker's abandonment/redemption story is disclosed fiction.

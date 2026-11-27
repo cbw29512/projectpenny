@@ -26,7 +26,7 @@ class CloudRoleFixture(unittest.TestCase):
             conn.execute(sql.SQL("SET search_path TO {}").format(sql.Identifier(self.schema)))
             for path in sorted(Path("netlify/mailbox").glob("*.sql")):
                 conn.execute(path.read_text())
-            configure_roles(conn,self.schema,**{k:self.roles[k] for k in ("member","bridge","maintenance","admin","projection_writer","projection_reader")})
+            configure_roles(conn,self.schema,**{k:self.roles[k] for k in ("member","bridge","maintenance","projection_writer","projection_reader")})
             conn.execute("UPDATE mailbox_control SET enabled=true")
             self.a,self.b=uuid4(),uuid4()
             conn.execute("INSERT INTO mailbox_member(id) VALUES (%s),(%s)",(self.a,self.b))

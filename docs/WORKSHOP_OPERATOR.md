@@ -1,8 +1,7 @@
 # Interim private Workshop operator
 Local SSH CLI reuses the protected operator configuration; no web route,
-deployment, additional credentials or model tools. Website admin remains
-the intended routine interface; this local tool enables testing and
-recovery before verified admin MFA and outbound control exist.
+deployment, additional credentials or model tools. The NucBox is the sole administration boundary. This local tool remains
+the trusted review interface; any future UI is local-only.
 From the Penny release directory, using its existing virtualenv:
 ```sh
 python -m penny.runtime.workshop --config ~/.config/penny/operator.json list
