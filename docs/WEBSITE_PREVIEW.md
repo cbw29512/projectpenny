@@ -19,3 +19,16 @@ synthetic content, noindex is not access control. No DB, keys, API, paid
 services or external assets. Final character art still requires approval.
 Next: authenticated mailbox migrations and transactional claim/answer flow;
 enable live submit and network CSP only after security acceptance.
+
+## Private beta browser protocol candidate
+The separate beta-mailbox modules implement explicitly enabled, in-memory
+operator-issued member credentials, one outstanding draft and exact key/text
+replay after ambiguous submit, owner-bound reply validation, bounded response
+stream, request timeout, manual read and 15-second minimum request spacing.
+No browser storage, automatic polling, third-party endpoint or redirect.
+Sign-out clears local state; there is no durable recovery after reload yet.
+The public preview does not import this candidate and CSP remains closed.
+The synthetic browser-to-real-gateway handler test exercises response loss,
+replay and owner-validated reply, not a deployed database/bridge round trip.
+Next: approved private beta UI and identity/session integration; no live
+credentials, CSP relaxation, deployment or new spend in this change.
