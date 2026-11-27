@@ -27,3 +27,15 @@ User-unit process limits are not full sandboxing. Separate OS identities,
 read-only release ownership, egress policy, secret isolation, model digest
 certification, backups, restart drill and Netlify credit/edge checks remain
 launch prerequisites. No public API, production installation or expenditure.
+
+## Read-only readiness diagnostic
+From the checked-out release with its Python dependencies, run:
+    python -m penny.runtime.preflight_cli
+Checks independent private config parsing, operator DB runtime schema
+sentinels and gates, canonical identity, Ollama GET /api/tags inventory,
+and fixed Penny systemd user unit states. No model generation/download,
+service restart, database writes, secrets or remote communication.
+Output never certifies readiness; model digest approval, actual runtime
+role permissions, full migrations, performance, backups and live service
+rehearsal remain separate checks. A diagnostic exit 0 means collection
+completed, not that all checks passed. See https://docs.ollama.com/api/tags.
