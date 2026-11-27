@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Penny — Maker console candidate</title>
+<link rel="stylesheet" href="/website/assets/base.css">
+<link rel="stylesheet" href="/private-beta/conversation.css">
+<script type="module" src="/private-maker/boot.mjs"></script>
+</head><body>
+<header class="masthead"><div class="wrap topbar"><strong>PROJECT PENNY · MAKER</strong><span>Private candidate</span></div></header>
+<main class="wrap">
+<section class="panel">
+<h1>Maker console</h1>
+<p>Private cloud mailbox administration. An approved identity provider and recent MFA are required. This is not a public login page.</p>
+<label for="maker-token">Provider-issued administrator credential</label>
+<input id="maker-token" type="password" maxlength="8185" autocomplete="off" spellcheck="false" disabled>
+<div class="actions"><button id="maker-load" type="button" disabled>Load credential</button>
+<button id="maker-clear" type="button" disabled>Clear session</button></div>
+<p id="maker-notice" role="status" aria-live="polite">Unavailable until initialized.</p>
+</section>
+<section class="panel"><h2>Cloud mailbox</h2>
+<dl><dt>Admission</dt><dd id="maker-admission">Unknown</dd>
+<dt>Pending questions</dt><dd id="maker-pending">—</dd>
+<dt>Processing questions</dt><dd id="maker-processing">—</dd></dl>
+<button id="maker-read" type="button" disabled>Check status</button>
+<p class="small">Status expires after 60 seconds. No automatic network polling.</p>
+</section>
+<section class="panel"><h2>Pause new visitor questions</h2>
+<p>This closes cloud admission only. It does not cancel existing work, stop Ollama, pause local business tasks or reopen admission. For a local emergency stop use the trusted SSH operator controls.</p>
+<label for="maker-confirm">Type PAUSE ADMISSION to confirm</label>
+<input id="maker-confirm" type="text" maxlength="15" autocomplete="off" disabled>
+<button id="maker-pause" type="button" disabled>Pause cloud admission</button>
+</section>
+<section class="panel"><h2>Not connected</h2><p>Local runtime controls, product review, business approvals and verified financial records require separate trusted integration. No financial or work status is fabricated.</p></section>
+<noscript>JavaScript required. No request sent.</noscript>
+</main></body></html>

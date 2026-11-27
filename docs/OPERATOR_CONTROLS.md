@@ -33,3 +33,16 @@ not proof of isolation, provider readiness or remote reconciliation.
 No UI network listener or service installation. Review and approval UI,
 readiness checks, actual runtime credentials, deployment, backups and
 model certification still required. No new expenditure.
+
+## Private Maker cloud console candidate
+Outside the public publish root, private-maker/ consumes the existing
+administrator status and pause-admission API only. Requires an approved
+HTTPS host, real provider-issued administrator bearer, server-verified MFA
+and allowlisted admin identity. No credential issuer, storage, automatic
+polling, public links, resume action or direct NucBox commands. Status
+expires after 60 seconds; exact typed confirmation and fresh open status
+are required to request pause. Ambiguous pause requires status read before
+another attempt. Cloud pause closes new admission, not existing work or
+local inference. Local emergency stop remains SSH-only. Tests exercise
+the real gateway with synthetic credentials, not provider MFA certification.
+Product review and other approvals remain disconnected. No deployment.
