@@ -32,7 +32,7 @@ class FeedbackShapeTests(unittest.TestCase):
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
-class FeedbackTests(DatabaseFixture):
+class FeedbackFixture(DatabaseFixture):
     def setUp(self):
         super().setUp()
         self.reviewer=uuid4()
@@ -64,6 +64,9 @@ class FeedbackTests(DatabaseFixture):
                   key="rate",usefulness=4,purchase_interest="maybe")
         return submit_feedback(self.dsn,token or self.token,**(args|kw))
 
+
+@unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
+class FeedbackTests(FeedbackFixture):
     def test_owner_only_replay_and_no_work(self):
         r=self.rate()
         self.assertEqual(r.status,"accepted")

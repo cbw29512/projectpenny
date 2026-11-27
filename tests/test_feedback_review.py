@@ -11,37 +11,12 @@ from penny.business.preview import withdraw
 from penny.community.feedback import own_feedback,withdraw_feedback
 from penny.community.feedback_review import review_feedback
 from penny.community.feedback_summary import feedback_summary
+from penny.community.feedback_queue import pending_feedback
 from penny.community.intake import submit_suggestion
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
-class FeedbackReviewTests(DatabaseFixture):
-    def setUp(self):
-        super().setUp()
-        self.reviewer=uuid4()
-        evidence=b"synthetic proposal"
-        self.q=stage(self.dsn,source_ref="preview:test",category=Category.DIGITAL_PRODUCT,
-            title="Checklist",hypothesis="Usable checklist",metric=Metric.PROTOTYPE_CHECKS_PASSED,
-            target=3,duration_seconds=600,additional_cash_cents=0,evidence_ref="test:proposal",
-            evidence=evidence,reviewer_id=self.reviewer,review_until=int(time.time())+3600).entry_id
-        for action in (Action.APPROVE,Action.START):
-            self.assertTrue(advance(self.dsn,self.q,action=action,
-                expected_proposal_sha256=sha256(evidence).hexdigest(),evidence_ref="test:decision",
-                evidence=b"synthetic decision",reviewer_id=self.reviewer,confirmed=True))
-        self.task=submit_prototype(self.dsn,self.q,key="beta",reviewer_id=self.reviewer).task_id
-        brain=Mock()
-        brain.generate.return_value=RAW
-        self.assertEqual(run_once(self.store,brain),WorkerResult.COMPLETED)
-        self.digest=read_artifact(self.dsn,self.task)["artifact"]["content_sha256"]
-        self.args=dict(source_ref="preview:one",artifact_sha256=self.digest,title="Beta checklist",
-            preview_text="Please evaluate this synthetic excerpt.",reviewer_id=self.reviewer,
-            evidence_ref="test:preview",evidence=b"synthetic safety review",
-            expires_at=int(time.time())+300,confirmed=True)
-        self.preview=approve(self.dsn,self.task,**self.args).entry_id
-        self.hash=read_preview(self.dsn,self.preview)["preview_sha256"]
-        self.token=issue_session(self.dsn,uuid4()).token
-        self.other=issue_session(self.dsn,uuid4()).token
-    rate=fixture.FeedbackTests.rate
+class FeedbackReviewTests(fixture.FeedbackFixture):
     def moderate(self,receipt,*,rating=4,interest="maybe",verdict="eligible",reason="valid_feedback",**kw):
         args=dict(expected_preview_sha256=self.hash,expected_usefulness=rating,
                   expected_interest=interest,verdict=verdict,reason=reason,reviewer_id=self.reviewer)
@@ -106,3 +81,31 @@ class FeedbackReviewTests(DatabaseFixture):
         with patch("penny.brain.identity.SYSTEM_PROMPT","changed"):
             self.assertFalse(self.moderate(r))
             self.assertIsNone(feedback_summary(self.dsn,self.preview))
+
+    def test_pending_worklist_is_bounded_private_and_clears_reviewed_rows(self):
+        first=self.rate()
+        second=self.rate(token=self.other)
+        rows=pending_feedback(self.dsn)
+        self.assertEqual({r["feedback_id"] for r in rows},{first.feedback_id,second.feedback_id})
+        self.assertEqual(len(pending_feedback(self.dsn,limit=1)),1)
+        for row in rows:
+            self.assertEqual(set(row),{"feedback_id","preview_id","preview_sha256","usefulness",
+                "purchase_interest","submitted_at","preview_available"})
+            self.assertTrue(row["preview_available"])
+        for invalid in (True,0,21):
+            with self.assertRaises(ValueError):
+                pending_feedback(self.dsn,limit=invalid)
+        self.assertTrue(self.moderate(first))
+        self.assertEqual([r["feedback_id"] for r in pending_feedback(self.dsn)],[second.feedback_id])
+        self.assertTrue(withdraw_feedback(self.dsn,self.other,second.feedback_id))
+        self.assertEqual(pending_feedback(self.dsn),())
+
+    def test_stale_preview_worklist_and_guardian(self):
+        r=self.rate()
+        self.assertTrue(withdraw(self.dsn,self.preview,reviewer_id=self.reviewer,
+            evidence_ref="test:withdraw",evidence=b"synthetic withdrawal",confirmed=True))
+        self.assertFalse(pending_feedback(self.dsn)[0]["preview_available"])
+        with patch("penny.brain.identity.SYSTEM_PROMPT","changed"):
+            self.assertEqual(pending_feedback(self.dsn),())
+        self.assertTrue(self.moderate(r,verdict="rejected",reason="integrity"))
+        self.assertEqual(pending_feedback(self.dsn),())

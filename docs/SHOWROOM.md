@@ -106,3 +106,12 @@ only counts and rating sum for larger samples. This is not anonymous or safe
 for repeated public publication: small cells and differencing remain risks.
 No public endpoint, automatic moderation, correction, retention/purge or
 revision scheduling. No claimed purchases, revenue or actual community votes.
+
+## Local moderation worklist
+A bounded trusted-local worklist lists oldest pending feedback (maximum 20),
+exact review values and current preview availability. No owner identity,
+request key, source asset or private product text is returned. Stale feedback
+remains visible to the reviewer for rejection, and reviewed/withdrawn rows
+leave the queue. No public or model-facing API, automatic moderation or
+scheduling. The shared integration fixture is reused without duplicating
+its setup or inherited test methods. CI verification remains required.
