@@ -11,3 +11,10 @@ instead of dropping a table referenced by later migrations. Existing rollback
 assertions, concurrency tests, admission limits, and privacy tests are retained.
 Tests discover contiguous migration numbering and assert key current tables.
 This does not implement production migration orchestration or upgrade/restore drills.
+
+## CI queue discipline
+Feature branches with an open PR use the pull_request trigger only; main
+retains push testing. Superseded runs in the same workflow/ref concurrency
+group are canceled. Both Python/PostgreSQL and Node jobs remain mandatory
+for release certification. This reduces duplicate future work; it does
+not cancel legacy ungrouped runs or resolve hosted runner/billing capacity.

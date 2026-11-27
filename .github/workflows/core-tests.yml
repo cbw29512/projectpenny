@@ -1,9 +1,13 @@
 name: Core tests
 on:
   push:
-    branches: [main, feature/bounded-scheduler-core]
+    branches: [main]
   pull_request:
     branches: [main]
+# One current test run per PR; main remains independently certified.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
