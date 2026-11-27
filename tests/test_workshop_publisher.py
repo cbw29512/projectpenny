@@ -9,6 +9,7 @@ from penny.progress.workshop_gate import configure,reserve,finish
 from penny.progress.workshop_publisher import publish_once
 from penny.progress.workshop_wire import signature
 from penny.runtime.operator_control import stop
+from penny.scheduler.storage_db import locked
 
 
 class SignatureTests(unittest.TestCase):
@@ -28,15 +29,20 @@ class SignatureTests(unittest.TestCase):
 class WorkshopGateTests(DatabaseFixture):
     def setUp(self):
         super().setUp()
-        self.config=SimpleNamespace(dsn=self.dsn,host="penny.example",key=b"x"*32)
+        self.config=SimpleNamespace(dsn=self.dsn,host="fixture.netlify.app",key=b"x"*32)
 
     def test_default_closed_and_stop(self):
         self.assertEqual(publish_once(self.config,confirmed=True),"paused")
+        self.assertFalse(configure(SimpleNamespace(dsn=self.dsn,host="penny.example",key=b"x"*32),
+                                   enabled=True,limit=1,confirmed=True))
         self.assertTrue(configure(self.config,enabled=True,limit=1,confirmed=True))
         with patch("penny.progress.workshop_publisher.send",return_value="published") as send:
             self.assertEqual(publish_once(self.config,confirmed=True),"published")
             self.assertEqual(send.call_args.args[1]["stage"],"unavailable")
             self.assertEqual(publish_once(self.config,confirmed=True),"cooldown")
+            with locked(self.dsn) as (conn,_,now):
+                conn.execute("UPDATE workshop_delivery_control SET not_before=0")
+            self.assertEqual(publish_once(self.config,confirmed=True),"budget_exhausted")
             self.assertTrue(stop(self.dsn))
             self.assertEqual(publish_once(self.config,confirmed=True),"paused")
             send.assert_called_once()

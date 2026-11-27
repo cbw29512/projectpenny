@@ -67,7 +67,7 @@ def read_config(path):
 
 def load_config(path,kind):
     try:
-        if kind not in ("inference","bridge","operator","projection"):
+        if kind not in ("inference","bridge","operator","projection","workshop"):
             raise ValueError("unknown runtime")
         # libpq uses PG* environment settings for omitted connection options,
         # including hostaddr, service, options, password files and TLS. Refuse
@@ -75,7 +75,7 @@ def load_config(path,kind):
         if any(name.startswith("PG") for name in os.environ):
             raise PermissionError("ambient PostgreSQL environment refused")
         data=read_config(path)
-        key_field="projection_key_hex" if kind=="projection" else "bridge_key_hex"
+        key_field={"projection":"projection_key_hex","workshop":"workshop_key_hex"}.get(kind,"bridge_key_hex")
         keys={"dsn"} if kind in ("inference","operator") else {"dsn","host",key_field}
         if type(data) is not dict or set(data)!=keys or type(data["dsn"]) is not str:
             raise ValueError("invalid config")

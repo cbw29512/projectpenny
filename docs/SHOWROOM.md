@@ -257,3 +257,16 @@ budget. Fixed 300-second backoff on 429/503. In-flight requests may finish
 after stop; remote lease expires without renewal. No automatic timer, CLI,
 separate runtime role, deployed Netlify composition or live request yet.
 Tests synthetic, CI pending.
+
+## Publication preflight and operator controls
+CI 46073323921 failed two enablement tests because synthetic penny.example
+violated the existing netlify.app-only host allowlist. Correct fixture to
+fixture.netlify.app; retain negative test for disallowed host and assert
+daily budget exhaustion. Add local explicit enable/disable/reconcile/
+publish-once CLI using a separately named workshop_key_hex config field.
+No production authorization record is created from chat approval alone;
+actual host, isolated credentials, daily limit and operator preflight
+must be established on the NucBox. Connected Netlify name search returned
+no Penny project; no site created, no secret generated, no deployment or
+actual transmission. Runtime cloud composition and browser reader remain
+pending. CI pending for this repair and CLI.
