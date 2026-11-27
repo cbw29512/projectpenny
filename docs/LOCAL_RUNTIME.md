@@ -95,3 +95,9 @@ The immediate parent is opened without symlink following and held during
 read; protect all ancestor paths and the release independently. This is not
 proof of actual DB role privileges, same-UID isolation or global libpq
 configuration security. No live settings changed.
+
+## Production service isolation candidate
+See [isolated runtime](ISOLATED_RUNTIME.md). Separate system service identities
+and units live in deployment/isolated; legacy user units remain unchanged.
+Do not install or start both generations. Actual provisioning, DB permissions,
+OS egress controls, systemd support and adversarial verification are required.

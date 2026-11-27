@@ -1,0 +1,37 @@
+[Unit]
+Description=Penny isolated bridge candidate
+# Do not install beside enabled legacy user timers.
+
+[Service]
+Type=oneshot
+User=penny-bridge
+Group=penny-bridge
+WorkingDirectory=/opt/penny/release
+ExecStart=/opt/penny/venv/bin/python -E -s -B -m penny.runtime bridge --config /etc/penny-private/bridge/bridge.json
+TimeoutStartSec=45
+TimeoutStopSec=10
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectProc=invisible
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET
+InaccessiblePaths=-/etc/penny-private/operator -/etc/penny-private/inference -/etc/penny-private/projection
+InaccessiblePaths=-/run/docker.sock -/run/containerd/containerd.sock -/run/podman/podman.sock -/run/tailscale/tailscaled.sock
+SocketBindDeny=any
+LimitCORE=0
+TasksMax=32
