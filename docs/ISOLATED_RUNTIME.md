@@ -322,3 +322,20 @@ No actual roles, credentials or configuration have been created. This checks
 effective access at one instant, not all other databases, OS permissions,
 network isolation, routine body authenticity or production readiness.
 Mocked regression tests added; actual connection rehearsal and CI pending.
+
+## Integrated private business rehearsal
+CI 46023042659 passed the service login diagnostic unit tests. The new
+disposable PostgreSQL rehearsal applies all migrations under a non-login
+owner, configures the three exact role scopes, then uses an EXECUTE-only
+inference role for both proposal generation and Workshop prototype
+completion. Synthetic Maker review promotes, approves and starts the
+experiment; an exact quality review and approved synthetic PNG enable a
+private branded proof. Five synthetic authenticated members rate a separately
+reviewed local preview; moderation and private aggregation cannot trigger
+inference or grant commercial authority. Withdrawal hides the preview and
+aggregate; emergency stop prevents another model call. Vault remains empty.
+The test uses a mock brain, startup SET ROLE (not real login authentication),
+no cloud, no payments, no live data and no actual product release. Revision
+lineage, protected beta delivery and live website integration remain open.
+This is a regression test, not a production readiness certification.
+Fresh CI pending; no changes on NucBox.

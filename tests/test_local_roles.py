@@ -98,3 +98,16 @@ class LocalRolesTests(unittest.TestCase):
             report=audit_role(conn,self.schema,self.roles["inference"],"inference")
             self.assertIn("excess_routine:penny_activity_inputs",report.issues)
             self.assertIn("unsafe_routine:penny_inference_begin",report.issues)
+
+    def test_integrated_private_business_rehearsal(self):
+        from psycopg.conninfo import make_conninfo
+        from business_rehearsal_fixture import rehearse_business
+        with psycopg.connect(DSN) as conn:
+            self.configure(conn)
+        # Test-only startup SET ROLE: the server sees actual restricted current
+        # privileges, but this is not proof of separate production authentication.
+        operator=make_conninfo(DSN,options="-c search_path="+self.schema+" -c role="+self.owner)
+        worker=make_conninfo(DSN,options="-c search_path="+self.schema+" -c role="+self.roles["inference"])
+        with psycopg.connect(worker) as conn:
+            self.assertEqual(conn.execute("SELECT current_user").fetchone()[0],self.roles["inference"])
+        rehearse_business(self,operator,worker)
