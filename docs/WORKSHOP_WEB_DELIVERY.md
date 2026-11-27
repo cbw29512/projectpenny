@@ -47,3 +47,9 @@ https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/
 https://docs.netlify.com/build/functions/configuration/
 https://docs.netlify.com/build/functions/api/
 https://docs.netlify.com/build/functions/environment-variables/
+
+## Draft smoke rehearsal
+CI 46083596964 passed edge staging. Dedicated smoke routes now support the
+exact provider draft hostname and return a fixed marker. The production
+entry remains separate and disconnected. See NETLIFY_SMOKE.md for bounded
+13-request probe and manual draft procedure. No deployment or requests run.
