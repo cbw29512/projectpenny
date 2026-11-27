@@ -43,3 +43,6 @@ fallback to internal/private ranges; original hostname TLS validation.
 Still require separate OS service identities, protected release ownership,
 local firewall/egress policy, database role audit, SSH key-only access,
 verified backup/restore, and adversarial rehearsal before production.
+
+Read-only security inspection is available through penny.runtime.security_audit_cli.
+It cannot certify actual SSH source restrictions or firewall policy. See LOCAL_RUNTIME.md.

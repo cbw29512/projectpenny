@@ -64,3 +64,20 @@ interface, desktop address, key-only non-root access, host-key verification
 and firewall/sshd effective policy must be verified before release. Do not
 change live SSH/firewall rules without separate approval and a tested
 recovery path; preserve the existing access and unrelated services.
+
+## Read-only local security inspection
+From the verified release, run python -m penny.runtime.security_audit_cli
+for TCP listener classification. To inspect candidate sshd policy for the
+approved desktop, additionally supply --user USER --desktop-ip LAN_IP
+--server-ip LAN_IP --desktop-host HOST --ssh-port PORT. Do not infer approval
+from SSH_CONNECTION. Add --protected-port PORT for each additional Penny
+service. Default protected ports 5432 and 11434 are conservative candidates,
+not proof of process ownership. No sudo, firewall change, key access,
+network request, service reload or automatic remediation. sshd -T may fail
+without sufficient permissions; unavailable is not a pass. This inspects
+on-disk effective configuration for the supplied context, not the running
+daemon or every Match context. TCP bindings do not prove network reachability;
+Docker forwarding, other namespaces, UDP, router, firewall, source address
+restriction, host key and actual running config require separate review.
+Output omits raw addresses and configuration; keep results private.
+References: https://man.openbsd.org/sshd.8 and https://man7.org/linux/man-pages/man8/ss.8.html
