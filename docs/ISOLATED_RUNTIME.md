@@ -105,3 +105,24 @@ role may be tested with schema USAGE and only these two EXECUTE grants.
 Full mailbox worker is NOT ready for that role: admission, scheduling,
 acknowledgement and rejection still use direct table queries and must be
 scoped before deployment. Do not grant broad access as a workaround.
+
+## Mailbox visitor admission and acknowledgement (migration 043)
+Worker calls penny_bridge_admit(uuid,uuid,uuid,bigint,text) and
+penny_bridge_ack(uuid,uuid,uuid) instead of direct receipt/task/mapping SQL.
+Both revoke PUBLIC execution and pin search_path. The new admission routine
+requires enabled/unblocked bridge and unpaused scheduler, locks the same
+scheduler row, computes exact payload digest in PostgreSQL, verifies mapped
+member, bounded lease, exact replay, durable receipt cap, local entitlement,
+rest schedule, queue caps and rolling member/community quotas. It creates
+only mapped visitor tasks and no recall scope. Direct legacy tests now
+explicitly enable the bridge, as the production worker already requires.
+The SQL policy mirrors the existing Python admission thresholds; maintain
+parity when changing them, and require disposable PostgreSQL parity and
+concurrency tests before release. PostgreSQL and Python Unicode whitespace
+and timezone versions require boundary testing. A compromised bridge or cloud
+credential can submit invented questions for already mapped owners; the
+mapping alone does not prove end-user intent. Existing approval/review and
+external authentication remain mandatory. Ack only records a fenced
+attestation; it is not proof of remote delivery. Worker scheduling, deferral
+and rejection still require scoping before the full worker can use an
+EXECUTE-only role. No production role grants, migrations or service changes.

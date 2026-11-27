@@ -20,6 +20,7 @@ class BridgeReceiptTests(DatabaseFixture):
         self.owner,self.member=uuid4(),uuid4()
         with psycopg.connect(self.dsn) as conn:
             conn.execute("INSERT INTO bridge_member VALUES (%s,%s,true)",(self.owner,self.member))
+            conn.execute("UPDATE bridge_control SET enabled=true")
         self.claim=RemoteClaim(uuid4(),self.owner,uuid4(),
             datetime.now(timezone.utc)+timedelta(minutes=5),"Question")
 
@@ -96,3 +97,51 @@ class BridgeReceiptTests(DatabaseFixture):
             self.assertTrue(complete(self.dsn,task.task_id,task.fence,success=True,result="draft"))
         self.assertEqual(self.admit().status,"member_quota")
         self.assertEqual(self.count(),(3,3))
+
+    def test_database_gate_blocks_even_direct_admission(self):
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("UPDATE bridge_control SET enabled=false")
+        self.assertEqual(self.admit().status,"paused")
+        self.assertEqual(self.count(),(0,0))
+
+    def test_scoped_role_has_no_raw_admission_authority(self):
+        from psycopg import sql
+        role=sql.Identifier("admit_"+uuid4().hex)
+
+        def cleanup():
+            with psycopg.connect(self.dsn) as conn:
+                conn.execute(sql.SQL("DROP OWNED BY {}").format(role))
+                conn.execute(sql.SQL("DROP ROLE {}").format(role))
+
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute(sql.SQL("CREATE ROLE {} NOLOGIN").format(role))
+            conn.execute(sql.SQL("GRANT USAGE ON SCHEMA {} TO {}").format(
+                sql.Identifier(self.schema),role))
+            for signature in ("penny_bridge_admit(uuid,uuid,uuid,bigint,text)",
+                              "penny_bridge_ack(uuid,uuid,uuid)"):
+                conn.execute(sql.SQL("GRANT EXECUTE ON FUNCTION {} TO {}").format(
+                    sql.SQL(signature),role))
+        self.addCleanup(cleanup)
+
+        def call(statement,args=()):
+            with psycopg.connect(self.dsn) as conn:
+                conn.execute(sql.SQL("SET ROLE {}").format(role))
+                return conn.execute(statement,args).fetchall()
+
+        c=self.claim
+        args=(c.id,c.owner,c.fence,int(c.lease_until.timestamp()),c.text)
+        row=call("SELECT * FROM penny_bridge_admit(%s,%s,%s,%s,%s)",args)[0]
+        self.assertEqual(row[0],"accept")
+        self.assertEqual(call("SELECT * FROM penny_bridge_admit(%s,%s,%s,%s,%s)",args),
+                         [("accept",row[1],True)])
+        self.assertEqual(call("SELECT penny_bridge_ack(%s,%s,%s)",(c.id,c.fence,row[1])),[(True,)])
+        for statement in ("SELECT payload FROM work_task",
+                          "UPDATE bridge_control SET enabled=true",
+                          "UPDATE bridge_member SET enabled=true",
+                          "UPDATE scheduler_entitlement SET tier=6",
+                          "INSERT INTO member_recall_scope SELECT * FROM member_recall_scope",
+                          "INSERT INTO work_task SELECT * FROM work_task"):
+            with self.subTest(statement=statement):
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                    call(statement)
+        self.assertEqual(self.count(),(1,1))

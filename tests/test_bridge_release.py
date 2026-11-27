@@ -20,6 +20,7 @@ class BridgeReleaseTests(DatabaseFixture):
         self.owner,self.member,self.reviewer=uuid4(),uuid4(),uuid4()
         with psycopg.connect(self.dsn) as conn:
             conn.execute("INSERT INTO bridge_member VALUES (%s,%s,true)",(self.owner,self.member))
+            conn.execute("UPDATE bridge_control SET enabled=true")
         self.remote=RemoteClaim(uuid4(),self.owner,uuid4(),
             datetime.now(timezone.utc)+timedelta(minutes=5),"Question")
         self.receipt=admit_claim(self.dsn,self.remote)
