@@ -283,3 +283,20 @@ workflow remains available outside the supervised worker. CI must verify
 parser parity, restricted-role denials, revoked/unrecalled sources and
 rollback. Actual OS/DB role provisioning and live isolation certification
 remain pending. No production migration or deployment performed.
+
+## Dedicated local role provisioning candidate
+CI run 46017933581 passed after the final inference fallback removal.
+The trusted local configure_roles(conn,schema,inference=...,bridge=...,
+projection=...,confirmed=True) function now grants fixed scopes of 6, 7
+and 3 entrypoints respectively in a dedicated non-public schema. Roles
+must already exist; the executing schema owner must be non-login and
+unprivileged. PUBLIC access in that schema is revoked and all grants
+are audited transactionally; preexisting excess effective privileges
+cause rollback instead of automatic repair. No role creation, password
+changes, deployment, or automatic invocation. New migrations require
+reaudit. This is a schema-scoped candidate, not whole-database security:
+separate checks of database ownership/CONNECT/TEMP, public/other schemas,
+role login authentication, object ownership, default grants, routine body
+integrity, host egress and local IPC remain required. Do not run on the
+existing public schema or assume migration of live data is authorized.
+Disposable PostgreSQL tests added; new CI pending.
