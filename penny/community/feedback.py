@@ -64,9 +64,12 @@ def own_feedback(dsn,token,feedback_id):
         with locked(dsn) as (conn,_,now):
             owner=resolve_member(conn,now,token)
             return conn.execute(
-                """SELECT id,preview_id,preview_sha256,usefulness,purchase_interest,
-                    submitted_at,withdrawn_at FROM workshop_feedback
-                    WHERE id=%s AND member_id=%s""",(feedback_id,owner)).fetchone()
+                """SELECT f.id,f.preview_id,f.preview_sha256,f.usefulness,f.purchase_interest,
+                    f.submitted_at,f.withdrawn_at,
+                    CASE WHEN f.withdrawn_at IS NOT NULL THEN 'withdrawn'
+                         ELSE coalesce(r.verdict,'pending') END AS moderation
+                    FROM workshop_feedback f LEFT JOIN workshop_feedback_review r ON r.feedback_id=f.id
+                    WHERE f.id=%s AND f.member_id=%s""",(feedback_id,owner)).fetchone()
     except Exception as exc:
         logger.error("Workshop feedback read failed (%s)",type(exc).__name__)
         raise

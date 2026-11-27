@@ -15,8 +15,10 @@ def capacity_reason(conn,owner,now):
                 FROM community_suggestion s LEFT JOIN community_suggestion_review r
                 ON r.suggestion_id=s.id
                 UNION ALL
-                SELECT f.member_id,f.submitted_at,f.withdrawn_at IS NULL
-                FROM workshop_feedback f
+                SELECT f.member_id,f.submitted_at,
+                    f.withdrawn_at IS NULL AND v.feedback_id IS NULL
+                FROM workshop_feedback f LEFT JOIN workshop_feedback_review v
+                ON v.feedback_id=f.id
             )
             SELECT count(*) AS total,
                 count(*) FILTER (WHERE submitted_at>%s) AS daily,

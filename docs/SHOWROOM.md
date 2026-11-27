@@ -90,3 +90,19 @@ retention/purge, branded release or beta grants yet. Existing caps reused
 provisionally; active unmoderated feedback consumes pending capacity, so
 this local rehearsal must not be enabled publicly until moderation exists.
 No authorization for actual publication or deployment. CI pending.
+
+## Moderation and private aggregate (migration 054)
+Trusted local reviewer can record a terminal eligible/rejected decision with
+fixed reasons, bound to exact displayed rating, interest and preview digest.
+No copies of the rating or interest are placed in the immutable decision.
+Owner status exposes only pending/eligible/rejected/withdrawn, not reviewer
+identity. Terminal review frees shared pending capacity, not the rolling
+submission or retained-record budget. Withdrawal still clears the values and
+excludes the row from aggregates even after eligibility. New eligibility
+requires a live integrity-checked preview; rejection can close stale work.
+Private aggregate recomputes under the shared lock from current eligible
+nonwithdrawn feedback; suppress samples below five (provisional) and expose
+only counts and rating sum for larger samples. This is not anonymous or safe
+for repeated public publication: small cells and differencing remain risks.
+No public endpoint, automatic moderation, correction, retention/purge or
+revision scheduling. No claimed purchases, revenue or actual community votes.

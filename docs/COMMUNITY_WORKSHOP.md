@@ -68,3 +68,10 @@ rows replace the proposed immutable suggestion linkage for rating-only
 feedback, so rating content can be removed. Optional textual feedback,
 moderation, correction, retention, aggregate projection and reviewed revision
 linkage remain pending. See SHOWROOM.md for the exact limits.
+
+## Moderation implementation (054)
+Local terminal feedback review and a private aggregate candidate now exist.
+Routine feedback moderation still requires a trusted local reviewer; no public
+moderation interface or automated scoring is enabled. Eligible, live feedback
+is summarized separately from sales and withdrawn/rejected feedback. Public
+projection requires its own privacy and cache review; no automatic task creation.
