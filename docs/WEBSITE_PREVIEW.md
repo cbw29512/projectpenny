@@ -32,3 +32,20 @@ The synthetic browser-to-real-gateway handler test exercises response loss,
 replay and owner-validated reply, not a deployed database/bridge round trip.
 Next: approved private beta UI and identity/session integration; no live
 credentials, CSP relaxation, deployment or new spend in this change.
+
+## Private conversation interface candidate
+The separate private-beta/ directory contains a responsive credential and
+conversation interface, deliberately excluded from the website/ publish root.
+It starts disabled, requires a secure HTTPS context and uses only the
+same-origin mailbox protocol. A credential loaded locally is not called
+verified until a server response. The original draft stays locked on an
+ambiguous receipt; explicit retry reuses the client key and text. Replies
+use textContent only. Clear session/pagehide removes credentials, draft
+and reply; no storage or automatic polling. An expired credential with an
+outstanding question requires operator assistance; durable reload/recovery
+and safe credential renewal are not implemented. This page does not create
+access control: an approved isolated HTTPS host, response security headers,
+scoped gateway and issued credentials are prerequisites. Do not publish
+this directory by changing the public deploy root. Tests exercise the UI
+binding with synthetic responses, including late response after sign-out;
+no actual hosted browser or NucBox has been certified. No live deployment.

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title>Penny — private conversation beta</title>
+  <link rel="stylesheet" href="/website/assets/base.css">
+  <link rel="stylesheet" href="/private-beta/conversation.css">
+  <script type="module" src="/private-beta/boot.mjs"></script>
+</head>
+<body>
+  <header class="masthead"><div class="wrap topbar"><strong>PROJECT PENNY</strong><span>Private beta candidate</span></div></header>
+  <main class="wrap">
+    <section class="panel">
+      <h1>Talk to Penny</h1>
+      <p>Financially Underfunded. Sarcastically Overqualified.</p>
+      <p>This private interface requires an authorized HTTPS test host and a short-lived operator-issued member credential. Do not use real personal information during rehearsal.</p>
+      <p id="beta-status" role="status" aria-live="polite">Unavailable until the private beta initializes.</p>
+      <label for="beta-token">Private beta credential</label>
+      <input id="beta-token" type="password" autocomplete="off" spellcheck="false" maxlength="1017" disabled>
+      <div class="actions">
+        <button id="beta-sign-in" type="button" disabled>Load credential</button>
+        <button id="beta-sign-out" type="button" disabled>Clear session</button>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="beta-question-label">
+      <h2 id="beta-question-label">Your question</h2>
+      <label for="beta-question">Question (maximum 2,000 characters)</label>
+      <textarea id="beta-question" rows="5" maxlength="2000" autocomplete="off" disabled></textarea>
+      <p id="beta-count" class="small">0 / 2000</p>
+      <div class="actions">
+        <button id="beta-submit" type="button" disabled>Send question</button>
+        <button id="beta-read" type="button" disabled>Check reply</button>
+        <button id="beta-next" type="button" disabled>New question</button>
+      </div>
+      <p class="small">Requests are spaced by at least 15 seconds. Checking a reply does not generate another answer. A lost confirmation must be retried with the same question.</p>
+    </section>
+    <section class="panel" aria-labelledby="beta-answer-label">
+      <h2 id="beta-answer-label">Penny's reply</h2>
+      <p id="beta-answer" aria-live="polite">No confirmed reply.</p>
+    </section>
+    <p class="small">Clearing this session or leaving the page erases local credentials, questions and replies. It does not cancel remote work. Reload recovery is not yet available.</p>
+    <noscript>JavaScript is required for the private beta. No request has been sent.</noscript>
+  </main>
+</body>
+</html>
