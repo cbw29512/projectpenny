@@ -37,13 +37,13 @@ def submit_prototype(dsn,opportunity_id,*,key,reviewer_id):
         raise
 
 
-def _submit_locked(conn,control,now,opportunity_id,task_key,reviewer_id,decision):
+def _submit_locked(conn,control,now,opportunity_id,task_key,reviewer_id,decision,*,reviewed_prompt=None):
     """Shared admission; trusted caller holds scheduler lock and validates authority."""
     row=conn.execute(LATEST+" WHERE o.id=%s",(opportunity_id,)).fetchone()
     if row is None or row["category"]!="digital_product":
         return Receipt("unsupported_opportunity")
-    prompt=PROMPT+json.dumps({k:row[k] for k in ("title","hypothesis")},
-                              ensure_ascii=False,separators=(",",":"))
+    prompt=reviewed_prompt if reviewed_prompt is not None else PROMPT+json.dumps(
+        {k:row[k] for k in ("title","hypothesis")},ensure_ascii=False,separators=(",",":"))
     if len(prompt)>2000:
         return Receipt("brief_too_large")
     old=conn.execute("""SELECT t.id,t.payload,w.requested_by,w.opportunity_id

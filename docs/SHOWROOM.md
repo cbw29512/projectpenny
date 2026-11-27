@@ -115,3 +115,23 @@ remains visible to the reviewer for rejection, and reviewed/withdrawn rows
 leave the queue. No public or model-facing API, automatic moderation or
 scheduling. The shared integration fixture is reused without duplicating
 its setup or inherited test methods. CI verification remains required.
+
+## Reviewed revision admission (057)
+CI 46059575858 passed the integrated private business rehearsal. Revision
+admission now binds a private digest of the live eligible aggregate (minimum
+five), parent artifact digest and exact preview to a trusted Maker-reviewed
+improvement brief and evidence fingerprint. Recheck the digest under the
+scheduler lock before admitting a new immutable Workshop task. One revision
+per preview, exact replay only; use existing experiment, pause, daily and
+per-opportunity caps. New prototype is unreviewed; no inherited quality,
+brand, publication, payment or commercial authority. Prior artifact remains
+unchanged. The worker receives the prior checklist and reviewed brief, not
+individual ratings, member IDs or raw visitor messages. Long prompts exceeding
+2000 chars are refused rather than truncated. The aggregate is evidence of
+self-reported opinions, not demand or specific requested features.
+A later feedback withdrawal suppresses current aggregates but does not
+retroactively undo a previously authorized private task; historical digest
+contains no individual values. Future completion-time source revocation,
+reviewed revision comparison, closed beta, written suggestions, consented
+credit, retention and public progress projection remain separate work.
+Synthetic regression tests added; CI pending. No live release.
