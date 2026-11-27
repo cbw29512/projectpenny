@@ -33,7 +33,8 @@ test("closed by default and exact replay after lost acceptance",async()=>{
   assert.equal(client.signIn(token),true);
   assert.equal((await client.submit("Hello")).status,"uncertain");
   assert.equal((await client.submit("Changed")).status,"uncertain");
-  assert.equal((await client.submit("Hello")).status,"uncertain");
+  const limited=await client.submit("Hello");
+  assert.equal(limited.status,"uncertain");assert.equal(limited.busy,false);
   assert.equal(calls.length,1);
   advance();assert.equal((await client.submit("Hello")).id,id);
   assert.deepEqual(calls,[[owner,{key,text:"Hello"}],[owner,{key,text:"Hello"}]]);
@@ -52,4 +53,14 @@ test("reject mismatched answer IDs and no unsolicited requests",async()=>{
   await c.submit("Hi");now=15000;
   assert.equal((await c.read()).status,"unavailable");assert.equal(c.snapshot().text,null);
   assert.equal(c.next(),false);
+});
+
+test("later throttle cannot resolve uncertain prior submission",async()=>{
+  let now=0,calls=0;
+  const c=createBetaMailbox({enabled:true,uuid:()=>key,clock:()=>now,fetcher:async()=>{
+    if(++calls===1)throw Error("lost response");
+    return new Response('{"status":"rate_limited"}',{status:429,headers:{"Content-Type":"application/json"}});
+  }});
+  c.signIn(token);await c.submit("Hi");now=15000;
+  assert.equal((await c.submit("Hi")).status,"uncertain");assert.equal(c.snapshot().busy,false);
 });

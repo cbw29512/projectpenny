@@ -66,11 +66,13 @@ export function createBetaMailbox({enabled=false,fetcher,uuid,clock}={}){
     busy=true;const epoch=generation;
     try{
       const result=await exchange(PATH,"POST",{key:pending.key,text:pending.draft});
-      if(epoch!==generation)return snapshot();
-      if(result?.limited)return snapshot();
-      const receipt=result?decodeReceipt(result.code,result.data):{status:"uncertain"};
-      pending.status=receipt.status;
-      if(receipt.status==="accepted"){pending.id=receipt.id;pending.draft=null;}
+      if(epoch===generation&&!result?.limited){
+        const receipt=result?decodeReceipt(result.code,result.data):{status:"uncertain"};
+        // A later throttle or refusal cannot resolve an earlier lost response.
+        if(pending.status!=="uncertain"||receipt.status==="accepted")
+          pending.status=receipt.status;
+        if(receipt.status==="accepted"){pending.id=receipt.id;pending.draft=null;}
+      }
     }catch{if(epoch===generation)pending.status="uncertain";}
     finally{busy=false;}
     return snapshot();
@@ -80,10 +82,11 @@ export function createBetaMailbox({enabled=false,fetcher,uuid,clock}={}){
     busy=true;const epoch=generation;
     try{
       const result=await exchange(PATH+"/"+pending.id,"GET");
-      if(epoch!==generation||result?.limited)return snapshot();
-      const reply=result?decodeRead(result.code,result.data,pending.id):{status:"unavailable"};
-      pending.status=reply.status;
-      pending.answer=reply.status==="answered"?reply.text:null;
+      if(epoch===generation&&!result?.limited){
+        const reply=result?decodeRead(result.code,result.data,pending.id):{status:"unavailable"};
+        pending.status=reply.status;
+        pending.answer=reply.status==="answered"?reply.text:null;
+      }
     }catch{if(epoch===generation)pending.status="unavailable";}
     finally{busy=false;}
     return snapshot();
