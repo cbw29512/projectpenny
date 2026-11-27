@@ -135,3 +135,14 @@ contains no individual values. Future completion-time source revocation,
 reviewed revision comparison, closed beta, written suggestions, consented
 credit, retention and public progress projection remain separate work.
 Synthetic regression tests added; CI pending. No live release.
+
+## Trusted revision comparison
+CI 46060606443 passed revision admission. New private comparison checks both
+artifact digests, parent/preview/opportunity lineage and exact admitted
+prompt against the reviewed brief hash. Reports literal additions/removals,
+retained-item order, title/instruction change and quality status. Recomputes
+whether the admitted feedback basis is still current; historic review
+evidence is not erased by withdrawal, and no current aggregate is exposed.
+Not a semantic improvement score or decision to release. The next review
+must bind actual improvement evidence to the new artifact. Public projection,
+written contributions and consented credit remain pending. CI pending.

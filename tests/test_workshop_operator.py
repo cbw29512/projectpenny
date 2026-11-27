@@ -96,3 +96,16 @@ class CliTests(unittest.TestCase):
         code,out=self.run_cli(["export",str(self.task),"--review-id",str(uuid4()),"--digest",self.digest])
         self.assertEqual(code,1)
         self.assertEqual(out,"")
+
+    @patch("penny.runtime.workshop.compare_revision")
+    def test_compare_is_private_ascii_escaped_json(self,compare):
+        compare.return_value={"status":"available","before":{"content":"\u202e"},
+                              "commercial_release_authorized":False}
+        code,out=self.run_cli(["compare",str(self.task)])
+        self.assertEqual(code,0)
+        self.assertNotIn("\u202e",out)
+        self.assertEqual(json.loads(out),compare.return_value)
+        compare.assert_called_once_with("fixture",self.task)
+        compare.return_value=None
+        code,out=self.run_cli(["compare",str(self.task)])
+        self.assertEqual((code,out),(1,""))

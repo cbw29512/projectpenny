@@ -35,3 +35,16 @@ Check exit code; a failed command may leave an empty or partial file.
 Export is not publication authorization. Existing copies cannot be
 retracted after revocation. No actual product or evidence generated here.
 No new migration. Unit and disposable PostgreSQL tests only.
+
+## Private revision comparison
+```sh
+python -m penny.runtime.workshop --config ~/.config/penny/operator.json compare REVISION_TASK_UUID
+```
+Read-only ASCII-escaped JSON: immutable parent and child bytes and SHA-256,
+current quality states, admitted improvement brief, exact item additions,
+removals and retained order, title/instruction change flags and whether the
+original aggregate basis is still current. Pending/invalid/corrupt work
+returns status without a comparison. Same text does not prove improvement;
+different text does not prove improvement either. Maker still reviews the
+new artifact using the existing quality rubric. No public API, approval,
+publication or member data. Treat output as confidential.
