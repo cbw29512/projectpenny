@@ -1,0 +1,13 @@
+[Unit]
+Description=Penny bounded activity observation cycle
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/.local/share/penny/release
+ExecStart=%h/.local/share/penny/venv/bin/python -m penny.runtime.activity_publish --config %h/.config/penny/projection.json --mode cycle
+TimeoutStartSec=45
+TimeoutStopSec=10
+KillMode=control-group
+NoNewPrivileges=true
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1

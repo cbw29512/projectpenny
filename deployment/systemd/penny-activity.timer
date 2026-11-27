@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule Penny's bounded activity observations
+
+[Timer]
+OnBootSec=120s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Unit=penny-activity.service
+
+[Install]
+WantedBy=timers.target

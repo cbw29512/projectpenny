@@ -39,3 +39,19 @@ Output never certifies readiness; model digest approval, actual runtime
 role permissions, full migrations, performance, backups and live service
 rehearsal remain separate checks. A diagnostic exit 0 means collection
 completed, not that all checks passed. See https://docs.ollama.com/api/tags.
+
+## Activity delivery candidate
+Migration 040 defaults disabled. Separate penny-activity.service/timer candidate
+uses the same durable gate as manual invocation, one attempt per 60 seconds
+minimum, explicit operator-selected daily cap 1–1440 (UTC buckets; counts
+attempts, not credits), endpoint/key binding and separate session advisory
+lock. Reserve before HTTP; never refund a failed attempt. A lost process
+leaves interrupted state until reviewed recovery; failures disable delivery,
+and HTTP backoff preserves a 24-hour cooldown. Emergency stop disables the
+activity gate too; restarting inference does not enable it. An already sent
+request cannot be canceled by database stop. Stop the activity timer/service
+as part of emergency procedure. Explicit --mode enable --daily-limit N
+--confirm is required, using protected projection config. --mode disable
+--confirm closes it; --mode recover --confirm reconciles interrupted state
+without reopening. No units installed, migration applied, or cap selected
+for production. Validate actual credit budget, permissions and endpoint first.

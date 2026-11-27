@@ -35,6 +35,7 @@ def stop(dsn):
         conn.execute("UPDATE scheduler_control SET paused=true WHERE singleton")
         conn.execute("UPDATE inference_runtime SET enabled=false WHERE singleton")
         conn.execute("UPDATE bridge_control SET enabled=false WHERE singleton")
+        conn.execute("UPDATE activity_delivery_control SET enabled=false WHERE singleton")
         _event(conn,now,"stop")
     return True
 

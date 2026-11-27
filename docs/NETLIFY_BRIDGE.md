@@ -134,3 +134,10 @@ DB role, publisher timer, browser fetch wiring or actual publication.
 Manual invocations are not a persistent local attempt limiter; automated
 publication requires durable cooldown and reviewed credit budget. Do not
 activate before those gates, scoped role audit, HTTPS tests and Maker approval.
+
+## Durable outbound activity delivery
+Migration 040 and candidate systemd timer now gate both manual and automated
+publisher invocations. Disabled by default, explicit daily attempt cap,
+configuration binding, persistent cooldown, independent session lock, failure
+block and reviewed crash recovery. No live budget, role grants, timer or
+endpoint activation. Public read admission and browser wiring remain open.

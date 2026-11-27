@@ -26,7 +26,7 @@ def signature(key, sample, activity):
                     hashlib.sha256).hexdigest()
 
 
-def publish_once(config, *, confirmed=False):
+def _send_once(config, *, confirmed=False):
     """Explicit operator action; no automatic retry or runtime state change."""
     conn = None
     try:
@@ -80,3 +80,24 @@ def publish_once(config, *, confirmed=False):
                 conn.close()
             except Exception:
                 logger.warning("Activity connection cleanup failed")
+
+
+def publish_once(config, *, confirmed=False):
+    """Every supported invocation shares the persistent local gate."""
+    if confirmed is not True:
+        return "refused"
+    from .delivery_gate import LOCK_ID, reserve, finish
+    from penny.runtime.operator_control import _exclusive
+    try:
+        with _exclusive(config.dsn,LOCK_ID) as acquired:
+            if not acquired:
+                return "busy"
+            result=reserve(config)
+            if result!="reserved":
+                return result
+            result=_send_once(config,confirmed=True)
+            finish(config.dsn,result)
+            return result
+    except Exception as exc:
+        logger.error("Activity cycle blocked (%s)",type(exc).__name__)
+        return "uncertain"

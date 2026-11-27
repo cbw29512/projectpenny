@@ -3,7 +3,7 @@ import json
 import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
-from penny.progress.publisher import publish_once, signature, PATH
+from penny.progress.publisher import _send_once as publish_once, signature, PATH
 
 
 class PublisherTests(unittest.TestCase):
