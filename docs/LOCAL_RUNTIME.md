@@ -81,3 +81,17 @@ Docker forwarding, other namespaces, UDP, router, firewall, source address
 restriction, host key and actual running config require separate review.
 Output omits raw addresses and configuration; keep results private.
 References: https://man.openbsd.org/sshd.8 and https://man7.org/linux/man-pages/man8/ss.8.html
+
+## Private configuration hardening
+Runtime configuration now rejects duplicate JSON keys, non-UTF-8 data,
+ambient PG* environment variables (libpq connection/credential overrides),
+noncanonical outbound hosts/keys, invalid database ports, hard-linked files,
+unsafe immediate parent directories and changes detected during file read.
+Use a private owner-controlled config directory (0700 recommended), regular
+0600 files, explicit local DSNs and a clean service environment. Both bridge
+and projection keys must be 32–64 bytes encoded as contiguous hex. Existing
+nonconforming configurations fail closed; do not silently rewrite them.
+The immediate parent is opened without symlink following and held during
+read; protect all ancestor paths and the release independently. This is not
+proof of actual DB role privileges, same-UID isolation or global libpq
+configuration security. No live settings changed.
