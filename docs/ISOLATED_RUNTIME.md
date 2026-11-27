@@ -205,3 +205,19 @@ Python Unicode casefold/split, so Unicode and ranking parity require testing.
 Trusted local recall remains separate. Completion and candidate intake still
 need isolation before full EXECUTE-only inference deployment. No live migration,
 role changes or production certification.
+
+## Ordinary draft completion (migration 049)
+The supervised worker now uses penny_inference_complete_draft(uuid,uuid,uuid,text)
+for ordinary results, bound to current cycle/task/fence and unexpired lease.
+The routine writes only a fenced outcome and scheduler accounting, rejects
+replay, and checks consent/deleted preference snapshots before retaining
+text. PUBLIC execute is revoked; no production grants installed. Specialized
+internal memory-review, maintenance, business-draft and workshop tasks return
+an explicit specialized status without storing anything. The current runtime
+opts into the existing trusted Python completion for those routes only, to
+preserve atomic candidate validation and staging. The adapter defaults to
+refusing specialized completion, and never falls back after a refusal or
+uncertain database result. This transitional runtime still needs legacy
+privileges for specialized tasks; do not provision a broad worker role or
+certify the inference boundary yet. Next scope those four intake routes.
+No production migration, role changes or live deployment. CI remains pending.
