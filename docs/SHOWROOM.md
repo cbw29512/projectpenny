@@ -270,3 +270,13 @@ must be established on the NucBox. Connected Netlify name search returned
 no Penny project; no site created, no secret generated, no deployment or
 actual transmission. Runtime cloud composition and browser reader remain
 pending. CI pending for this repair and CLI.
+
+## Workshop hosted runtime composition
+Added candidate production-only composition using the existing projection
+roles and shared validation, distinct Workshop key and exact netlify.app
+origin matching the local allowlist. Requires an explicitly supplied provider
+limiter and verified TLS/scoped queries. Warm runtime checks enable flag and
+refuses configuration drift. Full connected Netlify list returned no identifiable
+Penny project. No site created or paid resources provisioned. No deployed
+function entrypoint, real provider limiter, browser reader or live delivery
+in this increment. Synthetic runtime tests added; CI pending.
