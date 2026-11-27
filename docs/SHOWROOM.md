@@ -217,3 +217,16 @@ unavailable; the backend reviewed snapshot producer and secure member
 transport are not connected. Existing connect-src none and noindex remain.
 No live site deployment or real progress claim. Browser regression tests
 added; CI pending.
+
+## Reviewed Workshop progress candidate (061)
+CI 46071296781 passed the website Workshop. Local snapshot producer binds
+the explicitly reviewed catalog product (exact planned checklist title),
+selected stage, current quality/preview/revision evidence and disclosure
+review. Explicit withdrawal requires a real recorded withdrawal. Source
+digest remains private; candidate emits only the browser's six fields,
+expires within one hour or upstream expiry, and suppresses an invalid
+latest snapshot without older fallback. Beta status awaits exact rendition
+verification. Title plus trusted catalog review is the current product
+binding, not a general product identity registry. No transport, actual
+publication, provider provisioning or live records. Synthetic tests added;
+positive revision disclosure and expiry tests still needed. CI pending.
