@@ -43,6 +43,8 @@ test("runtime authenticates signed write and reads only via restricted role",asy
       return {release(){},query:async(s,a)=>{
         calls.push({role,s,a});
         if(s.includes("current_user"))return {rows:[{role,login:role,unsafe:false}]};
+        if(s.includes("workshop_allow_write")&&role==="projection_writer")return {rows:[{ok:true}]};
+        if(s.includes("workshop_allow_read")&&role==="projection_reader")return {rows:[{ok:true}]};
         if(s.includes("workshop_publish")&&role==="projection_writer"){
           const [sampled_at,stage,generated_at,expires_at]=a;
           observation={sampled_at,stage,generated_at,expires_at};return {rows:[{ok:true}]};
@@ -58,11 +60,11 @@ test("runtime authenticates signed write and reads only via restricted role",asy
   assert.equal(response.status,200);
   assert.equal((await response.json()).stage,"prototype_reviewed");
   assert.equal(pools.length,2);assert.ok(pools.every(p=>p.options.ssl.rejectUnauthorized));
-  assert.equal(calls.length,4);
-  assert.deepEqual(calls.map(c=>c.role),["projection_writer","projection_writer","projection_reader","projection_reader"]);
+  assert.equal(calls.length,8);
+  assert.deepEqual(calls.map(c=>c.role),["projection_writer","projection_writer","projection_writer","projection_writer","projection_reader","projection_reader","projection_reader","projection_reader"]);
   e.PENNY_WORKSHOP_ENABLED="false";
   assert.equal((await handler(read())).status,503);
   e.PENNY_WORKSHOP_ENABLED="true";e.PENNY_WORKSHOP_KEY_HEX="ef".repeat(32);
   assert.equal((await handler(read())).status,503);
-  assert.equal(calls.length,4);
+  assert.equal(calls.length,8);
 });

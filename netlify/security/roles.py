@@ -13,8 +13,8 @@ SCOPES = {
                "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)",
                "mailbox_allow_bridge(text)"),
     "maintenance": ("mailbox_purge()",),
-    "projection_writer": ("activity_publish(bigint,text)","workshop_publish(bigint,text,bigint,bigint)"),
-    "projection_reader": ("activity_read()","workshop_read()"),
+    "projection_writer": ("activity_publish(bigint,text)","workshop_publish(bigint,text,bigint,bigint)","workshop_allow_write()"),
+    "projection_reader": ("activity_read()","workshop_read()","workshop_allow_read()"),
 }
 HELPER = "mailbox_expire(timestamptz)"
 NAME = re.compile(r"[a-z][a-z0-9_]{0,62}")

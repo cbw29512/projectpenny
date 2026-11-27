@@ -5,6 +5,7 @@ import {projectionConfig} from "./projection-config.mjs";
 import {createWorkshopHandler} from "../projection/workshop-handler.mjs";
 import {createWorkshopVerifier,unavailable} from "../projection/workshop-state.mjs";
 import {createWorkshopRepository} from "../projection/workshop-repository.mjs";
+import {createWorkshopLimiter} from "../projection/workshop-limiter.mjs";
 import {reply} from "../gateway/response.mjs";
 
 export function workshopConfig(env){return projectionConfig(env,"workshop");}
@@ -27,9 +28,10 @@ export function createWorkshopRuntime({env,Pool,allow}){
           pool.on("error",()=>console.error("Workshop projection pool unavailable"));
           return createScopedQuery(pool,config.roles[scope]);
         };
+        const queries={writerQuery:query("writer"),readerQuery:query("reader")};
         handler=createWorkshopHandler({enabled:true,origin:config.origin,
-          verify:createWorkshopVerifier(config.key),allow,
-          repository:createWorkshopRepository({writerQuery:query("writer"),readerQuery:query("reader")})});
+          verify:createWorkshopVerifier(config.key),allow:createWorkshopLimiter({edgeAllow:allow,...queries}),
+          repository:createWorkshopRepository(queries)});
         pinned=digest;
       }
       return await handler(request);
