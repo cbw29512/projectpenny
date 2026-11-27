@@ -93,3 +93,51 @@ class BridgeReleaseTests(DatabaseFixture):
         self.assertIsNone(self.pending())
         self.store.set_paused(False)
         self.assertIsNotNone(self.pending())
+
+    def test_restricted_delivery_role_cannot_read_or_approve_drafts(self):
+        role="reply_"+uuid4().hex
+        from psycopg import sql
+        ident=sql.Identifier(role)
+
+        def cleanup():
+            with psycopg.connect(self.dsn) as conn:
+                conn.execute(sql.SQL("DROP OWNED BY {}").format(ident))
+                conn.execute(sql.SQL("DROP ROLE {}").format(ident))
+
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute(sql.SQL("CREATE ROLE {} NOLOGIN").format(ident))
+            conn.execute(sql.SQL("GRANT USAGE ON SCHEMA {} TO {}").format(
+                sql.Identifier(self.schema),ident))
+            for signature in ("penny_bridge_pending_reply(uuid)",
+                              "penny_bridge_record_delivery(uuid,uuid,text)"):
+                conn.execute(sql.SQL("GRANT EXECUTE ON FUNCTION {} TO {}").format(
+                    sql.SQL(signature),ident))
+        self.addCleanup(cleanup)
+
+        def call(statement,args=()):
+            with psycopg.connect(self.dsn) as conn:
+                conn.execute(sql.SQL("SET ROLE {}").format(ident))
+                return conn.execute(statement,args).fetchall()
+
+        self.ack()
+        self.finish()
+        question=self.remote.id
+        self.assertEqual(call("SELECT * FROM penny_bridge_pending_reply(%s)",(question,)),[])
+        for statement,args in (
+            ("SELECT result FROM task_outcome",()),
+            ("SELECT payload FROM work_task",()),
+            ("SELECT * FROM penny_bridge_reviewed(%s)",(question,)),
+            ("UPDATE bridge_release SET identity_sha256='forged'",()),
+            ("INSERT INTO bridge_release SELECT * FROM bridge_release",()),
+        ):
+            with self.subTest(statement=statement):
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                    call(statement,args)
+        self.assertTrue(self.approve())
+        row=call("SELECT * FROM penny_bridge_pending_reply(%s)",(question,))[0]
+        self.assertEqual(row[2],"Draft")
+        self.assertEqual(call("SELECT penny_bridge_record_delivery(%s,%s,%s)",
+                              (question,uuid4(),row[1])),[(False,)])
+        self.assertEqual(call("SELECT penny_bridge_record_delivery(%s,%s,%s)",
+                              (question,row[0],row[1])),[(True,)])
+        self.assertEqual(call("SELECT * FROM penny_bridge_pending_reply(%s)",(question,)),[])

@@ -90,3 +90,18 @@ and cannot enable publication or change approved limits. A compromised
 publisher could misreport public observations or exhaust its approved budget;
 no assertion of authenticity after key theft. Inference and mailbox scopes
 still require deeper refactoring. No live migration or role changes.
+
+## Mailbox reply boundary (partial)
+Migration 042 limits delivery to two fixed routines: penny_bridge_pending_reply(uuid)
+and penny_bridge_record_delivery(uuid,uuid,text). Both pin search_path and
+revoke PUBLIC execute. The private invoker helper must NOT be granted to
+workers. Only acknowledged, unexpired, mapped, successful, exact SHA-256
+reviewed replies with the pinned identity can be read. The trusted Maker's
+approval remains separate. Receipt recording cannot change approval, text,
+identity or fence. A compromised delivery credential can falsely attest
+receipt or disclose previously approved replies; remote receipt truth still
+requires reconciliation. No production grants are installed. A fresh delivery
+role may be tested with schema USAGE and only these two EXECUTE grants.
+Full mailbox worker is NOT ready for that role: admission, scheduling,
+acknowledgement and rejection still use direct table queries and must be
+scoped before deployment. Do not grant broad access as a workaround.

@@ -9,6 +9,7 @@ from penny.guardian.state import Actor, Capability
 from penny.scheduler.storage_db import locked
 from .receipts import valid_id
 from .state import wire_text
+from .reply_db import reply_call
 
 logger = logging.getLogger(__name__)
 
@@ -66,42 +67,29 @@ def approve_reply(dsn,question_id,*,reviewer_id,expected_text):
         return True
 
 
-def _approved(row):
-    if (row is None or row["draft_sha256"] is None
-            or row["identity_sha256"] != APPROVED_PROMPT_SHA256
-            or not validate_draft(row["result"]).allowed):
-        return False
-    try:
-        return _digest(row["result"]) == row["draft_sha256"]
-    except (ValueError,TypeError):
-        return False
-
-
 def pending_reply(dsn,question_id):
-    if not valid_id(question_id):
+    if not valid_id(question_id) or not authorize(
+            Actor.WORKER,Capability.READ_APPROVED_BRIDGE_REPLY).allowed:
         return None
-    with locked(dsn) as (conn,control,now):
-        if control["paused"] or not authorize(Actor.WORKER,Capability.READ_APPROVED_BRIDGE_REPLY).allowed:
-            return None
-        row = _live(conn,question_id,now)
-        if not _approved(row) or row["delivered_at"] is not None:
-            return None
-        return ApprovedReply(question_id,row["fence"],row["draft_sha256"],row["result"])
+    row=reply_call(dsn,"pending",(question_id,))
+    if row is None or not validate_draft(row["result"]).allowed:
+        return None
+    # Independent local digest check in addition to the DB approval boundary.
+    if _digest(row["result"])!=row["draft_sha256"]:
+        return None
+    return ApprovedReply(question_id,row["fence"],row["draft_sha256"],row["result"])
 
 
 def record_delivery(dsn,reply):
-    # Trusted transport caller attests a confirmed remote response, never
-    # use this as permission to send. Retries must use pending_reply again.
-    if type(reply) is not ApprovedReply or not valid_id(reply.question_id):
+    # A confirmed external response is an attestation, not new authority.
+    try:
+        if (type(reply) is not ApprovedReply or not valid_id(reply.question_id)
+                or not valid_id(reply.fence) or not authorize(
+                    Actor.WORKER,Capability.READ_APPROVED_BRIDGE_REPLY).allowed
+                or _digest(reply.text)!=reply.draft_sha256):
+            return False
+        row=reply_call(dsn,"delivered",(reply.question_id,reply.fence,reply.draft_sha256))
+        return row is not None and row["recorded"] is True
+    except (ValueError,TypeError):
+        logger.warning("Mailbox delivery receipt rejected")
         return False
-    with locked(dsn) as (conn,_,now):
-        if not authorize(Actor.WORKER,Capability.READ_APPROVED_BRIDGE_REPLY).allowed:
-            return False
-        row = _live(conn,reply.question_id,now)
-        if not _approved(row) or (row["fence"],row["draft_sha256"],row["result"]) != (
-                reply.fence,reply.draft_sha256,reply.text):
-            return False
-        if row["delivered_at"] is None:
-            conn.execute("UPDATE bridge_release SET delivered_at=%s WHERE question_id=%s",
-                         (now,reply.question_id))
-        return True
