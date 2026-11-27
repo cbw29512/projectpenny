@@ -126,3 +126,22 @@ external authentication remain mandatory. Ack only records a fenced
 attestation; it is not proof of remote delivery. Worker scheduling, deferral
 and rejection still require scoping before the full worker can use an
 EXECUTE-only role. No production role grants, migrations or service changes.
+
+## Mailbox worker SQL boundary (migration 044)
+The complete runtime bridge path now calls seven fixed routines: admit, ack,
+pending_reply, record_delivery, reserve, defer and reject, with signatures in
+migrations 042–044 and tests/test_mailbox_role.py. No direct table access is
+needed by the supported worker path; session advisory locks remain standard
+PostgreSQL calls. Reserve enforces durable cooldown, bridge/scheduler gates,
+expiry housekeeping and rest; defer only extends cooldown and latches a block;
+reject only marks a matching failed/expired/canceled mapped receipt. The
+private rest helper and reviewed-reply helper must never be granted to workers.
+Full restricted-role roundtrip and negative tests are added, not certified.
+The role can still consume resources, attest false receipts or send arbitrary
+requests using a stolen cloud credential; external auth, network egress and
+provider quotas remain separate boundaries. Database routines do not prove
+remote user intent or remote delivery. Provision a fresh dedicated login with
+schema USAGE and only the seven EXECUTE grants, no table grants; audit PUBLIC,
+ownership, membership and all other effective privileges before use. SQL rest
+and admission policy parity remains a release gate. No actual production role
+created or grants/migrations applied.

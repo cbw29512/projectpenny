@@ -5,8 +5,8 @@ from contextlib import contextmanager
 import psycopg
 
 from penny.guardian.policy import identity_matches
-from penny.scheduler.storage_db import locked, expire_waiting
-from penny.scheduler.rest_gate import rest_closed
+from .reply_db import reply_call
+from .receipts import valid_id
 from .worker_state import Action
 
 logger = logging.getLogger(__name__)
@@ -31,41 +31,19 @@ def exclusive_cycle(dsn):
 
 
 def reserve_action(dsn):
-    # Reserve before any external effect; restart cannot erase cooldown.
-    with locked(dsn) as (conn,control,now):
-        gate=conn.execute("SELECT * FROM bridge_control WHERE singleton FOR UPDATE").fetchone()
-        if (gate is None or not gate["enabled"] or gate["blocked_reason"] is not None
-                or control["paused"] or not identity_matches()):
-            return Action("paused"),INTERVAL
-        if gate["not_before"]>now:
-            return Action("cooldown"),gate["not_before"]-now
-        conn.execute("UPDATE bridge_control SET not_before=%s WHERE singleton",(now+INTERVAL,))
-        expire_waiting(conn,now)
-        row=conn.execute(
-            """SELECT r.question_id,r.fence,r.task_id,r.acked_at,
-                      t.state,m.enabled,m.local_member=r.local_member AS mapped
-               FROM bridge_receipt r JOIN work_task t ON t.id=r.task_id
-               JOIN bridge_member m ON m.cloud_owner=r.cloud_owner
-               LEFT JOIN bridge_release a ON a.question_id=r.question_id
-               WHERE r.expires_at>%s AND r.remote_rejected_at IS NULL
-                 AND a.delivered_at IS NULL
-               ORDER BY r.admitted_at,r.question_id LIMIT 1""",(now,)
-        ).fetchone()
-        if row is None:
-            # Do not lease new remote questions during rest. Existing replies
-            # and rejection/ack housekeeping may still complete.
-            return Action("paused" if rest_closed(control,now) else "claim"),INTERVAL
-        if not row["enabled"] or not row["mapped"]:
-            return Action("waiting"),INTERVAL
-        if row["state"] in ("failed","expired","canceled"):
-            kind="reject"
-        elif row["acked_at"] is None:
-            kind="ack"
-        elif row["state"]=="succeeded":
-            kind="answer"
-        else:
-            kind="waiting"
-        return Action(kind,row["question_id"],row["fence"],row["task_id"]),INTERVAL
+    if not identity_matches():
+        return Action("paused"),INTERVAL
+    row=reply_call(dsn,"reserve",())
+    if row is None or row["kind"] not in (
+            "paused","cooldown","waiting","claim","ack","answer","reject"):
+        raise RuntimeError("invalid mailbox reservation")
+    ids=(row["question_id"],row["fence"],row["task_id"])
+    if (type(row["delay"]) is not int or row["delay"]<1
+            or (row["kind"] in ("ack","answer","reject") and not all(map(valid_id,ids)))
+            or (row["kind"] in ("paused","cooldown","claim") and any(x is not None for x in ids))
+            or (row["kind"]=="waiting" and not (all(x is None for x in ids) or all(map(valid_id,ids))))):
+        raise RuntimeError("invalid mailbox action")
+    return Action(row["kind"],*ids),row["delay"]
 
 
 def defer(dsn,seconds,*,block=None):
@@ -73,19 +51,14 @@ def defer(dsn,seconds,*,block=None):
         raise ValueError("invalid bridge cooldown")
     if block not in (None,"authentication","remote_conflict","local_integrity"):
         raise ValueError("invalid block reason")
-    with locked(dsn) as (conn,_,now):
-        conn.execute("""UPDATE bridge_control SET not_before=greatest(not_before,%s),
-                        blocked_reason=coalesce(blocked_reason,%s)
-                        WHERE singleton""",(now+seconds,block))
+    row=reply_call(dsn,"defer",(seconds,block))
+    if row is None or row["recorded"] is not True:
+        raise RuntimeError("mailbox cooldown not recorded")
 
 
 def record_rejection(dsn,action):
-    with locked(dsn) as (conn,_,now):
-        row=conn.execute(
-            """UPDATE bridge_receipt r SET remote_rejected_at=coalesce(r.remote_rejected_at,%s)
-               FROM work_task t WHERE r.question_id=%s AND r.fence=%s
-               AND r.task_id=%s AND t.id=r.task_id AND r.expires_at>%s
-               AND t.state IN ('failed','expired','canceled') RETURNING r.question_id""",
-            (now,action.question_id,action.fence,action.task_id,now)
-        ).fetchone()
-        return row is not None
+    if (type(action) is not Action or action.kind!="reject" or not all(
+            valid_id(x) for x in (action.question_id,action.fence,action.task_id))):
+        return False
+    row=reply_call(dsn,"reject",(action.question_id,action.fence,action.task_id))
+    return row is not None and row["recorded"] is True

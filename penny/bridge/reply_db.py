@@ -6,6 +6,9 @@ from psycopg.rows import dict_row
 
 logger=logging.getLogger(__name__)
 CALLS={
+    "reserve":"SELECT * FROM penny_bridge_reserve()",
+    "defer":"SELECT penny_bridge_defer(%s,%s) AS recorded",
+    "reject":"SELECT penny_bridge_reject(%s,%s,%s) AS recorded",
     "admit":"SELECT * FROM penny_bridge_admit(%s,%s,%s,%s,%s)",
     "ack":"SELECT penny_bridge_ack(%s,%s,%s) AS recorded",
     "pending":"SELECT * FROM penny_bridge_pending_reply(%s)",

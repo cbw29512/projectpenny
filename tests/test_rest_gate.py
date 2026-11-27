@@ -10,7 +10,6 @@ from penny.runtime.inference import inference_tick
 from penny.scheduler.storage_db import locked
 from penny.scheduler.outcomes import complete
 from penny.business.hourly import plan_hour
-from penny.bridge.worker_store import reserve_action
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
@@ -41,7 +40,8 @@ class RestGateTests(DatabaseFixture):
             brain=Mock()
             self.assertEqual(inference_tick(self.dsn,brain),"paused")
             brain.generate.assert_not_called()
-            self.assertEqual(reserve_action(self.dsn)[0].kind,"paused")
+            # Mailbox rest now uses its own database clock, not this Python mock.
+            # Deterministic SQL boundary tests live in test_mailbox_role.py.
         with self.gate(False):
             self.assertIsNotNone(self.store.claim())
 
