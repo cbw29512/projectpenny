@@ -174,3 +174,24 @@ withdrawal removes live consent and attribution. No payment/tier weighting,
 automatic causal claim, public names or publication. The reviewer must
 substantiate the actual contribution; linkage alone is not causal evidence.
 No public request routes or operator commands added in this slice. CI pending.
+
+## Closed beta grant and exact rendition (060)
+CI 46067514098 passed private contributor recognition. Local trusted beta
+proof preparation reuses the current exact quality-reviewed branded edition
+and inserts a fixed opaque grant UUID watermark, never member identity.
+Reviewer must inspect exact variant bytes before granting; grant binds both
+base and variant hashes, active preview, exact quality review, approved brand,
+authenticated tester and independent evidence. Provisional limits: one grant
+per tester/preview, at most 20 per preview and 4096 retained; expiry at most
+seven days and no later than preview expiry. Reissue requires a separately
+reviewed preview, not extension or resurrection. Read reauthenticates session
+and owner, checks pause, revocation, expiry, current preview/source/quality/
+brand and exact render hashes under one lock. Revocation cannot retract a
+copy already disclosed; watermark is a deterrent, not copy protection.
+Trusted adapter supplies local approved artwork bytes, not visitor upload.
+No public routes, object URLs, remote delivery, billing, cache or commercial
+release. Future transport must enforce no-store, bounded read rate, safe
+download headers, revocation at delivery and tester-specific authorization.
+Synthetic regression tests added; real expiry and quality supersession
+coverage, retention/purge, operator tooling and public beta remain pending.
+No live infrastructure changes. CI pending.

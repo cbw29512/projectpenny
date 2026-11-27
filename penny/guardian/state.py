@@ -47,6 +47,7 @@ class Capability(Enum):
     REQUEST_WORKSHOP = "request_workshop"
     STAGE_WORKSHOP = "stage_workshop"
     REVIEW_PRODUCT_CATALOG = "review_product_catalog"
+    READ_BETA_EDITION = "read_beta_edition"
     ATTRIBUTE_PRODUCT_FINANCE = "attribute_product_finance"
     REVIEW_PROGRESS_SNAPSHOT = "review_progress_snapshot"
     REVIEW_VIRTUAL_WORLD = "review_virtual_world"

@@ -26,6 +26,7 @@ _ALLOWED = frozenset({
     (Actor.ADMIN, Capability.ISSUE_MEMBER_SESSION),
     (Actor.WORKER, Capability.RECALL_MEMBER_MEMORY),
     (Actor.MEMBER, Capability.SUBMIT_SUGGESTION),
+    (Actor.MEMBER, Capability.READ_BETA_EDITION),
     (Actor.ADMIN, Capability.REVIEW_SUGGESTION),
     (Actor.ADMIN, Capability.VERIFY_CONTRIBUTION),
     (Actor.ADMIN, Capability.RECORD_VAULT_ENTRY),
@@ -80,6 +81,8 @@ def authorize(actor: Actor, capability: Capability) -> Decision:
             return Decision(True, "private_prototype_only")
         if capability in (Capability.REVIEW_PRODUCT_CATALOG,Capability.ATTRIBUTE_PRODUCT_FINANCE):
             return Decision(True, "private_product_evidence_review_only")
+        if capability is Capability.READ_BETA_EDITION:
+            return Decision(True, "authenticated_exact_beta_grant_only")
         if capability is Capability.REVIEW_VIRTUAL_WORLD:
             return Decision(True, "private_virtual_world_review_only")
         if capability is Capability.REVIEW_PROGRESS_SNAPSHOT:

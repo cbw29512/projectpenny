@@ -24,23 +24,29 @@ def build_private(dsn,task_id,*,review_id,source_sha256,brand_version,artwork):
                    (Capability.REVIEW_PRODUCT_CATALOG,Capability.REVIEW_BUSINESS_EXPERIMENT)):
             return None
         with locked(dsn) as (conn,_,now):
-            row=_latest(conn,task_id)
-            if (_verdict(row)!="passed" or row["id"]!=review_id
-                    or row["content_sha256"]!=source_sha256):
-                return None
-            source=read_locked(conn,task_id,now)
-            if not source or source["status"]!="private_prototype":
-                return None
-            data=source["artifact"]
-            if (data["content_sha256"]!=source_sha256
-                    or not matches_locked(conn,brand_version,artwork)):
-                return None
-            content=printable(data["content"],artwork)
-            if content is None:
-                return None
-            return BrandedEdition(source_sha256,str(review_id),brand_version,
-                                  sha256(artwork).hexdigest(),
-                                  sha256(content).hexdigest(),content)
+            return build_locked(conn,task_id,now,review_id=review_id,source_sha256=source_sha256,
+                                brand_version=brand_version,artwork=artwork)
     except Exception as exc:
         logger.error("Private branded edition refused (%s)",type(exc).__name__)
         raise
+
+
+def build_locked(conn,task_id,now,*,review_id,source_sha256,brand_version,artwork):
+    """Caller holds review lock and has checked applicable authorization."""
+    row=_latest(conn,task_id)
+    if (_verdict(row)!="passed" or row["id"]!=review_id
+            or row["content_sha256"]!=source_sha256):
+        return None
+    source=read_locked(conn,task_id,now)
+    if not source or source["status"]!="private_prototype":
+        return None
+    data=source["artifact"]
+    if (data["content_sha256"]!=source_sha256
+            or not matches_locked(conn,brand_version,artwork)):
+        return None
+    content=printable(data["content"],artwork)
+    if content is None:
+        return None
+    return BrandedEdition(source_sha256,str(review_id),brand_version,
+                          sha256(artwork).hexdigest(),
+                          sha256(content).hexdigest(),content)
