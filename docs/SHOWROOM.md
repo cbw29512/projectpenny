@@ -146,3 +146,17 @@ evidence is not erased by withdrawal, and no current aggregate is exposed.
 Not a semantic improvement score or decision to release. The next review
 must bind actual improvement evidence to the new artifact. Public projection,
 written contributions and consented credit remain pending. CI pending.
+
+## Evidence-reviewed improvement verdict (058)
+Private terminal verdict binds exact before/after content, original feedback
+basis, exact current child quality review, reviewer and evidence fingerprint.
+Improved requires changed content, a passing child quality review and live
+matching feedback; parent revocation/integrity failure prevents the claim.
+No automatic comparison score or commercial authorization. Exact retries
+are historical receipts; conflicting reviews refuse. Status recomputes current
+evidence and marks withdrawn/expired feedback or superseded quality stale.
+The historical verdict is retained without individual community values.
+The existing compare command still reports mechanical changes only; this
+new review API is local trusted code, not yet wired into an operator command
+or public display. Terminal verdict correction policy remains future work.
+Synthetic regression added, CI pending. No live deployment.

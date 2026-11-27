@@ -11,7 +11,9 @@ from penny.auth.session import issue_session
 from penny.business.revision import revision_basis,submit_revision
 from penny.business.revision_compare import compare_revision
 from penny.business.workshop_intake import read_artifact
-from penny.business.quality import quality_status
+from penny.business.quality import quality_status,review
+from penny.business.quality_state import CRITERIA
+from penny.business.revision_review import review_revision,revision_review_status
 from penny.community.feedback_review import review_feedback
 from penny.community.feedback import withdraw_feedback
 from penny.runtime.inference import inference_tick
@@ -105,3 +107,41 @@ class RevisionTests(fixture.FeedbackFixture):
         self.assertEqual(result["status"],"integrity_error")
         self.assertIsNone(result["comparison"])
         self.assertNotIn("before",result)
+
+    def test_reviewed_improvement_requires_exact_current_evidence(self):
+        ratings=self.seed()
+        digest=revision_basis(self.dsn,self.preview)["basis_sha256"]
+        r=self.request(digest)
+        self.assertEqual(r.status,"accept")
+        self.assertTrue(start(self.dsn,"inference",confirmed=True))
+        brain=Mock()
+        brain.generate.return_value=json.dumps(dict(title="New checklist",instructions="Read first",
+            items=["Check weather","Pack layers","Check documents"]))
+        self.assertEqual(inference_tick(self.dsn,brain),"completed")
+        c=compare_revision(self.dsn,r.task_id)
+        args=dict(parent_sha256=c["before"]["sha256"],child_sha256=c["after"]["sha256"],
+            basis_sha256=digest,quality_review_id=uuid4(),verdict="improved",
+            reviewer_id=self.reviewer,evidence_ref="test:improvement",
+            evidence=b"synthetic comparison review",confirmed=True)
+        def decide(**changes):
+            return review_revision(self.dsn,r.task_id,**(args|changes))
+        self.assertFalse(decide())
+        q=review(self.dsn,r.task_id,source_ref="test:revision-quality",
+            expected_content_sha256=args["child_sha256"],checks={k:True for k in CRITERIA},
+            revoked=False,reviewer_id=self.reviewer,evidence_ref="test:quality",
+            evidence=b"synthetic quality",confirmed=True)
+        args["quality_review_id"]=q.entry_id
+        self.assertFalse(decide(parent_sha256="0"*64))
+        with self.assertRaises(ValueError):
+            decide(confirmed=False)
+        self.assertTrue(decide())
+        self.assertTrue(decide())
+        self.assertFalse(decide(verdict="not_improved"))
+        status=revision_review_status(self.dsn,r.task_id)
+        self.assertTrue(status["improvement_verified"])
+        self.assertFalse(status["commercial_release_authorized"])
+        self.assertTrue(withdraw_feedback(self.dsn,*ratings[0]))
+        status=revision_review_status(self.dsn,r.task_id)
+        self.assertEqual(status["status"],"stale")
+        self.assertFalse(status["improvement_verified"])
+        self.assertEqual(status["recorded_verdict"],"improved")

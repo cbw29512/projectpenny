@@ -52,60 +52,65 @@ def compare_revision(dsn,task_id):
         if not authorize(Actor.ADMIN,Capability.REVIEW_BUSINESS_EXPERIMENT).allowed:
             return None
         with locked(dsn) as (conn,_,now):
-            link=conn.execute("""SELECT r.*,p.task_id AS preview_task,
-                p.artifact_sha256 AS preview_parent_sha256,
-                w.opportunity_id AS child_opportunity,
-                parent.opportunity_id AS parent_opportunity,t.payload
-                FROM workshop_revision r
-                JOIN workshop_preview p ON p.id=r.preview_id
-                JOIN workshop_task w ON w.task_id=r.task_id
-                JOIN workshop_task parent ON parent.task_id=r.parent_task_id
-                JOIN work_task t ON t.id=r.task_id WHERE r.task_id=%s""",(task_id,)).fetchone()
-            if link is None:
-                return None
-            base={"task_id":str(task_id),"parent_task_id":str(link["parent_task_id"]),
-                  "commercial_release_authorized":False,"comparison":None}
-            parent=read_locked(conn,link["parent_task_id"],now)
-            child=read_locked(conn,task_id,now)
-            if (not parent or parent["status"]!="private_prototype" or not child
-                    or link["preview_task"]!=link["parent_task_id"]
-                    or link["parent_opportunity"]!=link["child_opportunity"]
-                    or link["preview_parent_sha256"]!=link["parent_sha256"]
-                    or parent["artifact"]["content_sha256"]!=link["parent_sha256"]):
-                return base|{"status":"integrity_error"}
-            old=parent["artifact"]
-            # Reconstruct the canonical admitted prompt and check its brief hash.
-            # No arbitrary text from a corrupt task is returned to the operator.
-            try:
-                payload=link["payload"]
-                if not payload.startswith(PROMPT):
-                    raise ValueError("missing revision prompt")
-                data=json.loads(payload[len(PROMPT):])
-                brief=data["reviewed_improvement"]
-                if (type(brief) is not str or data["prior_checklist"]!=old["content"]
-                        or sha256(brief.encode()).hexdigest()!=link["brief_sha256"]
-                        or payload!=PROMPT+json.dumps({"prior_checklist":old["content"],
-                            "reviewed_improvement":brief},ensure_ascii=False,separators=(",",":"))):
-                    raise ValueError("revision prompt mismatch")
-            except (ValueError,TypeError,KeyError,RecursionError):
-                return base|{"status":"integrity_error"}
-            if child["status"]!="private_prototype":
-                return base|{"status":child["status"]}
-            new=child["artifact"]
-            basis=_basis(conn,link["preview_id"],now)
-            before_quality=_quality(conn,link["parent_task_id"],old["content_sha256"])
-            after_quality=_quality(conn,task_id,new["content_sha256"])
-            return base|{
-                "status":"available","reviewed_improvement":brief,
-                "basis_sha256":link["basis_sha256"],
-                "basis_current":basis is not None and basis[2]==link["basis_sha256"],
-                "before":{"content":old["content"],"sha256":old["content_sha256"],
-                          "quality_status":before_quality},
-                "after":{"content":new["content"],"sha256":new["content_sha256"],
-                         "quality_status":after_quality},
-                "comparison":_compare(old["content"],new["content"]),
-                "improvement_verified":False,
-            }
+            return compare_locked(conn,task_id,now)
     except Exception as exc:
         logger.error("Workshop revision comparison failed (%s)",type(exc).__name__)
         raise
+
+
+def compare_locked(conn,task_id,now):
+    """Caller holds scheduler lock; never approve or publish."""
+    link=conn.execute("""SELECT r.*,p.task_id AS preview_task,
+        p.artifact_sha256 AS preview_parent_sha256,
+        w.opportunity_id AS child_opportunity,
+        parent.opportunity_id AS parent_opportunity,t.payload
+        FROM workshop_revision r
+        JOIN workshop_preview p ON p.id=r.preview_id
+        JOIN workshop_task w ON w.task_id=r.task_id
+        JOIN workshop_task parent ON parent.task_id=r.parent_task_id
+        JOIN work_task t ON t.id=r.task_id WHERE r.task_id=%s""",(task_id,)).fetchone()
+    if link is None:
+        return None
+    base={"task_id":str(task_id),"parent_task_id":str(link["parent_task_id"]),
+          "commercial_release_authorized":False,"comparison":None}
+    parent=read_locked(conn,link["parent_task_id"],now)
+    child=read_locked(conn,task_id,now)
+    if (not parent or parent["status"]!="private_prototype" or not child
+            or link["preview_task"]!=link["parent_task_id"]
+            or link["parent_opportunity"]!=link["child_opportunity"]
+            or link["preview_parent_sha256"]!=link["parent_sha256"]
+            or parent["artifact"]["content_sha256"]!=link["parent_sha256"]):
+        return base|{"status":"integrity_error"}
+    old=parent["artifact"]
+    # Reconstruct the canonical admitted prompt and check its brief hash.
+    # No arbitrary text from a corrupt task is returned to the operator.
+    try:
+        payload=link["payload"]
+        if not payload.startswith(PROMPT):
+            raise ValueError("missing revision prompt")
+        data=json.loads(payload[len(PROMPT):])
+        brief=data["reviewed_improvement"]
+        if (type(brief) is not str or data["prior_checklist"]!=old["content"]
+                or sha256(brief.encode()).hexdigest()!=link["brief_sha256"]
+                or payload!=PROMPT+json.dumps({"prior_checklist":old["content"],
+                    "reviewed_improvement":brief},ensure_ascii=False,separators=(",",":"))):
+            raise ValueError("revision prompt mismatch")
+    except (ValueError,TypeError,KeyError,RecursionError):
+        return base|{"status":"integrity_error"}
+    if child["status"]!="private_prototype":
+        return base|{"status":child["status"]}
+    new=child["artifact"]
+    basis=_basis(conn,link["preview_id"],now)
+    before_quality=_quality(conn,link["parent_task_id"],old["content_sha256"])
+    after_quality=_quality(conn,task_id,new["content_sha256"])
+    return base|{
+        "status":"available","reviewed_improvement":brief,
+        "basis_sha256":link["basis_sha256"],
+        "basis_current":basis is not None and basis[2]==link["basis_sha256"],
+        "before":{"content":old["content"],"sha256":old["content_sha256"],
+                  "quality_status":before_quality},
+        "after":{"content":new["content"],"sha256":new["content_sha256"],
+                 "quality_status":after_quality},
+        "comparison":_compare(old["content"],new["content"]),
+        "improvement_verified":False,
+    }
