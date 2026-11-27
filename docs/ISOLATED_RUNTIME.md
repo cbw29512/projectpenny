@@ -161,3 +161,18 @@ minimal environment and ignores Python environment/user site configuration;
 this reduces accidental credential inheritance but does not isolate same-UID
 files, /proc or memory and does not constitute a sandbox. The parent validates
 bounded child JSON text. No change to canonical identity or model settings.
+
+## Inference claim scope (migration 046)
+Supervised inference now uses a claim-only repository with one fixed routine,
+penny_inference_claim(uuid). It requires the current durable cycle token,
+consumes a single claim attempt (including idle), checks gates and rest,
+expires old tasks, cancels changed entitlements and selects only one task.
+It returns that task's fenced payload and memory flags, never the full queue.
+The SQL selection mirrors the approved Python policy: aged-first, last-member
+avoidance, exact 60/30/10 usage normalization, tier and deterministic arrival.
+Parity tests and restricted-role denial tests are required before release.
+The old trusted local TaskStore remains for operator/test workflows; do not
+run both dispatch paths concurrently. Claim access alone is not authority to
+recall memory or complete a task. Those operations still require scoping.
+The inference runtime role is NOT yet ready for execute-only deployment.
+No role grants, live migrations or service changes were made.

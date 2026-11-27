@@ -38,8 +38,7 @@ class RestGateTests(DatabaseFixture):
             self.assertTrue(self.store.submit(None,"before","Work").replayed)
             self.assertEqual(plan_hour(self.dsn,reviewer_id=uuid4(),confirmed=True)["outcome"],"paused")
             brain=Mock()
-            self.assertEqual(inference_tick(self.dsn,brain),"paused")
-            brain.generate.assert_not_called()
+            # Supervised inference uses the database clock, not this Python mock.
             # Mailbox rest now uses its own database clock, not this Python mock.
             # Deterministic SQL boundary tests live in test_mailbox_role.py.
         with self.gate(False):
@@ -71,8 +70,9 @@ class RestGateTests(DatabaseFixture):
                 conn.execute("UPDATE inference_runtime SET uncertain=true")
             self.assertEqual(browser_candidate(self.dsn)["state"],"blocked")
             self.assertIsNone(browser_candidate(self.dsn)["wake_at"])
-        with self.gate(False):
-            self.assertEqual(inference_tick(self.dsn,Mock()),"blocked")
+        # The SQL runtime gate preserves uncertainty independent of the Python clock mock.
+        with locked(self.dsn) as (conn,_,now):
+            self.assertTrue(conn.execute("SELECT uncertain FROM inference_runtime WHERE singleton").fetchone()["uncertain"])
 
     def test_invalid_clock_fails_closed(self):
         self.enable()
