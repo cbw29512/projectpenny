@@ -176,3 +176,17 @@ run both dispatch paths concurrently. Claim access alone is not authority to
 recall memory or complete a task. Those operations still require scoping.
 The inference runtime role is NOT yet ready for execute-only deployment.
 No role grants, live migrations or service changes were made.
+
+## Personal recall scope (migration 047)
+The supervised worker calls penny_inference_personal_recall(uuid,uuid,uuid)
+using the current cycle, task and fence. The database derives the owner and
+consent epoch from the live task; no arbitrary member lookup or text search.
+Only an unexpired enabled consent of the approved version may return up to
+three latest preferences. A one-shot content-free attempt marker covers
+empty or stale-consent results. Existing snapshot IDs are committed before
+return; completion still uses its existing consent/deletion recheck.
+No direct personal memory or consent grants are needed for this operation.
+Legacy trusted recall is retained for local/test workflows, not the supervised
+worker. Existing Python completion and business recall are still unscoped.
+Do not deploy an execute-only inference role until those are addressed.
+No production grants or migration applied; CI and privacy-race rehearsal pending.

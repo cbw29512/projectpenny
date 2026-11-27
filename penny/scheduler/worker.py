@@ -20,7 +20,7 @@ class WorkerResult(str, Enum):
     BLOCKED = "blocked"
 
 
-def run_once(store, brain, *, finish=complete, clock=time.time) -> WorkerResult:
+def run_once(store, brain, *, finish=complete, clock=time.time, personal_recall=None) -> WorkerResult:
     """Trusted internal entry point; output is a draft, not a public reply."""
     try:
         permission = authorize(Actor.WORKER, Capability.GENERATE_DRAFT)
@@ -37,7 +37,8 @@ def run_once(store, brain, *, finish=complete, clock=time.time) -> WorkerResult:
         if claim.memory_enabled and claim.personal_memory_enabled:
             return WorkerResult.BLOCKED
         if claim.personal_memory_enabled:
-            preferences = recall_preferences(store.dsn,claim.task_id,claim.fence)
+            reader=recall_preferences if personal_recall is None else personal_recall
+            preferences = reader(store.dsn,claim.task_id,claim.fence)
             budget = min(90.0,claim.lease_until-clock()-5.0)
             if budget <= 0:
                 return WorkerResult.BLOCKED
