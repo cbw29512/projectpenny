@@ -230,3 +230,16 @@ verification. Title plus trusted catalog review is the current product
 binding, not a general product identity registry. No transport, actual
 publication, provider provisioning or live records. Synthetic tests added;
 positive revision disclosure and expiry tests still needed. CI pending.
+
+## Candidate hosted Workshop projection (mailbox 010)
+CI 46071763826 passed local snapshot review. Added default-disabled hosted
+singleton with fixed enum, signed observation timestamps and max 120-second
+lease, never beyond original review expiry. Newer observation can clear to
+unavailable; same sample only exact replay, older or too-frequent writes
+refuse. Distinct Workshop MAC domain/header; bounded JSON, no-store reads,
+provider limiter dependency, no admin route. Existing projection writer and
+reader scopes gain only the respective fixed Workshop routine (re-audit
+before any grant). No raw product/member data, no connection to local DB.
+No runtime composition, outbound publisher, durable local publication gate
+or browser fetch in this increment. No deployment, provisioning or live
+credentials. CI pending; synthetic SQL and handler tests only.
