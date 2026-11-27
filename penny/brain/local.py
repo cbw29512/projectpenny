@@ -33,11 +33,19 @@ class LocalBrain:
             raise
         try:
             result = subprocess.run(
-                [sys.executable, "-m", "penny.brain.transport"],
+                [sys.executable, "-E", "-s", "-B", "-m", "penny.brain.transport"],
+                # No parent credentials, proxy settings, LD_PRELOAD or PYTHONPATH.
+                # This is environment minimization, not a separate OS identity.
+                env={"PATH":"/usr/bin:/bin","LC_ALL":"C.UTF-8"},
                 input=wire, text=True, encoding="utf-8",
                 capture_output=True, timeout=timeout, check=True,
             )
-            return json.loads(result.stdout)
+            if len(result.stdout)>192002:
+                raise ValueError("oversized inference child response")
+            text=json.loads(result.stdout)
+            if type(text) is not str or not text.strip() or len(text)>16000 or "\x00" in text:
+                raise ValueError("invalid inference child response")
+            return text
         except Exception as exc:
             # Timeout does NOT prove the Ollama server stopped generating.
             logger.error("Local brain request failed (%s)", type(exc).__name__)

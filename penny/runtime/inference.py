@@ -1,49 +1,41 @@
 """Crash-safe inference cycle gate; never assert a stopped model automatically."""
 import logging
+from uuid import UUID
 
 import psycopg
 
 from penny.guardian.policy import identity_matches
-from penny.scheduler.storage_db import locked
 from penny.scheduler.storage import TaskStore
-from penny.scheduler.rest_gate import rest_closed
 from penny.scheduler.worker import run_once, WorkerResult
+from .inference_db import gate_call
 
-logger = logging.getLogger(__name__)
-LOCK_ID = 724390581215032
+logger=logging.getLogger(__name__)
+LOCK_ID=724390581215032
 
 
-def inference_tick(dsn, brain):
+def inference_tick(dsn,brain):
     try:
-        # Session lock prevents overlapping service invocations; the durable
-        # uncertain marker survives a process death or lost DB connection.
+        if not identity_matches():
+            return "paused"
+        # Session advisory lock serializes supported worker invocations.
+        # DB reservation survives process death and is distinct from a task fence.
         with psycopg.connect(dsn,autocommit=True,connect_timeout=5) as guard:
             guard.execute("SET statement_timeout='5s'")
             if not guard.execute("SELECT pg_try_advisory_lock(%s)",(LOCK_ID,)).fetchone()[0]:
                 return "busy"
-            with locked(dsn) as (conn,control,now):
-                gate=conn.execute("SELECT * FROM inference_runtime WHERE singleton FOR UPDATE").fetchone()
-                if (gate is None or not gate["enabled"] or control["paused"]
-                        or not identity_matches()):
-                    return "paused"
-                if gate["uncertain"]:
-                    return "blocked"
-                if conn.execute("SELECT 1 FROM work_task WHERE state='running'").fetchone():
-                    conn.execute("UPDATE inference_runtime SET uncertain=true,last_result='interrupted' WHERE singleton")
-                    return "blocked"
-                if rest_closed(control,now):
-                    return "paused"
-                conn.execute("""UPDATE inference_runtime SET uncertain=true,
-                             last_started=%s,last_result='interrupted' WHERE singleton""",(now,))
-            # Do not hold the scheduler transaction across model execution.
+            row=gate_call(dsn,"begin")
+            status,token=row["status"],row["token"]
+            if status in ("paused","blocked") and token is None:
+                return status
+            if status!="reserved" or type(token) is not UUID or token.int==0:
+                raise RuntimeError("invalid inference cycle reservation")
+            # No transaction is held across model execution.
             result=run_once(TaskStore(dsn),brain)
-            with locked(dsn) as (conn,_,now):
-                active=conn.execute("SELECT 1 FROM work_task WHERE state='running'").fetchone()
-                safe=result in (WorkerResult.IDLE,WorkerResult.COMPLETED) and active is None
-                conn.execute("""UPDATE inference_runtime SET uncertain=%s,
-                    last_finished=%s,last_result=%s WHERE singleton""",
-                    (not safe,now,result.value if safe else "blocked"))
-            return result.value if safe else "blocked"
+            outcome=result.value if type(result) is WorkerResult else "blocked"
+            finished=gate_call(dsn,"finish",(token,outcome))["status"]
+            if finished not in ("idle","completed","blocked"):
+                raise RuntimeError("invalid inference cycle outcome")
+            return finished
     except Exception as exc:
         logger.error("Inference runtime stopped (%s)",type(exc).__name__)
         return "blocked"

@@ -89,7 +89,7 @@ def recover_inference(dsn,*,isolated=False,task_id=None,fence=None):
                 _finalize(conn,row,"failed","operator confirmed isolated recovery",now)
             elif task_id is not None:
                 return False
-            conn.execute("""UPDATE inference_runtime SET uncertain=false,
+            conn.execute("""UPDATE inference_runtime SET uncertain=false,cycle_token=NULL,
                          last_finished=%s,last_result='interrupted' WHERE singleton""",(now,))
             _event(conn,now,"recover_inference",task_id)
             return True

@@ -145,3 +145,19 @@ schema USAGE and only the seven EXECUTE grants, no table grants; audit PUBLIC,
 ownership, membership and all other effective privileges before use. SQL rest
 and admission policy parity remains a release gate. No actual production role
 created or grants/migrations applied.
+
+## Inference supervisor scope (migration 045)
+The supervisor reserves a durable per-cycle UUID before model work and
+finishes only that exact cycle. Missing, stale or consumed tokens cannot
+clear the marker; active tasks prevent a clean finish. Maker recovery
+invalidates the token. Two fixed SECURITY DEFINER routines with pinned
+search_path and no PUBLIC execute replace direct supervisor gate writes.
+Existing uncertain state is preserved. No role provisioning or migration
+applied to production. This is not a proof of upstream model idleness:
+a compromised supervisor can misattest its own outcome. Claim, recall,
+completion and artifact intake still need scoping before a complete
+EXECUTE-only inference role is possible. The child now receives an explicit
+minimal environment and ignores Python environment/user site configuration;
+this reduces accidental credential inheritance but does not isolate same-UID
+files, /proc or memory and does not constitute a sandbox. The parent validates
+bounded child JSON text. No change to canonical identity or model settings.
