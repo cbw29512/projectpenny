@@ -28,3 +28,10 @@ no local action is executed. Hosting admission configuration is a trusted
 operator provisioning/maintenance concern, not a public API. An approved
 outbound-only availability lease is a future improvement, not a remote
 admin command channel. No cloud access to NucBox.
+
+## Defense in depth
+Public-only IPv4 HTTPS is shared by both outbound connectors. No DNS
+fallback to internal/private ranges; original hostname TLS validation.
+Still require separate OS service identities, protected release ownership,
+local firewall/egress policy, database role audit, SSH key-only access,
+verified backup/restore, and adversarial rehearsal before production.

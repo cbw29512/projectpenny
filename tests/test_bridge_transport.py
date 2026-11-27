@@ -52,7 +52,7 @@ class BridgeTransportTests(unittest.TestCase):
         expected = hmac.new(KEY, ("penny-beta-v1." + payload).encode(), hashlib.sha256).digest()
         self.assertEqual(sig, base64.urlsafe_b64encode(expected).decode().rstrip("="))
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_claim_uses_fixed_https_route_and_typed_response(self, connection):
         self.response(connection, self.claim_data())
         result = self.client.claim()
@@ -70,7 +70,7 @@ class BridgeTransportTests(unittest.TestCase):
         self.assertTrue(kwargs["headers"]["Authorization"].startswith("Bearer v1."))
         connection.return_value.close.assert_called_once()
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_untrusted_claim_fields_rejected(self, connection):
         for changes in ({"role": "administrator"}, {"text": "x" * 2001},
                         {"id": "invalid"}, {"leaseUntil": "2000-01-01T00:00:00.000Z"},
@@ -78,13 +78,13 @@ class BridgeTransportTests(unittest.TestCase):
             self.response(connection, {**self.claim_data(), **changes})
             self.assertEqual(self.client.claim().status, "uncertain")
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_no_redirect_or_retry(self, connection):
         self.response(connection, status=302, headers={"Location": "http://localhost"})
         self.assertEqual(self.client.claim().status, "uncertain")
         connection.assert_called_once()
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_backoff_and_auth_failure(self, connection):
         self.response(connection, status=429, headers={"Retry-After": "3600"})
         self.assertEqual(self.client.claim().retry_after, 3600)
@@ -93,7 +93,7 @@ class BridgeTransportTests(unittest.TestCase):
         self.response(connection, status=401)
         self.assertEqual(self.client.claim().status, "unauthorized")
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_reply_bound_and_duplicate_json(self, connection):
         response = self.response(connection, raw=b"x" * (MAX_RESPONSE_BYTES + 1))
         self.assertEqual(self.client.claim().status, "uncertain")
@@ -101,7 +101,7 @@ class BridgeTransportTests(unittest.TestCase):
         self.response(connection, raw=b'{"status":"empty","status":"claimed"}')
         self.assertEqual(self.client.claim().status, "uncertain")
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_typed_upload_and_uncertain_network(self, connection):
         self.response(connection, {"status": "ok"})
         self.assertEqual(self.client.answer(self.id, self.fence, "Reply").status, "ok")
@@ -112,7 +112,7 @@ class BridgeTransportTests(unittest.TestCase):
         self.assertEqual(self.client.ack(self.id, self.fence, uuid4()).status, "uncertain")
         self.assertEqual(connection.call_count, 2)
 
-    @patch("penny.bridge.transport.http.client.HTTPSConnection")
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
     def test_invalid_upload_never_connects(self, connection):
         with self.assertRaises(ValueError):
             self.client.answer(self.id, self.fence, "x" * 16001)

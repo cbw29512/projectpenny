@@ -1,5 +1,4 @@
 """Restricted HTTPS client, no redirect, proxy, arbitrary URL or retries."""
-import http.client
 import json
 import logging
 import re
@@ -11,7 +10,7 @@ from .auth import bridge_token
 from .state import BridgeResult, parse_claim, wire_text
 
 logger = logging.getLogger(__name__)
-HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.netlify\.app\Z")
+from .public_https import HOST, PublicHTTPSConnection
 MAX_RESPONSE_BYTES = 16384
 PATHS = {op: "/api/v1/bridge/" + op for op in ("claim", "ack", "answer", "reject")}
 
@@ -66,7 +65,7 @@ class BridgeClient:
             wire = json.dumps(body, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
             if len(wire) > 100000:
                 raise ValueError("oversized wire request")
-            conn = http.client.HTTPSConnection(self._host, port=443,
+            conn = PublicHTTPSConnection(self._host, port=443,
                 timeout=self._timeout, context=ssl.create_default_context())
             conn.request("POST", PATHS[op], body=wire, headers={
                 "Authorization": bridge_token(self._key),

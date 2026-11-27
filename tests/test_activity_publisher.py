@@ -13,7 +13,7 @@ class PublisherTests(unittest.TestCase):
         self.sample={"schema":"penny-activity-v1","status":"reviewed","state":"working",
                      "sampled_at":999,"expires_at":1014}
 
-    @patch("penny.progress.publisher.http.client.HTTPSConnection")
+    @patch("penny.progress.publisher.PublicHTTPSConnection")
     @patch("penny.progress.publisher.time.time",return_value=1000)
     @patch("penny.progress.publisher.browser_candidate")
     def test_exact_public_wire_and_no_unconfirmed_request(self,candidate,clock,https):

@@ -1,13 +1,13 @@
 """Explicit one-shot activity publisher; never send task content or inference."""
 import hashlib
 import hmac
-import http.client
 import json
 import logging
 import ssl
 import time
 
-from penny.bridge.transport import HOST, _unique_pairs
+from penny.bridge.transport import _unique_pairs
+from penny.bridge.public_https import HOST, PublicHTTPSConnection
 from penny.progress.activity import browser_candidate
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ def _send_once(config, *, confirmed=False):
         wire = json.dumps({"sampled_at":sample,"activity":activity},
                           separators=(",",":")).encode("ascii")
         # Local candidate DB transaction has already ended before HTTPS.
-        conn = http.client.HTTPSConnection(config.host,443,timeout=5,
+        conn = PublicHTTPSConnection(config.host,443,timeout=5,
                                           context=ssl.create_default_context())
         conn.request("POST",PATH,body=wire,headers={
             "Authorization":"PennyActivity v1."+mac,
