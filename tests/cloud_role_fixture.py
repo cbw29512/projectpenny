@@ -13,7 +13,7 @@ class CloudRoleFixture(unittest.TestCase):
     def setUp(self):
         suffix=uuid4().hex
         self.schema="mailbox_"+suffix
-        self.roles={k:k+"_"+suffix for k in ("owner","member","bridge","maintenance","admin","outsider")}
+        self.roles={k:k+"_"+suffix for k in ("owner","member","bridge","maintenance","admin","outsider","projection_writer","projection_reader")}
         self.addCleanup(self.cleanup_roles)
         with psycopg.connect(DSN,autocommit=True) as conn:
             if conn.info.dbname!="penny_test":
@@ -26,7 +26,7 @@ class CloudRoleFixture(unittest.TestCase):
             conn.execute(sql.SQL("SET search_path TO {}").format(sql.Identifier(self.schema)))
             for path in sorted(Path("netlify/mailbox").glob("*.sql")):
                 conn.execute(path.read_text())
-            configure_roles(conn,self.schema,**{k:self.roles[k] for k in ("member","bridge","maintenance","admin")})
+            configure_roles(conn,self.schema,**{k:self.roles[k] for k in ("member","bridge","maintenance","admin","projection_writer","projection_reader")})
             conn.execute("UPDATE mailbox_control SET enabled=true")
             self.a,self.b=uuid4(),uuid4()
             conn.execute("INSERT INTO mailbox_member(id) VALUES (%s),(%s)",(self.a,self.b))

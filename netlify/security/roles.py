@@ -13,6 +13,8 @@ SCOPES = {
                "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)",
                "mailbox_allow_bridge(text)"),
     "maintenance": ("mailbox_purge()",),
+    "projection_writer": ("activity_publish(bigint,text)",),
+    "projection_reader": ("activity_read()",),
     "admin": ("mailbox_admin_status(uuid)","mailbox_admin_pause(uuid)",
               "mailbox_admin_allow(uuid,text)"),
 }
@@ -20,7 +22,8 @@ HELPER = "mailbox_expire(timestamptz)"
 NAME = re.compile(r"[a-z][a-z0-9_]{0,62}")
 
 
-def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None):
+def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None,
+                    projection_writer=None, projection_reader=None):
     """Grant narrow execution on a dedicated schema in one transaction.
 
     Roles must already exist; no passwords or account creation here.
@@ -32,6 +35,10 @@ def configure_roles(conn, schema, *, member, bridge, maintenance, admin=None):
         mapping = dict(member=member,bridge=bridge,maintenance=maintenance)
         if admin is not None:
             mapping['admin'] = admin
+        if (projection_writer is None) != (projection_reader is None):
+            raise ValueError("separate paired projection roles required")
+        if projection_writer is not None:
+            mapping.update(projection_writer=projection_writer,projection_reader=projection_reader)
         names = [schema,*mapping.values()]
         if any(type(n) is not str or not NAME.fullmatch(n) for n in names):
             raise ValueError("invalid role or schema name")

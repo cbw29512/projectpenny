@@ -99,3 +99,19 @@ See [authenticated gateway core](GATEWAY_CORE.md). Routes are implemented as an 
 
 ## Private transport
 See [outbound bridge transport](BRIDGE_TRANSPORT.md). Typed client implemented but not running; local durable admission and approved outbox remain prerequisites.
+
+## Activity observation cache — candidate cloud migration 008
+The existing activity snapshot remains a 15-second live observation. A
+60-second bridge cannot promise continuous live freshness. The separate
+single-row cache accepts only a fresh (under 15s) DB-clock-checked sample
+and fixed enum, rejects regression/conflicting replay, spaces distinct
+writes at least 45s apart, and hides samples at 120s. Public presentation
+must label it Last observed; it cannot trigger pajamas, sleep, work
+admission or chat availability. No raw records, identifiers or free text.
+Disabled by default; optional distinct projection writer/reader roles
+have only their exact SECURITY DEFINER routine, with existing privilege
+audit support. No roles provisioned, no migration applied outside tests.
+The browser parser is isolated until the endpoint exists. Next is the
+authenticated outbound publisher and read-only HTTP adapter with separate
+credentials, explicit budget/edge controls and reviewed activation.
+No automatic Netlify provisioning, deployment or additional spending.
