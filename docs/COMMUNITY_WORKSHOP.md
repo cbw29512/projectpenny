@@ -60,3 +60,11 @@ credentials. Reuse existing scheduler and Guardian.
   attribution with consent, corrected/withdrawn feedback handling.
 - [ ] Final quality and commercial authorization remain distinct from beta.
 - [ ] End-to-end private rehearsal before live publication.
+
+## First feedback implementation
+Migration 053 adds local version-bound structured ratings and interest with
+owner-only withdrawal and shared suggestion capacity. Separate structured
+rows replace the proposed immutable suggestion linkage for rating-only
+feedback, so rating content can be removed. Optional textual feedback,
+moderation, correction, retention, aggregate projection and reviewed revision
+linkage remain pending. See SHOWROOM.md for the exact limits.

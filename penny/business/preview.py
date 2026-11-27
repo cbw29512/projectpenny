@@ -89,6 +89,22 @@ def approve(dsn,task_id,*,source_ref,artifact_sha256,title,preview_text,
         raise
 
 
+def read_preview_locked(conn,preview_id,now):
+    """Trusted internal check; caller already holds scheduler lock."""
+    p=conn.execute("""SELECT p.*,w.preview_id AS withdrawn
+        FROM workshop_preview p LEFT JOIN workshop_preview_withdrawal w
+        ON w.preview_id=p.id WHERE p.id=%s""",(preview_id,)).fetchone()
+    if (not p or p["withdrawn"] or p["expires_at"]<=now
+            or not _valid_preview(p["title"],p["preview_text"])
+            or p["preview_sha256"]!=_digest(p["title"],p["preview_text"])
+            or not _source_ok(conn,p["task_id"],p["artifact_sha256"],now)):
+        return None
+    return {"preview_id":str(preview_id),"title":p["title"],
+            "preview_text":p["preview_text"],"preview_sha256":p["preview_sha256"],
+            "expires_at":p["expires_at"],"status":"beta_feedback_only",
+            "commercial_release_authorized":False}
+
+
 def read_preview(dsn,preview_id):
     """Trusted local projection candidate only; no public endpoint or owner data."""
     try:
@@ -97,18 +113,7 @@ def read_preview(dsn,preview_id):
         if not authorize(Actor.ADMIN,Capability.REVIEW_PRODUCT_CATALOG).allowed:
             return None
         with locked(dsn) as (conn,_,now):
-            p=conn.execute("""SELECT p.*,w.preview_id AS withdrawn
-                FROM workshop_preview p LEFT JOIN workshop_preview_withdrawal w
-                ON w.preview_id=p.id WHERE p.id=%s""",(preview_id,)).fetchone()
-            if (not p or p["withdrawn"] or p["expires_at"]<=now
-                    or not _valid_preview(p["title"],p["preview_text"])
-                    or p["preview_sha256"]!=_digest(p["title"],p["preview_text"])
-                    or not _source_ok(conn,p["task_id"],p["artifact_sha256"],now)):
-                return None
-            return {"preview_id":str(preview_id),"title":p["title"],
-                    "preview_text":p["preview_text"],"preview_sha256":p["preview_sha256"],
-                    "expires_at":p["expires_at"],"status":"beta_feedback_only",
-                    "commercial_release_authorized":False}
+            return read_preview_locked(conn,preview_id,now)
     except Exception as exc:
         logger.error("Preview read refused (%s)",type(exc).__name__)
         raise

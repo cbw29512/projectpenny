@@ -76,3 +76,17 @@ Do not imply ownership of ideas or copyright solely because of a timestamp.
 No new spending, live beta, publication, payments or deployment authorized.
 Exact tester eligibility, rate limits, retention and commercial pricing
 remain pending review; do not infer them from this direction.
+
+## First implemented slice (migration 053)
+Local authenticated structured feedback binds an exact live reviewed preview
+ID and SHA-256. One rating per member/version, usefulness 1–5 and interest
+ yes/maybe/no; no free text, no inference or automatic revision. It shares
+existing suggestion quotas under the scheduler lock, rather than duplicating
+immutable suggestion bodies. Owner-only read and withdrawal; withdrawal
+clears rating/interest, retains a minimal member/request/version tombstone
+for duplicate prevention and quota accounting (not full deletion). No
+public endpoint, aggregation, moderator workflow, correction/resubmission,
+retention/purge, branded release or beta grants yet. Existing caps reused
+provisionally; active unmoderated feedback consumes pending capacity, so
+this local rehearsal must not be enabled publicly until moderation exists.
+No authorization for actual publication or deployment. CI pending.
