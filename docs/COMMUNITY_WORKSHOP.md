@@ -10,6 +10,13 @@ privacy, safety, financial and publication authorization. A private Maker
 review interface is required for launch; ordinary feedback should not require
 manual SSH commands.
 
+The Maker approved the controlled showroom direction: Penny's growth and
+community participation are the durable value, not unrestricted access to
+private work. Follow [showroom contract](SHOWROOM.md). Community members
+advise, test and improve Penny's products; they do not commission arbitrary
+work. Routine quality feedback is community-led. Maker retains the existing
+disclosure, security, legal, finance and final-release authority.
+
 ## State and ownership
 Reuse workshop_task/artifact, business opportunity, quality review, catalog,
 community_suggestion and recognition. Migration 035 adds immutable

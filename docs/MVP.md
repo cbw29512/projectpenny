@@ -45,6 +45,12 @@ website-admin proposals.
   feedback and bounded revisions, version history, verified contributor credit,
   independent quality and final commercial approval. Private Maker review UI
   required; see [community Workshop](COMMUNITY_WORKSHOP.md).
+- [ ] Controlled public showroom and closed beta: Penny's growth and community
+  interaction are the primary public experience. Protect unpublished products,
+  original source assets and private commercial research; community feedback
+  informs Penny's work but never becomes arbitrary instructions to a generator.
+  Show approved excerpts, verified progress, version history, decisions and
+  consented contribution credit. See [showroom contract](SHOWROOM.md).
 - [ ] Every Penny-created product and public beta carries Penny's approved
   character artwork, recognizable name/brand and accurate attribution; branded
   deliverable and listing are mandatory commercial release gates. See

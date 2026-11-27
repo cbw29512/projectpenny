@@ -1,0 +1,78 @@
+# Penny's controlled showroom — approved MVP direction
+Status: requirements approved by Maker, implementation pending.
+Penny's growth, personality and community interaction are the durable value.
+The community is her advisory and testing team, not her employer. The
+showroom is a projection of safe reviewed information, not access to a model
+or private Workshop. Do not change the canonical identity or finance contract.
+
+## Visibility state (planned)
+| State | Audience | Allowed content |
+| --- | --- | --- |
+| Secret | Trusted local Maker and authorized private worker | Full private product, evidence, unpublished idea and source assets |
+| Showroom | Public visitors | Approved description, selected excerpt or demonstration, safe progress and feedback topics |
+| Closed beta | Authorized authenticated testers | Exact approved review edition, scoped to tester and version |
+| Released | Public listing and authorized purchasers | Approved listing and exact commercially authorized deliverable |
+
+Visibility applies to an exact immutable edition, not a mutable artifact
+or unrestricted URL. Promotion requires existing relevant reviews and
+separate authorization. Withdrawal, expiry, quality revocation, brand drift
+or integrity mismatch suppress future access. Previously downloaded material
+cannot reliably be recalled. Watermarks, access controls and delayed
+disclosure deter copying but cannot guarantee secrecy after disclosure.
+Do not imply ownership of ideas or copyright solely because of a timestamp.
+
+## Proposed schema (not installed)
+- ShowroomEdition: stable product/edition/version ID; source artifact digest;
+  approved brand/version and preview digest; explicit visibility; review
+  reference; disclosure expiry; withdrawal marker. Public projection carries
+  only allowlisted fields, never private source identifiers that expose paths,
+  internal prompt content, keys, private evidence or full research.
+- BetaGrant: authenticated tester ID, exact edition ID/digest, reviewed scope,
+  grant/expiry/revocation state. No public object URL for private assets.
+  Any tester-specific watermark uses an opaque identifier, not personal
+  information exposed to other testers. Exact rendered variant must meet
+  the brand/disclosure contract. No live payment or third-party DRM.
+- Feedback: existing suggestion and preview IDs, member, bounded category,
+  usefulness and purchase-interest choices, optional comment, moderation
+  and correction/withdrawal state. No free-form instruction authority.
+- Decision/Revision: link reviewed feedback and prior edition to authorized
+  work and new immutable artifact; factual explanation and consented credit.
+  No edit of historical reviews or product bytes.
+
+## Workflow
+1. Penny privately evaluates an idea and creates a useful prototype.
+2. Review exact safe, branded excerpts for showroom. Delay disclosure if
+   commercially sensitive; never automatically dump raw model output.
+3. Community votes on features, reports problems, gives usability/pricing
+   feedback and proposes improvements. Aggregate interest is not revenue.
+4. Only the approved bounded scheduler may evaluate suggestions and request
+   revisions. No visitor-selected tools, files, prompts, private research
+   queries, custom deliverable generation or automatic product publishing.
+5. Approved testers can evaluate a controlled review edition; access expires,
+   can be revoked and is isolated per edition and member. Treat any disclosed
+   content as potentially copied. No guarantee of copy prevention.
+6. Penny explains actual decisions and improvements in her own voice, thanks
+   verified contributors with consent, and publishes only safe reviewed
+   progress. Preserve setbacks and do not invent feedback or results.
+7. Separate final content, legal, security, brand, price, seller, payment and
+   commercial-release reviews. Community approval is advice, not authority.
+
+## Acceptance
+- [ ] Secret drafts and full source assets never appear in public payloads,
+  bundles, caches, client state, logs or object listings.
+- [ ] Exact branded showroom excerpt and beta grants are separate from
+  commercial authorization; expiry and revocation tested across caches.
+- [ ] Cross-member, cross-edition, replay, scraping and arbitrary-generation
+  abuse tests; bounded shared quotas with no inference on passive browsing.
+- [ ] Feedback intake and aggregation preserve privacy, consent, correction,
+  deletion and evidence; no invented demand, revenue, voters or endorsements.
+- [ ] Decisions/revisions link actual reviewed contributions; credit is
+  optional and consented. Show aggregate progress and real outcomes.
+- [ ] Community handles routine feedback, Maker handles sensitive disclosure
+  and exceptional decisions through trusted local review. No cloud admin.
+- [ ] First branded checklist demonstrates private -> showroom -> controlled
+  beta -> revised edition -> final review in a private rehearsal.
+
+No new spending, live beta, publication, payments or deployment authorized.
+Exact tester eligibility, rate limits, retention and commercial pricing
+remain pending review; do not infer them from this direction.
