@@ -195,3 +195,13 @@ download headers, revocation at delivery and tester-specific authorization.
 Synthetic regression tests added; real expiry and quality supersession
 coverage, retention/purge, operator tooling and public beta remain pending.
 No live infrastructure changes. CI pending.
+
+## Local beta operator
+CI 46068242382 passed closed-beta grant tests. Added trusted inspect/export/
+grant/revoke commands with exact rendition hash verification, explicit
+confirmation, protected artwork/evidence files and binary-only redirected
+proof export. Extended tests for superseded quality review and simulated
+expiry boundary under the access transaction lock; no real time delay or
+production database mutation. No public endpoint or member delivery transport,
+operator credential exposure, actual tester authorization or commercial
+release. CI pending.

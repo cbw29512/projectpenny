@@ -48,3 +48,25 @@ returns status without a comparison. Same text does not prove improvement;
 different text does not prove improvement either. Maker still reviews the
 new artifact using the existing quality rubric. No public API, approval,
 publication or member data. Treat output as confidential.
+
+## Local closed beta operator
+Use a fresh random grant UUID per selected tester. A trusted identity adapter
+must have verified the member and issued a live session. Commands use the
+same private operator config and mode-0600 reviewed local PNG/evidence files.
+Inspect produces hashes, not product bytes or an authorization:
+```sh
+python -m penny.runtime.beta --config ~/.config/penny/operator.json inspect GRANT_UUID \
+  --preview-id PREVIEW_UUID --review-id QUALITY_UUID --version BRAND_VERSION --artwork PRIVATE_PNG
+```
+Export uses the same arguments with action export, both --edition-sha256
+and --variant-sha256 from inspection and --confirm. Redirect only to a
+protected local file with umask 077 and noclobber. Inspect the actual exported
+bytes before grant. Grant uses the same arguments and exact digests plus
+--member-id MEMBER_UUID --expires-at UNIX_EPOCH_SECONDS --reviewer-id
+REVIEWER_UUID --evidence-ref PRIVATE_REF --evidence-file PRIVATE_FILE
+--confirm. Expiry cannot exceed the preview lifetime; no reissue or extension.
+Revoke takes GRANT_UUID, reviewer/evidence flags and --confirm only.
+No credentials or member tokens on command line. No actual delivery from
+this operator CLI; it prepares a proof and records local authorization only.
+A future authenticated member delivery adapter must not use operator credentials
+in public infrastructure. No live beta invitations or uploads performed.
