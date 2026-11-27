@@ -1,5 +1,7 @@
 import {createBetaMailbox} from "../website/assets/beta-mailbox.mjs";
 import {bindConversation} from "./conversation.mjs";
+import {createActivityReader} from "../website/assets/activity-reader.mjs";
+import {bindActivityReader} from "../website/assets/activity-reader-render.mjs";
 try{
   // This candidate is intentionally outside the public deploy root.
   // A trusted operator must serve it on an authorized private HTTPS origin.
@@ -15,6 +17,25 @@ try{
   const view=bindConversation(nodes,mailbox);
   // Browser back/forward cache must never restore a credential or reply.
   window.addEventListener("pagehide",()=>view.close());
+  // Only the private HTTPS beta wires the reader. No network polling.
+  const activityNodes={label:document.getElementById("beta-activity-label"),
+    stamp:document.getElementById("beta-activity-stamp"),
+    refresh:document.getElementById("beta-activity-refresh")};
+  if(Object.values(activityNodes).every(Boolean)){
+    const reader=createActivityReader({enabled:true,fetcher:(path,opts)=>fetch(path,opts),clock:()=>Date.now()});
+    const activity=bindActivityReader(activityNodes,reader);
+    let timer=null;
+    function tick(){
+      clearTimeout(timer);
+      if(document.visibilityState==="hidden")return;
+      activity.render();
+      // Local expiry/refresh-button rendering only; never a network request.
+      timer=setTimeout(tick,1000);
+    }
+    document.addEventListener("visibilitychange",tick);
+    window.addEventListener("pagehide",()=>{clearTimeout(timer);activity.close();});
+    tick();
+  }
 }catch{
   console.error("Private beta initialization refused.");
   const status=document.getElementById("beta-status");

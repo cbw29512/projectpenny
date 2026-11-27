@@ -141,3 +141,10 @@ publisher invocations. Disabled by default, explicit daily attempt cap,
 configuration binding, persistent cooldown, independent session lock, failure
 block and reviewed crash recovery. No live budget, role grants, timer or
 endpoint activation. Public read admission and browser wiring remain open.
+
+## Private beta read consumer
+Manual observation reader and view are wired in private-beta only, not
+website/index.html. Page-local interval 60s, response cap 512 bytes,
+5s abort, Retry-After and 120s expiry. No automatic network polling.
+Actual function deployment, provider budget enforcement and public activation
+remain blocked pending hosting and certification.
