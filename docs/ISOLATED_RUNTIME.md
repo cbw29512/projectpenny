@@ -221,3 +221,16 @@ uncertain database result. This transitional runtime still needs legacy
 privileges for specialized tasks; do not provision a broad worker role or
 certify the inference boundary yet. Next scope those four intake routes.
 No production migration, role changes or live deployment. CI remains pending.
+
+## Learning-candidate completion (migration 050)
+The existing scoped completion routine now handles memory-review tasks without
+legacy table privileges. A private SQL parser retains JSON duplicate-key
+rejection, exact fields, allowed kinds, Python-compatible trim characters and
+content limits. Invalid model proposals still record the bounded raw outcome
+but stage no candidate, matching the existing Python path. Valid proposals
+and source outcomes commit together; no approval or evidence authority is
+added. The parser has no PUBLIC execute grant and must not be granted to
+runtime roles. Tests cover parser parity, restricted-role staging and atomic
+rollback; PostgreSQL behavior is not yet certified. Maintenance proposals,
+business drafts and Workshop artifacts still use the explicit transitional
+legacy path. No production migration, role grants or deployment performed.

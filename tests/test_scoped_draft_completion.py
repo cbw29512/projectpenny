@@ -57,19 +57,25 @@ class DraftCompletionTests(DatabaseFixture):
             self.assertEqual(conn.execute("SELECT status,result FROM task_outcome").fetchall(),
                              [("canceled","personal memory permission changed")])
 
-    def test_specialized_never_silently_loses_candidate(self):
+    def test_learning_candidate_is_scoped_and_atomic(self):
         submit_review(self.store,"lesson","Observed result")
         token,claim=self.reserve()
         result='{"kind":"lesson","content":"Measure first"}'
-        self.assertFalse(ScopedDraftCompletion(token)(self.dsn,claim.task_id,claim.fence,
+        self.assertTrue(ScopedDraftCompletion(token)(self.dsn,claim.task_id,claim.fence,
                          success=True,result=result))
         with psycopg.connect(self.dsn) as conn:
-            self.assertEqual(conn.execute("SELECT count(*) FROM task_outcome").fetchone()[0],0)
-        self.assertTrue(ScopedDraftCompletion(token,allow_legacy_specialized=True)(
-            self.dsn,claim.task_id,claim.fence,success=True,result=result))
+            self.assertEqual(conn.execute("SELECT content,validation_state FROM memory_candidate").fetchall(),
+                             [("Measure first","quarantined")])
+            self.assertEqual(conn.execute("SELECT count(*) FROM business_memory").fetchone()[0],0)
+
+    def test_other_specialized_route_still_refused_without_legacy(self):
+        from penny.memory.maintenance import submit_maintenance
+        submit_maintenance(self.store,"lesson","Observed result")
+        token,claim=self.reserve()
+        self.assertFalse(ScopedDraftCompletion(token)(self.dsn,claim.task_id,claim.fence,
+                         success=True,result="{}"))
         with psycopg.connect(self.dsn) as conn:
-            self.assertEqual(conn.execute("SELECT content FROM memory_candidate").fetchall(),
-                             [("Measure first",)])
+            self.assertEqual(conn.execute("SELECT count(*) FROM task_outcome").fetchone()[0],0)
 
     def test_restricted_role_cannot_overwrite_outcome(self):
         self.store.submit(None,"ordinary","Draft a plan")
