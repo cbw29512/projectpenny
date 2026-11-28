@@ -119,3 +119,36 @@ class BridgeTransportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.client.reject("untrusted", self.fence)
         connection.assert_not_called()
+
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
+    def test_community_routes_and_typed_receipt(self, connection):
+        import time
+        now=int(time.time())
+        data=dict(id=str(self.id),owner=str(self.owner),fence=str(self.fence),
+                  key=str(uuid4()),text="Useful calendar",expiresAt=now+600,
+                  leaseUntil=now+300)
+        self.response(connection,data)
+        result=self.client.community_claim()
+        self.assertEqual(result.status,"claimed")
+        self.assertEqual(result.claim.id,self.id)
+        self.assertEqual(connection.return_value.request.call_args.args,
+                         ("POST","/api/v1/bridge/community/claim"))
+        self.response(connection,{"status":"ok"})
+        self.assertEqual(self.client.community_ack(self.id,self.fence).status,"ok")
+        args,kwargs=connection.return_value.request.call_args
+        self.assertEqual(args,("POST","/api/v1/bridge/community/ack"))
+        self.assertEqual(json.loads(kwargs["body"]),{"id":str(self.id),"fence":str(self.fence)})
+        self.assertTrue(kwargs["headers"]["Authorization"].startswith("Bearer v1."))
+
+    @patch("penny.bridge.transport.PublicHTTPSConnection")
+    def test_community_rejects_wrong_envelopes_and_never_retries(self, connection):
+        self.response(connection,self.claim_data())
+        self.assertEqual(self.client.community_claim().status,"uncertain")
+        self.response(connection,{"status":"empty"})
+        self.assertEqual(self.client.community_claim().status,"empty")
+        self.response(connection,status=302)
+        self.assertEqual(self.client.community_claim().status,"uncertain")
+        self.assertEqual(connection.call_count,3)
+        with self.assertRaises(ValueError):
+            self.client.community_ack(self.id,"invalid")
+        self.assertEqual(connection.call_count,3)

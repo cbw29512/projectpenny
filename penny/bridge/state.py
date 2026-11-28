@@ -2,6 +2,10 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from uuid import UUID
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from penny.community.transport_state import CommunityClaim
 
 
 @dataclass(frozen=True, slots=True)
@@ -16,7 +20,7 @@ class RemoteClaim:
 @dataclass(frozen=True, slots=True)
 class BridgeResult:
     status: str
-    claim: RemoteClaim | None = None
+    claim: "RemoteClaim | CommunityClaim | None" = None
     retry_after: int = 0
 
 

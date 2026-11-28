@@ -135,3 +135,11 @@ ASCII admission parity and private text repr. Scoped persistence revalidates
 claim and Guardian authorization, calls only fixed SQL, and returns true only
 after transaction completion. No HTTPS route, acknowledgment or live worker
 activation yet. Mocked failure and authorization tests added; CI pending.
+
+## Candidate outbound HTTPS client
+Two fixed community claim/ack paths reuse existing verified TLS, public-only
+DNS, short-lived bridge bearer, bounded responses and no automatic retries.
+Community claim uses typed integer-epoch envelope; acknowledgment sends only
+cloud ID and fence. No remote routes or worker activated. Caller must verify
+committed local receipt before acknowledgment; reconciliation remains pending.
+Mock network tests added; CI pending.

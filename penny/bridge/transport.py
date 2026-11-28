@@ -3,9 +3,11 @@ import json
 import logging
 import re
 import ssl
+import time
 from datetime import datetime, timezone
 from uuid import UUID
 
+from penny.community.transport_state import parse_community_claim
 from .auth import bridge_token
 from .state import BridgeResult, parse_claim, wire_text
 
@@ -13,6 +15,8 @@ logger = logging.getLogger(__name__)
 from .public_https import HOST, PublicHTTPSConnection
 MAX_RESPONSE_BYTES = 16384
 PATHS = {op: "/api/v1/bridge/" + op for op in ("claim", "ack", "answer", "reject")}
+PATHS.update(community_claim="/api/v1/bridge/community/claim",
+             community_ack="/api/v1/bridge/community/ack")
 
 
 def _identifier(value):
@@ -56,6 +60,13 @@ class BridgeClient:
         return self._send("reject", {"id": _identifier(question_id),
                                      "fence": _identifier(fence)})
 
+    def community_claim(self):
+        return self._send("community_claim", {})
+
+    def community_ack(self, claim_id, fence):
+        return self._send("community_ack", {"id": _identifier(claim_id),
+                                            "fence": _identifier(fence)})
+
     def _send(self, op, body):
         conn = None
         try:
@@ -96,6 +107,10 @@ class BridgeClient:
             if len(raw) > MAX_RESPONSE_BYTES or (length is not None and len(raw) != int(length)):
                 raise ValueError("invalid response length")
             data = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_pairs)
+            if op == "community_claim":
+                if data == {"status": "empty"}:
+                    return BridgeResult("empty")
+                return BridgeResult("claimed", parse_community_claim(data, int(time.time())))
             if op == "claim":
                 if data == {"status": "empty"}:
                     return BridgeResult("empty")
