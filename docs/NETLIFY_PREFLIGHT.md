@@ -42,3 +42,17 @@ flags must remain false. No upgrades, deletes, password generation, remote
 CLI or provisioning. Manifest receipt is not proof of function integrity
 or provider TLS/login isolation; actual role login and whole-database
 audit still required. CI pending; no live DB connection or cost incurred.
+
+## Authenticated runtime login check
+CI 46085540840 passed atomic installer. Added read-only login probe with
+explicit verified TLS DSN and no ambient PG settings. Actual session_user
+and current_user must match the runtime role; refuses DB owner/CREATE/TEMP,
+unexpected effective search path or temporary schema, other application
+schema access, missing TLS and any effective mailbox scope violation.
+Runtime SQL is schema-qualified; pg_catalog-only or pg_catalog plus mailbox
+search path permitted. Use dedicated database with appropriately restricted
+PUBLIC privileges, never globally revoke privileges on shared hosting.
+Disposable fixture now opens a real login (not merely SET ROLE) and
+confirms shared default TEMP grant is rejected. Provider login/TLS still
+unverified; probe does not audit all object types or remote certificates
+outside libpq's verify-full validation. No provider changes. CI pending.
