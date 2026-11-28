@@ -27,3 +27,8 @@ member cannot self-verify. Limit 100 concurrent retained requests/member
 full deletion from backups/WAL yet. Public attribution must be separate explicit
 consent and revocable before public projection. No production deployment.
 Apply migrations 001–011 in order.
+
+Consent replay requires the current consent version and a valid request time.
+Verification and display enforce outcome <= consent <= recognition <= database
+current time (verification uses current time for the new recognition). Invalid
+records remain withdrawable. Regression verification pending CI.

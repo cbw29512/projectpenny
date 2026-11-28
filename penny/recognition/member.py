@@ -25,10 +25,13 @@ def request_credit(dsn,token,outcome_id,role,*,accepted_version):
             if not credit_allowed_locked(conn,outcome_id,owner,role.value,now):
                 return None
             old = conn.execute(
-                "SELECT id FROM contribution_request WHERE member_id=%s AND outcome_id=%s AND role=%s",
+                "SELECT id,consent_version,requested_at FROM contribution_request WHERE member_id=%s AND outcome_id=%s AND role=%s",
                 (owner,outcome_id,role.value),
             ).fetchone()
             if old:
+                # Historical consent cannot stand in for current, explicit consent.
+                if old["consent_version"] != CONSENT_VERSION or not 0 <= old["requested_at"] <= now:
+                    return None
                 return old["id"]
             count = conn.execute("SELECT count(*) AS n FROM contribution_request WHERE member_id=%s",
                                  (owner,)).fetchone()["n"]
@@ -54,8 +57,10 @@ def list_credit(dsn,token):
                    FROM contribution_request q JOIN contribution_recognition c ON c.request_id=q.id
                    JOIN contribution_outcome o ON o.id=q.outcome_id
                    WHERE q.member_id=%s AND q.consent_version=%s
+                   AND 0 <= o.recorded_at AND o.recorded_at <= q.requested_at
+                   AND q.requested_at <= c.recorded_at AND c.recorded_at <= %s
                    ORDER BY c.recorded_at,q.id LIMIT %s""",
-                (owner,CONSENT_VERSION,MAX_REQUESTS),
+                (owner,CONSENT_VERSION,now,MAX_REQUESTS),
             ).fetchall()
             return tuple(Recognition(r["id"],r["outcome_id"],Role(r["role"]),Outcome(r["verdict"]),
                                      appreciation(Role(r["role"]),Outcome(r["verdict"]))) for r in rows

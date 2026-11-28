@@ -93,6 +93,25 @@ class RecognitionTests(DatabaseFixture):
             self.assertEqual(conn.execute("SELECT count(*) FROM contribution_outcome").fetchone()[0],1)
             self.assertEqual(conn.execute("SELECT count(*) FROM contribution_recognition").fetchone()[0],0)
 
+    def test_invalid_consent_chronology_cannot_receive_credit(self):
+        _,token = self.member()
+        outcome = self.outcome()
+        request = self.request(token,outcome)
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("UPDATE contribution_request SET requested_at=requested_at+86400 WHERE id=%s",(request,))
+        self.assertIsNone(self.request(token,outcome))
+        self.assertFalse(self.verify(request))
+        self.assertEqual(list_credit(self.dsn,token),())
+        self.assertTrue(withdraw_credit(self.dsn,token,request))
+
+    def test_future_recognition_not_displayed(self):
+        _,token = self.member()
+        request = self.request(token,self.outcome())
+        self.assertTrue(self.verify(request))
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("UPDATE contribution_recognition SET recorded_at=recorded_at+86400 WHERE request_id=%s",(request,))
+        self.assertEqual(list_credit(self.dsn,token),())
+
     def test_guardian_and_session_denial(self):
         _,token = self.member()
         outcome = self.outcome()

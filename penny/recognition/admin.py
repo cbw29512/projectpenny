@@ -49,9 +49,10 @@ def verify_request(dsn, request_id, *, reviewer_id, evidence_ref, evidence):
             raise ValueError("invalid attribution review")
         mark = fingerprint(request_id,evidence)
         with locked(dsn) as (conn,_,now):
-            row = conn.execute("SELECT id,member_id,outcome_id,role FROM contribution_request WHERE id=%s AND consent_version=%s",
+            row = conn.execute("SELECT q.id,q.member_id,q.outcome_id,q.role,q.requested_at,o.recorded_at AS outcome_at FROM contribution_request q JOIN contribution_outcome o ON o.id=q.outcome_id WHERE q.id=%s AND q.consent_version=%s",
                                (request_id,CONSENT_VERSION)).fetchone()
-            if not row or not credit_allowed_locked(conn,row["outcome_id"],row["member_id"],row["role"],now):
+            if (not row or not 0 <= row["outcome_at"] <= row["requested_at"] <= now
+                    or not credit_allowed_locked(conn,row["outcome_id"],row["member_id"],row["role"],now)):
                 return False
             return conn.execute(
                 """INSERT INTO contribution_recognition VALUES (%s,%s,%s,%s,%s,%s,%s)
