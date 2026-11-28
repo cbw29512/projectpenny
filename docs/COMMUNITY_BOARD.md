@@ -80,3 +80,11 @@ mailbox storage, identity mapping or publication is enabled by this slice.
 Independent default-off gate and bounded suggestion table. Owner comes from trusted server identity; exact request replay, rolling 3/member and 60/global daily limits, 100 unexpired and 512 retained rows. One-hour expiry. SQL is invoker-only with PUBLIC access revoked; no runtime grants. Local shared feedback quota and screening remain authoritative. No claim, delivery, owner status, purge, retention approval or route yet. Expired rows retain quota history and capacity fails closed until a reviewed purge exists. CI pending; no deployment.
 
 Cloud fresh-install manifest now explicitly includes migration 012 and requires the community gate to remain disabled before commit. Install regression tests include rollback on an unexpectedly enabled community gate. CI pending.
+
+## Candidate community claim envelope
+Separate typed claim validator (not wired to any live transport): UUID claim,
+owner, request key and fence, bounded idea, integer UTC epoch-second expiry
+and lease. Lease must be live, at most 900 seconds remaining, and no later
+than the expiry (at most 3600 seconds remaining). These are provisional
+transport limits; local clock, identity mapping, durable receipt and SQL
+claim/ack must independently enforce the contract. CI pending; no deployment.

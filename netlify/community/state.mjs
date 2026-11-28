@@ -14,3 +14,20 @@ export function validateSuggestion(body) {
     return false;
   }
 }
+
+// Candidate transfer envelope. The local bridge must independently authenticate
+// the owner, validate the body and persist its receipt before acknowledging.
+// Epoch seconds are explicit integers, never browser-controlled dates.
+export function validateClaim(body, now) {
+  try {
+    return Number.isSafeInteger(now) && now >= 0 &&
+      exact(body, ["id", "owner", "key", "text", "fence", "expiresAt", "leaseUntil"]) &&
+      [body.id, body.owner, body.key, body.fence].every(isId) &&
+      validateSuggestion({key: body.key, text: body.text}) &&
+      Number.isSafeInteger(body.expiresAt) && Number.isSafeInteger(body.leaseUntil) &&
+      now < body.leaseUntil && body.leaseUntil <= body.expiresAt &&
+      body.leaseUntil - now <= 900 && body.expiresAt - now <= 3600;
+  } catch {
+    return false;
+  }
+}
