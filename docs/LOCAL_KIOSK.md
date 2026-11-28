@@ -46,3 +46,11 @@ are second-resolution. New worker logs identify staging rejection categories.
 Never clear the safety gate or silently reconstruct an unstaged artifact.
 Wait for the supervised oneshot inference cycle to finish before pausing for
 review; the temporary uncertainty marker is expected during active inference.
+
+## Private financial display (071)
+Existing snapshot view now includes only Penny ledger aggregates in integer USD
+cents, excluding founder-only entries and evidence metadata. Empty ledger is
+null, never invented zero. Costs include payment fees; cash is recorded,
+not reconciled or authorized to spend. Stale snapshots are labeled. Existing
+read-only kiosk role and office artwork retained. CI and physical display
+verification required before installation.

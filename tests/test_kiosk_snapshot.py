@@ -75,3 +75,26 @@ class KioskSnapshotTests(DatabaseFixture):
         self.assertEqual((m["measured_count"],m["target"]),(3,5))
         self.assertNotIn("evidence_ref",m)
         self.assertNotIn("reviewer_id",m)
+
+    def test_finance_matches_vault_and_excludes_founder(self):
+        import time
+        from penny.vault.journal import record
+        from penny.vault.state import Kind
+        from penny.vault.summary import summarize
+        self.assertIsNone(self.read()["finance"])
+        reviewer=uuid4()
+        for kind,cents in ((Kind.FOUNDER_INCOME,9000),(Kind.COMMERCIAL_RECEIPT,1000),
+                           (Kind.COMMERCIAL_REFUND,100),(Kind.OPERATING_EXPENSE,200),
+                           (Kind.PAYMENT_FEE,50),(Kind.COMMUNITY_SUPPORT,300)):
+            record(self.dsn,source_ref="kiosk-"+kind.value,kind=kind,cents=cents,
+                   occurred_at=int(time.time())-1,evidence_ref="private:kiosk",
+                   evidence=b"synthetic test only",reviewer_id=reviewer)
+            if kind is Kind.FOUNDER_INCOME:
+                self.assertIsNone(self.read()["finance"])
+        finance=self.read()["finance"]
+        p=summarize(self.dsn)["penny"]
+        self.assertEqual(finance,{"net_receipts":p["net_commercial_receipts"],
+            "expenses":p["operating_expenses"]+p["payment_fees"],
+            "recorded_cash":p["recorded_cash"],"community_support":p["community_support"],
+            "status":"recorded_unreconciled"})
+        self.assertNotIn("private:kiosk",str(self.read()))

@@ -18,6 +18,12 @@ function render(s) {
   set("health", "LIVE · LOCAL");
   set("updated", stamp(s.sampled_at));
   showReaction(s);
+  const currency = new Intl.NumberFormat("en-US", {style:"currency",currency:"USD"});
+  const finance = s.finance;
+  for (const [id,key] of [["receipts","net_receipts"],["expenses","expenses"],["cash","recorded_cash"],["support","community_support"]]) {
+    set(id, finance ? currency.format(finance[key]/100) : "Unverified");
+  }
+  set("finance-status", finance ? "Recorded ledger totals · not reconciled cash or spending authority" : "No Penny financial entries available");
   const m = s.latest_measurement;
   set("measurement", m ? m.title + " · " + m.measured_count + " / " + m.target + " · " + m.metric + " · " + stamp(m.recorded_at) : "No measurement recorded");
   set("done", s.counts.succeeded ?? 0);
@@ -67,6 +73,7 @@ async function poll() {
     set("detail", "Last successful snapshot remains below; do not treat it as current.");
     set("elapsed", "");
     showReaction(null);
+    set("finance-status", "STALE · last recorded totals, not current");
   } finally {
     setTimeout(poll, 2000);
   }

@@ -18,6 +18,10 @@ export function validSnapshot(s, now) {
     const m = s.latest_measurement;
     if (m !== null && (!record(m) || !integer(m.recorded_at) || m.recorded_at > s.sampled_at
         || !integer(m.measured_count) || !integer(m.target) || m.target === 0)) return false;
+    const money = s.finance;
+    if (money !== undefined && money !== null && (!record(money)
+        || money.status !== "recorded_unreconciled"
+        || !["net_receipts","expenses","recorded_cash","community_support"].every(k => Number.isSafeInteger(money[k])))) return false;
     return true;
   } catch {
     return false;
