@@ -70,3 +70,10 @@ No credentials or member tokens on command line. No actual delivery from
 this operator CLI; it prepares a proof and records local authorization only.
 A future authenticated member delivery adapter must not use operator credentials
 in public infrastructure. No live beta invitations or uploads performed.
+
+## Independent local competency trials
+`python -m penny.runtime.workshop --config ~/.config/penny/operator.json compare-trials BEFORE_UUID AFTER_UUID`
+Compares two independently admitted private artifacts using the existing exact
+checklist diff and quality status under the scheduler lock. Not proof of
+revision lineage, learning, commercial approval or improvement. Missing or
+invalid artifacts return no content. No database migration or model call.

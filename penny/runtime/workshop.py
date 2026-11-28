@@ -8,6 +8,7 @@ from uuid import UUID
 from penny.business.workshop_operator import recent,inspect
 from penny.business.workshop_diagnosis import diagnose
 from penny.business.revision_compare import compare_revision
+from penny.business.trial_compare import compare_trials
 from penny.business.quality import review,export_private
 from penny.business.quality_state import CRITERIA
 from .config import load_config
@@ -24,6 +25,9 @@ def parser():
     show.add_argument("task_id",type=UUID)
     comparison=commands.add_parser("compare")
     comparison.add_argument("task_id",type=UUID)
+    trials=commands.add_parser("compare-trials")
+    trials.add_argument("before_id",type=UUID)
+    trials.add_argument("after_id",type=UUID)
     diagnostic=commands.add_parser("diagnose")
     diagnostic.add_argument("task_id",type=UUID)
     for name in ("review","revoke"):
@@ -56,6 +60,8 @@ def main(argv=None):
             result=inspect(dsn,args.task_id)
         elif args.action=="compare":
             result=compare_revision(dsn,args.task_id)
+        elif args.action=="compare-trials":
+            result=compare_trials(dsn,args.before_id,args.after_id)
         elif args.action=="diagnose":
             result=diagnose(dsn,args.task_id)
         elif args.action in ("review","revoke"):
