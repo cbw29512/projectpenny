@@ -112,3 +112,10 @@ access; pinned definer search paths and PUBLIC revocation. Existing fresh
 installer still requires all gates disabled and explicit reviewed digest.
 Local receipt remains operator-only; provider throttling, transport, identity
 and production activation remain separate gates. CI pending.
+
+## Restricted local receipt verification (064)
+The audited bridge scope gains a boolean-only receipt verifier bound to cloud
+ID and fence, current enabled mapping, valid chronology and stored body hash.
+No raw body or member data is returned. Admission still requires the trusted
+operator path; scoped admission and transport remain pending. This verifier
+alone does not authorize network delivery. No production grants applied.

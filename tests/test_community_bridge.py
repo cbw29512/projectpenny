@@ -78,3 +78,16 @@ class CommunityBridgeTests(DatabaseFixture):
         with psycopg.connect(self.dsn) as conn:
             self.assertEqual(conn.execute("SELECT count(*) FROM community_suggestion").fetchone()[0],0)
             self.assertEqual(conn.execute("SELECT count(*) FROM community_bridge_receipt").fetchone()[0],0)
+
+    def test_narrow_receipt_verification(self):
+        def check(fence):
+            with psycopg.connect(self.dsn) as conn:
+                return conn.execute("SELECT penny_community_receipt_exists(%s,%s)",
+                                    (self.args["cloud_id"],fence)).fetchone()[0]
+        self.assertFalse(check(self.args["fence"]))
+        self.assertEqual(self.admit().status,"accepted")
+        self.assertTrue(check(self.args["fence"]))
+        self.assertFalse(check(uuid4()))
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("UPDATE bridge_member SET enabled=false WHERE cloud_owner=%s",(self.cloud,))
+        self.assertFalse(check(self.args["fence"]))
