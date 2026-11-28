@@ -128,3 +128,10 @@ normalization/casefold parity is established; do not advertise Unicode support.
 Trusted Python transport must still check Guardian identity before invoking.
 SQL policy tag is pinned to v0.22; policy drift review required. No actual
 runtime activation, transport integration, or production certification.
+
+## Local transport adapter
+Typed Python claim parser enforces exact fields, canonical UUIDs, integer leases,
+ASCII admission parity and private text repr. Scoped persistence revalidates
+claim and Guardian authorization, calls only fixed SQL, and returns true only
+after transaction completion. No HTTPS route, acknowledgment or live worker
+activation yet. Mocked failure and authorization tests added; CI pending.

@@ -6,6 +6,7 @@ from psycopg.rows import dict_row
 
 logger=logging.getLogger(__name__)
 CALLS={
+    "community_admit":"SELECT penny_community_admit(%s,%s,%s,%s,%s,%s,%s) AS recorded",
     "reserve":"SELECT * FROM penny_bridge_reserve()",
     "defer":"SELECT penny_bridge_defer(%s,%s) AS recorded",
     "reject":"SELECT penny_bridge_reject(%s,%s,%s) AS recorded",
