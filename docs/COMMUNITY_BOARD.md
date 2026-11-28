@@ -164,3 +164,10 @@ Separate append-only local confirmation record, written only by the worker after
 remote success. Scoped routine checks gates, receipt, fence and live lease;
 worker reports ack_unrecorded if local confirmation fails. No automatic recovery
 selection or expired-lease reconciliation yet. CI pending; no deployment.
+
+## Live-lease recovery candidate (068)
+Select oldest unconfirmed durable receipt before new claim, with independent
+60-second DB recovery throttle and minimum 15 seconds remaining lease.
+Reverify before ack; never re-admit or re-claim the recovered suggestion.
+Expired lease reconciliation, provider backoff and persistent sticky blocking
+remain outstanding. No activation; CI pending.

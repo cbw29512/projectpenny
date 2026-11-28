@@ -14,7 +14,7 @@ SCOPES={
               "penny_bridge_defer(integer,text)","penny_bridge_reject(uuid,uuid,uuid)",
               "penny_community_receipt_exists(uuid,uuid)",
               "penny_community_admit(uuid,uuid,uuid,uuid,text,bigint,bigint)",
-              "penny_community_reserve()","penny_community_record_ack(uuid,uuid)"),
+              "penny_community_reserve()","penny_community_record_ack(uuid,uuid)","penny_community_recover()"),
     "projection":("penny_activity_reserve(text)","penny_activity_finish(text)",
                   "penny_activity_inputs()"),
 }
