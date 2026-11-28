@@ -23,16 +23,21 @@ def review_suggestion(dsn, suggestion_id, *, expected_sha256, verdict, reason, r
             raise ValueError("invalid suggestion review")
         with locked(dsn) as (conn, _, now):
             row = conn.execute(
-                "SELECT body,body_sha256 FROM community_suggestion WHERE id=%s",
+                "SELECT body,body_sha256,submitted_at FROM community_suggestion WHERE id=%s",
                 (suggestion_id,),
             ).fetchone()
-            if not row or row["body_sha256"] != expected_sha256 or digest(row["body"]) != expected_sha256:
+            # Match the worklist integrity gate before accepting or replaying a review.
+            if (not row or not 0 <= row["submitted_at"] <= now
+                    or row["body_sha256"] != expected_sha256
+                    or digest(row["body"]) != expected_sha256):
                 return False
             previous = conn.execute(
-                "SELECT verdict,reason,reviewer_id,body_sha256 FROM community_suggestion_review WHERE suggestion_id=%s",
+                "SELECT verdict,reason,reviewer_id,body_sha256,reviewed_at FROM community_suggestion_review WHERE suggestion_id=%s",
                 (suggestion_id,),
             ).fetchone()
             if previous:
+                if not row["submitted_at"] <= previous["reviewed_at"] <= now:
+                    return False
                 return (previous["verdict"], previous["reason"], previous["reviewer_id"], previous["body_sha256"]) == (
                     verdict.value, reason, reviewer_id, expected_sha256)
             conn.execute(

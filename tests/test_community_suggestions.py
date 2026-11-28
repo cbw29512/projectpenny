@@ -70,6 +70,19 @@ class SuggestionTests(DatabaseFixture):
             self.assertEqual(conn.execute("SELECT count(*) FROM work_task").fetchone()[0], 0)
             self.assertEqual(conn.execute("SELECT count(*) FROM community_suggestion_review").fetchone()[0], 1)
 
+    def test_future_submission_cannot_be_reviewed(self):
+        body = "Build future printable cards"
+        first = self.submit("future", body)
+        # Inject malformed historical data only in the disposable test schema.
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("ALTER TABLE community_suggestion DISABLE TRIGGER community_suggestion_immutable")
+            conn.execute("UPDATE community_suggestion SET submitted_at=submitted_at+86400 WHERE id=%s",
+                         (first.suggestion_id,))
+            conn.execute("ALTER TABLE community_suggestion ENABLE TRIGGER community_suggestion_immutable")
+        self.assertFalse(self.review(first, body))
+        with psycopg.connect(self.dsn) as conn:
+            self.assertEqual(conn.execute("SELECT count(*) FROM community_suggestion_review").fetchone()[0], 0)
+
     def test_drift_fails_closed(self):
         with patch("penny.brain.identity.SYSTEM_PROMPT", "changed"):
             self.assertEqual(self.submit("a", "Build something").status, "denied")
