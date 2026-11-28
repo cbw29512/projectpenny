@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/kiosk.css">
 <script type="module" src="/kiosk.mjs"></script>
 </head>
-<body>
+<body data-layout="fixed-office-v2">
 <header><div><small>PROJECT PENNY · PRIVATE LIVE OFFICE</small><h1>Financially Underfunded.<br>Sarcastically Overqualified.</h1></div><div><span id="health">Connecting</span><time id="updated"></time></div></header>
 <main>
 <section class="office"><svg id="penny-face" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310" role="img" aria-labelledby="penny-art-title">
@@ -50,16 +50,16 @@
   <path d="M106 269v25m250-25v25" stroke="#a17a56" stroke-width="8" stroke-linecap="round"/>
 </svg>
 
-<div class="panel"><small>THOUGHT CLOUD · EVIDENCE-BASED COMMENTARY</small><p id="aside">Waiting for verified runtime data.</p></div>
+<div class="panel thought"><small>THOUGHT CLOUD · EVIDENCE-BASED COMMENTARY</small><p id="aside">Waiting for verified runtime data.</p></div>
 <p id="emotion" class="expression">Expression: neutral</p>
-<div class="panel"><small>CURRENT OBJECTIVE · OBSERVED RUNTIME STATUS</small><h2 id="activity">Connecting to Penny</h2><p id="detail"></p><p id="elapsed"></p></div></section>
+<div class="panel objective"><small>CURRENT OBJECTIVE · OBSERVED RUNTIME STATUS</small><h2 id="activity">Connecting to Penny</h2><p id="detail"></p><p id="elapsed"></p></div></section>
 <section class="work">
 <div class="stats"><div><small>MISSION</small><strong>$1M</strong></div><div><small>SUCCEEDED TASKS</small><strong id="done">—</strong></div><div><small>QUEUED TASKS</small><strong id="queue">—</strong></div></div>
-<div class="panel"><small>PENNY’S VAULT · USD</small><div class="finance-grid"><div><small>NET COMMERCIAL RECEIPTS</small><strong id="receipts">Unverified</strong></div><div><small>RECORDED COSTS &amp; FEES</small><strong id="expenses">Unverified</strong></div><div><small>RECORDED CASH</small><strong id="cash">Unverified</strong></div><div><small>COMMUNITY SUPPORT</small><strong id="support">Unverified</strong></div></div><p id="finance-status">Waiting for ledger data</p></div>
-<div class="panel"><small>LATEST MEASURED EXPERIMENT</small><p id="measurement">No measurement recorded</p></div>
-<div class="panel"><small>LATEST HOURLY DECISION</small><p id="plan">Unavailable</p></div>
+<div class="panel vault"><small>PENNY’S VAULT · USD</small><div class="finance-grid"><div><small>NET COMMERCIAL RECEIPTS</small><strong id="receipts">Unverified</strong></div><div><small>RECORDED COSTS &amp; FEES</small><strong id="expenses">Unverified</strong></div><div><small>RECORDED CASH</small><strong id="cash">Unverified</strong></div><div><small>COMMUNITY SUPPORT</small><strong id="support">Unverified</strong></div></div><p id="finance-status">Waiting for ledger data</p></div>
+<div class="panel compact"><small>LATEST MEASURED EXPERIMENT</small><p id="measurement">No measurement recorded</p></div>
+<div class="panel compact"><small>LATEST HOURLY DECISION</small><p id="plan">Unavailable</p></div>
 <div class="panel output"><small>PENNY'S LATEST OUTPUT · PRIVATE UNREVIEWED DRAFT</small><h2 id="title">No result available</h2><pre id="speech"></pre></div>
-<div class="panel"><small>RECENT BUSINESS TASKS</small><ol id="history"></ol></div>
+<div class="panel feed"><div class="feed-heading"><small>LIVE BUSINESS ACTIVITY · NEWEST FIRST</small><small id="feed-position"></small></div><div id="feed-window"><ol id="history"></ol></div></div>
 </section>
 </main>
 <footer>Local read-only display · Drafts are not verified claims · No visitor messages or internal reasoning · Expressions are symbolic runtime reactions, not feelings · Concept artwork</footer>

@@ -2,7 +2,7 @@
 const set = (id, value) => { document.getElementById(id).textContent = value; };
 const stamp = value => new Date(value * 1000).toLocaleString();
 import { reaction, expressions } from "./emotion.mjs";
-import { validSnapshot } from "./state.mjs";
+import { validSnapshot, feedState, nextFeedOffset } from "./state.mjs";
 function showReaction(s) {
   const {emotion, comment} = reaction(s);
   const [brows, mouth] = expressions[emotion];
@@ -12,6 +12,37 @@ function showReaction(s) {
   set("emotion", "Expression: " + emotion);
   set("aside", comment);
 }
+
+let feedSignature = null;
+let lastAdvance = 0;
+function updateFeed(recent) {
+  const state = feedState(feedSignature,recent);
+  const window = document.getElementById("feed-window");
+  if (!state.changed) return;
+  feedSignature = state.signature;
+  const list = document.getElementById("history");
+  list.replaceChildren(...state.rows.map(item => {
+    const li = document.createElement("li");
+    li.textContent = stamp(item.finished_at) + " · " + (item.title ?? item.kind) + " — " + item.status;
+    return li;
+  }));
+  if (!state.rows.length) {
+    const li = document.createElement("li");
+    li.textContent = "No recorded business activity";
+    list.append(li);
+  }
+  window.scrollTop = 0;
+  lastAdvance = Date.now();
+  set("feed-position", state.rows.length + " recent tasks");
+}
+function advanceFeed() {
+  if (document.body.dataset.offline !== "false" || Date.now()-lastAdvance < 8000) return;
+  const window = document.getElementById("feed-window");
+  const next = nextFeedOffset(window.scrollTop,window.scrollHeight,window.clientHeight);
+  window.scrollTo({top:next,behavior:next===0?"instant":"smooth"});
+  lastAdvance = Date.now();
+}
+setInterval(advanceFeed,1000);
 
 function render(s) {
   document.body.dataset.offline = "false";
@@ -51,12 +82,7 @@ function render(s) {
   const latest = s.recent[0];
   set("title", latest ? latest.title ?? latest.kind : "No result available");
   set("speech", latest ? latest.prototype ?? latest.hypothesis ?? ("Task " + latest.status + " — no staged output") : "");
-  const list = document.getElementById("history");
-  list.replaceChildren(...s.recent.map(item => {
-    const li = document.createElement("li");
-    li.textContent = (item.title ?? item.kind) + " — " + item.status + " · " + stamp(item.finished_at);
-    return li;
-  }));
+  updateFeed(s.recent);
 }
 
 async function poll() {

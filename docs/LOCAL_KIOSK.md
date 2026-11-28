@@ -54,3 +54,12 @@ null, never invented zero. Costs include payment fees; cash is recorded,
 not reconciled or authorized to spend. Stale snapshots are labeled. Existing
 read-only kiosk role and office artwork retained. CI and physical display
 verification required before installation.
+
+## Fixed HDMI viewport
+The page never scrolls; the recent business feed alone advances every eight
+seconds when it overflows. A changed snapshot resets it to newest first;
+identical polling does not interrupt the rotation. Offline state freezes feed.
+Current projection is limited to five recent business tasks, not visitor chat
+or a full day history. Product output is a clipped preview. Physical resolution
+and layout must be checked on the monitor. Restart the confirmed HDMI browser
+launcher after swapping kiosk assets; no runtime or database migration needed.

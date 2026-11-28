@@ -27,3 +27,15 @@ export function validSnapshot(s, now) {
     return false;
   }
 }
+
+// Stable ordering and rotation state are independent of the two-second polling.
+export function feedState(previous, recent) {
+  const rows = [...recent].sort((a,b)=>b.finished_at-a.finished_at ||
+    String(a.task_id ?? "").localeCompare(String(b.task_id ?? "")));
+  const signature = JSON.stringify(rows.map(r=>[r.task_id,r.finished_at,r.status,r.title,r.kind]));
+  return {rows, signature, changed: previous !== signature};
+}
+export function nextFeedOffset(offset, height, viewport) {
+  const max = Math.max(0,height-viewport);
+  return max === 0 || offset >= max ? 0 : Math.min(max, offset+Math.max(1,Math.floor(viewport*0.75)));
+}
