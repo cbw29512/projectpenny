@@ -53,3 +53,13 @@ CI 46083596964 passed edge staging. Dedicated smoke routes now support the
 exact provider draft hostname and return a fixed marker. The production
 entry remains separate and disconnected. See NETLIFY_SMOKE.md for bounded
 13-request probe and manual draft procedure. No deployment or requests run.
+
+## Integrated local/cloud rehearsal
+CI 46086727050 passed operator interface. New cross-language test runs real
+reviewed product evidence, local publication gate, Python HMAC and reply
+validation, JavaScript verifier/handler/limiter/repository, disposable
+PostgreSQL cloud roles/routines and browser reader. Only connection transport,
+provider admission and test SQL adapter are simulated; no external HTTP.
+Checks exact public field allowlist, expiry, withdrawal and local attempt cap.
+CI unit job explicitly installs Node 22. Does not certify real TLS, provider
+rate limiting, deployed runtime composition or live credentials. CI pending.
