@@ -16,3 +16,12 @@ and actual downloadable UI remain pending. Revocation cannot retract
 bytes already exported. Existing Guardian admin review capability reused;
 no new public or model permissions. Review rubric is provisional, not
 legal or professional certification. Synthetic tests only. No deployment.
+
+## Advisory requirements coverage
+A pure local helper accepts 1–20 Maker-defined requirement identifiers with
+1–5 literal phrase alternatives each. It returns artifact digest and literal
+match/not-detected findings. Unicode normalization and whole token matching
+avoid substring false positives. Negation, paraphrase, accuracy and context
+remain human review matters. No automatic approval, task admission, model
+call, persistence or spending. Integration into the reviewed brief and
+bounded self-inspection workflow remains pending.
