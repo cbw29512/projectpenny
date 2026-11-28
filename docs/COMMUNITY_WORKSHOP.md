@@ -75,3 +75,9 @@ Routine feedback moderation still requires a trusted local reviewer; no public
 moderation interface or automated scoring is enabled. Eligible, live feedback
 is summarized separately from sales and withdrawn/rejected feedback. Public
 projection requires its own privacy and cache review; no automatic task creation.
+
+Shared daily intake counts include withdrawn ratings; withdrawing feedback never
+restores a daily submission slot. Reusing a withdrawn rating's request key
+for a different preview ID or digest is an idempotency conflict. Exact preview
+replay remains withdrawn without restoring scrubbed rating values. Regression
+checks pending CI.

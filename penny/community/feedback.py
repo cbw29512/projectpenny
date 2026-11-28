@@ -25,6 +25,10 @@ def submit_feedback(dsn,token,*,preview_id,preview_sha256,key,usefulness,purchas
                 """SELECT id,preview_id,preview_sha256,usefulness,purchase_interest,withdrawn_at
                 FROM workshop_feedback WHERE member_id=%s AND request_key=%s""",(owner,key)).fetchone()
             if prior:
+                # Withdrawal removes rating values, not the immutable preview identity.
+                # A reused key must never acknowledge a different preview/version.
+                if (prior["preview_id"],prior["preview_sha256"])!=(preview_id,preview_sha256):
+                    return FeedbackReceipt("idempotency_conflict")
                 if prior["withdrawn_at"] is not None:
                     return FeedbackReceipt("withdrawn",prior["id"],True)
                 if tuple(prior[k] for k in ("preview_id","preview_sha256","usefulness","purchase_interest"))!=(

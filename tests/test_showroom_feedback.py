@@ -88,6 +88,28 @@ class FeedbackTests(FeedbackFixture):
         self.assertEqual(sum(r.status=="accepted" for r in rows),1)
         self.assertEqual(submit_suggestion(self.dsn,self.token,key="last",body="Another idea").status,"member_limit")
 
+    def test_withdrawal_does_not_reset_shared_daily_budget(self):
+        for i in range(2):
+            self.assertEqual(submit_suggestion(self.dsn,self.token,key=str(i),
+                body="Idea "+str(i)).status,"accepted")
+        rating=self.rate()
+        self.assertEqual(rating.status,"accepted")
+        self.assertTrue(withdraw_feedback(self.dsn,self.token,rating.feedback_id))
+        self.assertEqual(submit_suggestion(self.dsn,self.token,key="extra",
+            body="Fourth community submission").status,"member_limit")
+        self.assertEqual(self.rate(key="replacement").status,"withdrawn")
+        with psycopg.connect(self.dsn) as conn:
+            self.assertEqual(conn.execute("SELECT count(*) FROM workshop_feedback").fetchone()[0],1)
+
+    def test_withdrawn_feedback_key_cannot_acknowledge_different_preview(self):
+        rating=self.rate()
+        self.assertTrue(withdraw_feedback(self.dsn,self.token,rating.feedback_id))
+        conflict=self.rate(preview_id=uuid4())
+        self.assertEqual(conflict.status,"idempotency_conflict")
+        self.assertIsNone(conflict.feedback_id)
+        self.assertEqual(self.rate(preview_sha256="b"*64).status,"idempotency_conflict")
+        self.assertEqual(self.rate().status,"withdrawn")
+
     def test_withdrawal_scrubs_rating_during_identity_drift(self):
         r=self.rate()
         self.store.set_paused(True)
