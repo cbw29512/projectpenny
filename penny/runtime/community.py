@@ -2,6 +2,7 @@
 import argparse
 import json
 import logging
+from datetime import datetime
 from uuid import UUID
 
 from penny.community.suggestion_queue import pending_suggestions
@@ -10,6 +11,13 @@ from penny.community.suggestion_state import Verdict, REASONS
 from .config import load_config
 
 logger = logging.getLogger(__name__)
+
+
+def _encode_timestamp(value):
+    """Serialize only timezone-aware database timestamps, not arbitrary objects."""
+    if isinstance(value, datetime) and value.utcoffset() is not None:
+        return value.isoformat()
+    raise TypeError("unsupported community output value")
 
 
 def main(argv=None):
@@ -41,7 +49,7 @@ def main(argv=None):
                 raise PermissionError("suggestion review refused")
             result = {"status": "reviewed", "suggestion_id": str(args.suggestion_id)}
         # Untrusted text is JSON-escaped, not executed or printed as raw controls.
-        print(json.dumps(result, ensure_ascii=True, sort_keys=True))
+        print(json.dumps(result, ensure_ascii=True, sort_keys=True, default=_encode_timestamp))
         return 0
     except Exception as exc:
         logger.error("Suggestion operator action refused (%s)", type(exc).__name__)

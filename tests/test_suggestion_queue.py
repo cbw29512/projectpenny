@@ -3,6 +3,7 @@ import contextlib
 import io
 import json
 import unittest
+from datetime import datetime, timezone
 from types import SimpleNamespace
 from unittest.mock import patch
 from uuid import uuid4
@@ -64,6 +65,18 @@ class CommunityOperatorTests(unittest.TestCase):
         with patch("penny.runtime.community.load_config") as load:
             self.assertEqual(main(args), 1)
             load.assert_not_called()
+
+    def test_nonempty_worklist_serializes_database_timestamp(self):
+        out = io.StringIO()
+        timestamp = datetime(2026, 11, 27, 12, tzinfo=timezone.utc)
+        row = {"suggestion_id": str(uuid4()), "body": "A useful idea",
+               "submitted_at": timestamp, "integrity_ok": True}
+        with patch("penny.runtime.community.load_config", return_value=SimpleNamespace(dsn="fixture")), \
+             patch("penny.runtime.community.pending_suggestions", return_value=(row,)), \
+             contextlib.redirect_stdout(out):
+            self.assertEqual(main(["--config", "fixture", "list"]), 0)
+        self.assertEqual(json.loads(out.getvalue())[0]["submitted_at"],
+                         timestamp.isoformat())
 
     def test_list_reuses_bounded_worklist(self):
         out = io.StringIO()
