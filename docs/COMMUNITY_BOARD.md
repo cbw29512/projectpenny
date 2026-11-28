@@ -178,3 +178,10 @@ and sticky block. Authentication/conflict failures require trusted operator
 review; scoped worker cannot clear blocks. Provider retry delays bounded to
 60–86400 seconds and never shorten an existing cooldown. Expired lease
 reconciliation, operator tooling and DB integration certification pending.
+
+## CI repair (070)
+Run 46101826164: website passed; Python 531 tests, three errors in effective
+local role provisioning. Migration 069 replaced two definer functions without
+restating their pinned search paths. Migration 070 restores the exact audited
+configuration and PUBLIC revocation without weakening the audit. Explicit
+regression test added. Rerun required before certification.

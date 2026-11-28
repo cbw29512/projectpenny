@@ -111,3 +111,13 @@ class LocalRolesTests(unittest.TestCase):
         with psycopg.connect(worker) as conn:
             self.assertEqual(conn.execute("SELECT current_user").fetchone()[0],self.roles["inference"])
         rehearse_business(self,operator,worker)
+
+    def test_replaced_community_routines_retain_definer_configuration(self):
+        with psycopg.connect(DSN) as conn:
+            self.as_owner(conn)
+            for signature in ("penny_community_reserve()","penny_community_recover()"):
+                row=conn.execute(
+                    "SELECT prosecdef,proconfig FROM pg_catalog.pg_proc WHERE oid=to_regprocedure(%s)",
+                    (self.schema+"."+signature,)).fetchone()
+                self.assertEqual(row,(True,["search_path=pg_catalog, "+self.schema+", pg_temp"]))
+            self.assertTrue(self.configure(conn)["bridge"].ready)
