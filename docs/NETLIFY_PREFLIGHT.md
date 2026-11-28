@@ -27,3 +27,18 @@ connectivity, or simultaneous permission changes. Runtime principal checks
 still needed. Real provider account permissions, credit/edge settings,
 live deployment and isolated credentials remain unverified. Do not move
 migrations or install provisioning packages until explicit launch approval.
+
+## Fresh installation candidate
+CI 46084983711 passed draft rehearsal. Fixed manifest for mailbox 001–011,
+reviewable SHA-256 over exact file bytes; refuse unrecognized SQL files or
+outer transaction wrappers. Trusted operator calls install_fresh only on
+an idle autocommit connection SET ROLE to a dedicated NOLOGIN owner, with
+explicit expected DB name, penny_mailbox schema, five separate existing
+roles, reviewed release digest and confirmation. Disposable test-only
+schema names are allowed in penny_test. Refuse the private penny database
+and occupied schema. Apply all migration bodies, manifest receipt, fixed
+role grants and effective audits in one transaction; all three admission
+flags must remain false. No upgrades, deletes, password generation, remote
+CLI or provisioning. Manifest receipt is not proof of function integrity
+or provider TLS/login isolation; actual role login and whole-database
+audit still required. CI pending; no live DB connection or cost incurred.
