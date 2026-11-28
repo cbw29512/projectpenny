@@ -119,3 +119,12 @@ ID and fence, current enabled mapping, valid chronology and stored body hash.
 No raw body or member data is returned. Admission still requires the trusted
 operator path; scoped admission and transport remain pending. This verifier
 alone does not authorize network delivery. No production grants applied.
+
+## Scoped local admission candidate (065)
+Default-off independent local gate. Execute-only bridge routine admits mapped
+ASCII suggestions and receipt atomically with scheduler lock, shared quotas,
+lease and replay checks. ASCII restriction is deliberate until Unicode
+normalization/casefold parity is established; do not advertise Unicode support.
+Trusted Python transport must still check Guardian identity before invoking.
+SQL policy tag is pinned to v0.22; policy drift review required. No actual
+runtime activation, transport integration, or production certification.

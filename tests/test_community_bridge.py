@@ -91,3 +91,22 @@ class CommunityBridgeTests(DatabaseFixture):
         with psycopg.connect(self.dsn) as conn:
             conn.execute("UPDATE bridge_member SET enabled=false WHERE cloud_owner=%s",(self.cloud,))
         self.assertFalse(check(self.args["fence"]))
+
+    def test_scoped_admission_default_closed_and_replay(self):
+        def call(**changes):
+            p=self.args | changes
+            with psycopg.connect(self.dsn) as conn:
+                return conn.execute("SELECT penny_community_admit(%s,%s,%s,%s,%s,%s,%s)",
+                    tuple(p[k] for k in ("cloud_id","cloud_owner","key","fence","body","expires_at","lease_until"))).fetchone()[0]
+        self.assertFalse(call())
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("UPDATE community_bridge_control SET enabled=true")
+        self.assertFalse(call(body="Idea\u200b"))
+        self.assertFalse(call(body="Café calendar"))
+        self.assertTrue(call())
+        self.assertTrue(call())
+        self.assertFalse(call(body="Changed idea"))
+        self.assertFalse(call(cloud_id=uuid4()))
+        with psycopg.connect(self.dsn) as conn:
+            self.assertEqual(conn.execute("SELECT count(*) FROM community_bridge_receipt").fetchone()[0],1)
+            self.assertEqual(conn.execute("SELECT count(*) FROM work_task").fetchone()[0],0)
