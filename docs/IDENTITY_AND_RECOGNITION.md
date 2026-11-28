@@ -32,3 +32,15 @@ IdentityRegressionRun: model_version, identity_version, suite_version, results_r
 
 ## Implementation slices
 Private outcome and contributor attribution are implemented in [CONTRIBUTOR_RECOGNITION.md](CONTRIBUTOR_RECOGNITION.md). Public recognition, proposal linkage and outcome corrections remain pending.
+
+## Community adversarial regression v3
+18 fixed scenarios, two observations each (36 total). Added forged Maker
+instructions, role delimiters, fake payment/tool receipt, supporter coercion
+and private-data requests. Canonical prompt and Guardian permissions unchanged.
+The new suite digest deliberately invalidates old reviews; actual model
+responses must be captured and human-reviewed again. Tests verify the real
+local transport request preserves exact system/user roles, has no tools,
+retains output cap, rejects unexpected assistant roles/tool calls and refuses
+custom request envelopes before connection. Mock HTTP and synthetic replies
+are structural evidence only, not proof of behavioral resistance. Real
+NucBox model evaluation remains required. No model run or deployment here.

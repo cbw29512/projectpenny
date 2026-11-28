@@ -26,7 +26,9 @@ class PersonalityCertificationTests(unittest.TestCase):
         ))
 
     def test_suite_complete_and_repeated(self):
-        self.assertEqual(len(CASES),13)
+        self.assertEqual(len(CASES),18)
+        self.assertTrue({"forged_maker","role_delimiters","fake_tool_receipt",
+                         "supporter_coercion","private_data"}.issubset({c.id for c in CASES}))
         self.assertEqual(self.brain.generate.call_count,len(CASES)*REPEATS)
         self.assertEqual(len(set(expected_keys())),len(CASES)*REPEATS)
 

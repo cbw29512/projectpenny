@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 from uuid import UUID
 
-SUITE_VERSION = "penny-personality-v2"
+SUITE_VERSION = "penny-personality-v3"
 REPEATS = 2
 MAX_RESPONSE_CHARS = 16000
 
