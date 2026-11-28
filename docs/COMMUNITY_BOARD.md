@@ -171,3 +171,10 @@ Select oldest unconfirmed durable receipt before new claim, with independent
 Reverify before ack; never re-admit or re-claim the recovered suggestion.
 Expired lease reconciliation, provider backoff and persistent sticky blocking
 remain outstanding. No activation; CI pending.
+
+## Persistent community failure containment (069)
+Both claim and recovery reservations honor a common durable provider cooldown
+and sticky block. Authentication/conflict failures require trusted operator
+review; scoped worker cannot clear blocks. Provider retry delays bounded to
+60–86400 seconds and never shorten an existing cooldown. Expired lease
+reconciliation, operator tooling and DB integration certification pending.

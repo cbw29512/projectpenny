@@ -6,6 +6,7 @@ from psycopg.rows import dict_row
 
 logger=logging.getLogger(__name__)
 CALLS={
+    "community_defer":"SELECT penny_community_defer(%s,%s) AS recorded",
     "community_recover":"SELECT * FROM penny_community_recover()",
     "community_record_ack":"SELECT penny_community_record_ack(%s,%s) AS recorded",
     "community_reserve":"SELECT penny_community_reserve() AS recorded",

@@ -31,11 +31,11 @@ def run_community_once(dsn, client):
                 return Cycle("paused",900)
             result=client.community_claim()
             if type(result) is not BridgeResult:
-                return Cycle("uncertain",900)
+                return _failure(dsn,result)
             if result.status=="empty" and result.claim is None:
                 return Cycle("empty",900)
             if result.status!="claimed" or type(result.claim) is not CommunityClaim:
-                return Cycle("uncertain",900)
+                return _failure(dsn,result)
             claim=result.claim
             if not persist_claim(dsn,claim):
                 return Cycle("not_admitted",900)
@@ -56,4 +56,24 @@ def _ack(dsn,client,cloud_id,fence):
         if recorded and recorded["recorded"] is True:
             return Cycle("acknowledged",60)
         return Cycle("ack_unrecorded",60)
-    return Cycle("ack_uncertain",900)
+    return _failure(dsn,ack,uncertain="ack_uncertain")
+
+
+def _failure(dsn,result,*,uncertain="uncertain"):
+    # A remote failure must never reopen either durable reservation path.
+    reason=None
+    delay=900
+    status=uncertain
+    if type(result) is not BridgeResult:
+        reason="local_integrity"
+    elif result.status in ("unauthorized","conflict"):
+        reason="authentication" if result.status=="unauthorized" else "remote_conflict"
+    elif result.status=="backoff" and type(result.retry_after) is int:
+        delay=max(60,min(result.retry_after,86400))
+        status="backoff"
+    if reason is not None:
+        status="blocked"
+    row=reply_call(dsn,"community_defer",(delay,reason))
+    if not row or row["recorded"] is not True:
+        raise RuntimeError("community cooldown not recorded")
+    return Cycle(status,delay)

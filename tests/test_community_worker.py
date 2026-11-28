@@ -59,3 +59,25 @@ class CommunityWorkerTests(unittest.TestCase):
         self.assertEqual(run_community_once("fixture",self.client).status,"acknowledged")
         self.client.community_claim.assert_not_called()
         self.client.community_ack.assert_called_once_with(self.claim.id,self.claim.fence)
+
+    @patch("penny.community.worker.identity_matches",return_value=True)
+    @patch("penny.community.worker.exclusive_cycle",return_value=nullcontext(True))
+    @patch("penny.community.worker.reply_call")
+    def test_auth_failure_records_sticky_block(self,db,lock,identity):
+        db.side_effect=[None,{"recorded":True},{"recorded":True}]
+        self.client.community_claim.return_value=BridgeResult("unauthorized")
+        self.assertEqual(run_community_once("fixture",self.client).status,"blocked")
+        db.assert_called_with("fixture","community_defer",(900,"authentication"))
+        self.client.community_ack.assert_not_called()
+
+    @patch("penny.community.worker.identity_matches",return_value=True)
+    @patch("penny.community.worker.exclusive_cycle",return_value=nullcontext(True))
+    @patch("penny.community.worker.reply_call")
+    def test_recovery_honors_provider_backoff(self,db,lock,identity):
+        db.side_effect=[{"cloud_id":self.claim.id,"fence":self.claim.fence},
+                        {"recorded":True},{"recorded":True}]
+        self.client.community_ack.return_value=BridgeResult("backoff",retry_after=3600)
+        result=run_community_once("fixture",self.client)
+        self.assertEqual((result.status,result.retry_after),("backoff",3600))
+        db.assert_called_with("fixture","community_defer",(3600,None))
+        self.client.community_claim.assert_not_called()
