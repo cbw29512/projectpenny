@@ -72,7 +72,8 @@ def install_fresh(conn,*,database,schema,roles,expected_digest,confirmed=False):
             if conn.execute("""SELECT
                 (SELECT enabled FROM mailbox_control WHERE singleton),
                 (SELECT enabled FROM activity_observation WHERE singleton),
-                (SELECT enabled FROM workshop_observation WHERE singleton)""").fetchone()!=(False,False,False):
+                (SELECT enabled FROM workshop_observation WHERE singleton),
+                (SELECT enabled FROM community_mailbox_control WHERE singleton)""").fetchone()!=(False,False,False,False):
                 raise PermissionError("initial publication gates not closed")
             return {"status":"installed_disabled","migration_count":len(entries),
                     "release_sha256":digest,"production_certified":False}

@@ -78,3 +78,5 @@ mailbox storage, identity mapping or publication is enabled by this slice.
 
 ## Cloud admission candidate (012)
 Independent default-off gate and bounded suggestion table. Owner comes from trusted server identity; exact request replay, rolling 3/member and 60/global daily limits, 100 unexpired and 512 retained rows. One-hour expiry. SQL is invoker-only with PUBLIC access revoked; no runtime grants. Local shared feedback quota and screening remain authoritative. No claim, delivery, owner status, purge, retention approval or route yet. Expired rows retain quota history and capacity fails closed until a reviewed purge exists. CI pending; no deployment.
+
+Cloud fresh-install manifest now explicitly includes migration 012 and requires the community gate to remain disabled before commit. Install regression tests include rollback on an unexpectedly enabled community gate. CI pending.

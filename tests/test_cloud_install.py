@@ -14,11 +14,11 @@ from netlify.security.roles import SCOPES
 class ManifestTests(unittest.TestCase):
     def test_release_is_exact_order_and_digest(self):
         digest,entries=release_plan()
-        self.assertEqual(len(entries),11)
+        self.assertEqual(len(entries),12)
         self.assertEqual(len(digest),64)
         self.assertEqual(digest,release_plan()[0])
         self.assertEqual(entries[0][0],"001_schema.sql")
-        self.assertEqual(entries[-1][0],"011_workshop_budget.sql")
+        self.assertEqual(entries[-1][0],"012_community_admission.sql")
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
@@ -56,13 +56,14 @@ class InstallTests(unittest.TestCase):
 
     def test_install_is_disabled_and_repeat_refuses_without_data_loss(self):
         report=self.install()
-        self.assertEqual(report["migration_count"],11)
+        self.assertEqual(report["migration_count"],12)
         self.assertFalse(report["production_certified"])
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(11,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(12,)])
         self.assertEqual(self.query("SELECT enabled FROM mailbox_control"),[(False,)])
+        self.assertEqual(self.query("SELECT enabled FROM community_mailbox_control"),[(False,)])
         with self.assertRaises(PermissionError):
             self.install()
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(11,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(12,)])
 
     def test_bad_digest_and_existing_object_refuse(self):
         with self.assertRaises(ValueError):
@@ -71,6 +72,16 @@ class InstallTests(unittest.TestCase):
         with self.assertRaises(PermissionError):
             self.install()
         self.assertEqual(self.query("SELECT count(*) FROM existing_data"),[(0,)])
+
+    def test_unexpected_enabled_community_gate_rolls_back(self):
+        digest,entries=release_plan()
+        # Simulate an unsafe migration while preserving the reviewed release input shape.
+        name,sha,body=entries[-1]
+        altered=entries[:-1]+((name,sha,body+"\nUPDATE community_mailbox_control SET enabled=true;"),)
+        with patch("netlify.security.install.release_plan",return_value=(digest,altered)):
+            with self.assertRaises(PermissionError):
+                self.install()
+        self.assertEqual(self.query("SELECT to_regclass('community_mailbox_control')"),[(None,)])
 
     def test_late_failure_rolls_back_all_migrations(self):
         with patch("netlify.security.install.audit_role",side_effect=RuntimeError("synthetic audit failure")):
