@@ -14,11 +14,11 @@ from netlify.security.roles import SCOPES
 class ManifestTests(unittest.TestCase):
     def test_release_is_exact_order_and_digest(self):
         digest,entries=release_plan()
-        self.assertEqual(len(entries),13)
+        self.assertEqual(len(entries),14)
         self.assertEqual(len(digest),64)
         self.assertEqual(digest,release_plan()[0])
         self.assertEqual(entries[0][0],"001_schema.sql")
-        self.assertEqual(entries[-1][0],"013_community_delivery.sql")
+        self.assertEqual(entries[-1][0],"014_community_scopes.sql")
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
@@ -56,14 +56,14 @@ class InstallTests(unittest.TestCase):
 
     def test_install_is_disabled_and_repeat_refuses_without_data_loss(self):
         report=self.install()
-        self.assertEqual(report["migration_count"],13)
+        self.assertEqual(report["migration_count"],14)
         self.assertFalse(report["production_certified"])
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(13,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(14,)])
         self.assertEqual(self.query("SELECT enabled FROM mailbox_control"),[(False,)])
         self.assertEqual(self.query("SELECT enabled FROM community_mailbox_control"),[(False,)])
         with self.assertRaises(PermissionError):
             self.install()
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(13,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(14,)])
 
     def test_bad_digest_and_existing_object_refuse(self):
         with self.assertRaises(ValueError):
@@ -89,3 +89,17 @@ class InstallTests(unittest.TestCase):
                 self.install()
         self.assertEqual(self.query("SELECT to_regclass('mailbox_control')"),[(None,)])
         self.assertEqual(self.install()["status"],"installed_disabled")
+
+    def test_community_runtime_roles_are_execute_only(self):
+        self.install()
+        for scope,allowed in (("member",("community_mailbox_submit(uuid,uuid,text)",)),
+                              ("bridge",("community_mailbox_claim()","community_mailbox_ack(uuid,uuid)"))):
+            role=self.roles[scope]
+            for signature in ("community_mailbox_submit(uuid,uuid,text)",
+                              "community_mailbox_claim()","community_mailbox_ack(uuid,uuid)"):
+                self.assertEqual(self.conn.execute(
+                    "SELECT has_function_privilege(%s,%s,'EXECUTE')",
+                    (role,self.schema+"."+signature)).fetchone()[0],signature in allowed)
+            self.assertFalse(self.conn.execute(
+                "SELECT has_table_privilege(%s,%s,'SELECT,INSERT,UPDATE,DELETE')",
+                (role,self.schema+".community_mailbox_suggestion")).fetchone()[0])

@@ -8,10 +8,10 @@ logger = logging.getLogger(__name__)
 # Fixed signatures, not supplied by a request or the model.
 SCOPES = {
     "member": ("mailbox_submit(uuid,uuid,text)","mailbox_read(uuid,uuid)",
-               "mailbox_allow_member(uuid,text)"),
+               "mailbox_allow_member(uuid,text)","community_mailbox_submit(uuid,uuid,text)"),
     "bridge": ("mailbox_claim()","mailbox_ack(uuid,uuid,uuid)",
                "mailbox_answer(uuid,uuid,text)","mailbox_reject(uuid,uuid)",
-               "mailbox_allow_bridge(text)"),
+               "mailbox_allow_bridge(text)","community_mailbox_claim()","community_mailbox_ack(uuid,uuid)"),
     "maintenance": ("mailbox_purge()",),
     "projection_writer": ("activity_publish(bigint,text)","workshop_publish(bigint,text,bigint,bigint)","workshop_allow_write()"),
     "projection_reader": ("activity_read()","workshop_read()","workshop_allow_read()"),

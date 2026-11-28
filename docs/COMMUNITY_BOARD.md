@@ -104,3 +104,11 @@ Retention, local role audit and end-to-end reconciliation still required.
 CI pending; no deployment.
 
 Local receipt admission locks the enabled identity mapping row during the transaction and validates receipt chronology on replay. Regression tests exercise reused fences/keys and forced receipt-write failure with atomic rollback. Scoped production admission remains pending; CI pending.
+
+## Cloud restricted execution (014)
+Existing audited member role can execute only suggestion submission among the
+new community routines; bridge role can execute claim/ack. No direct table
+access; pinned definer search paths and PUBLIC revocation. Existing fresh
+installer still requires all gates disabled and explicit reviewed digest.
+Local receipt remains operator-only; provider throttling, transport, identity
+and production activation remain separate gates. CI pending.
