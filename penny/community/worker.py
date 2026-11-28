@@ -39,7 +39,10 @@ def run_community_once(dsn, client):
                 return Cycle("receipt_unverified",900)
             ack=client.community_ack(claim.id,claim.fence)
             if type(ack) is BridgeResult and ack.status=="ok" and ack.claim is None:
-                return Cycle("acknowledged",900)
+                recorded=reply_call(dsn,"community_record_ack",(claim.id,claim.fence))
+                if recorded and recorded["recorded"] is True:
+                    return Cycle("acknowledged",900)
+                return Cycle("ack_unrecorded",900)
             # No retry or new claim until durable cooldown; reconciliation is separate.
             return Cycle("ack_uncertain",900)
     except Exception as exc:

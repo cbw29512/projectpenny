@@ -158,3 +158,9 @@ ack after committed admission and independent receipt verification. No retries,
 no worker timer or runtime activation. Conservative cooldown intentionally
 limits throughput to four attempts/hour; durable ack recovery and provider
 backoff handling are still required before production. Mocked tests; CI pending.
+
+## Durable acknowledgment evidence (067)
+Separate append-only local confirmation record, written only by the worker after
+remote success. Scoped routine checks gates, receipt, fence and live lease;
+worker reports ack_unrecorded if local confirmation fails. No automatic recovery
+selection or expired-lease reconciliation yet. CI pending; no deployment.
