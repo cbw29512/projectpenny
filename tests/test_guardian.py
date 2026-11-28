@@ -32,7 +32,7 @@ class GuardianTests(unittest.TestCase):
                     allowed = allowed or (actor is Actor.MEMBER and capability in (
                         Capability.MANAGE_OWN_MEMORY, Capability.WITHDRAW_MEMORY_CONSENT,
                         Capability.MANAGE_OWN_RECOGNITION, Capability.WITHDRAW_RECOGNITION, Capability.SUBMIT_SUGGESTION,
-                        Capability.READ_BETA_EDITION,
+                        Capability.READ_BETA_EDITION, Capability.READ_OWN_SUGGESTION,
                     ))
                     self.assertEqual(authorize(actor, capability).allowed, allowed)
 

@@ -30,6 +30,7 @@ class Capability(Enum):
     ISSUE_MEMBER_SESSION = "issue_member_session"
     RECALL_MEMBER_MEMORY = "recall_member_memory"
     SUBMIT_SUGGESTION = "submit_suggestion"
+    READ_OWN_SUGGESTION = "read_own_suggestion"
     REVIEW_SUGGESTION = "review_suggestion"
     VERIFY_CONTRIBUTION = "verify_contribution"
     MANAGE_OWN_RECOGNITION = "manage_own_recognition"

@@ -56,3 +56,12 @@ This is a private adapter, not a timer, public board or general-purpose agent.
 No software utility implementation, new ideas, spending, publication, approval,
 measurement or external actions. Runtime permissions and timer deployment
 remain separate acceptance gates.
+
+## Private suggestion review and owner status
+Bounded oldest-first worklist (maximum 20) and authenticated owner-only
+status lookup now share existing intake and terminal review records. No
+new scheduling authority, public text, or cross-owner access. Trusted local
+operator: `python -m penny.runtime.community --config PRIVATE_CONFIG list`;
+review requires exact digest, verdict/reason, reviewer UUID and --confirm.
+Retained text remains immutable; retention/erasure and typed cloud transport
+must be addressed before public suggestions. CI pending; no live deployment.
