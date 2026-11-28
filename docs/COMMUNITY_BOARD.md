@@ -75,3 +75,6 @@ A separate Node validator accepts only a UUID request key and bounded idea text.
 No supplied owner, role, tier or command. Local screening remains authoritative;
 Unicode behavior must be cross-runtime tested before activation. No HTTP route,
 mailbox storage, identity mapping or publication is enabled by this slice.
+
+## Cloud admission candidate (012)
+Independent default-off gate and bounded suggestion table. Owner comes from trusted server identity; exact request replay, rolling 3/member and 60/global daily limits, 100 unexpired and 512 retained rows. One-hour expiry. SQL is invoker-only with PUBLIC access revoked; no runtime grants. Local shared feedback quota and screening remain authoritative. No claim, delivery, owner status, purge, retention approval or route yet. Expired rows retain quota history and capacity fails closed until a reviewed purge exists. CI pending; no deployment.
