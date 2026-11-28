@@ -67,3 +67,5 @@ Retained text remains immutable; retention/erasure and typed cloud transport
 must be addressed before public suggestions. CI pending; no live deployment.
 
 Review admission also rejects future or negative submission times and refuses replay of a review outside its submission-to-current-time interval. Regression verification pending CI.
+
+Intake replay validates original content digest, duplicate digest and submission chronology before returning an existing receipt. Corrupted rows return denied without exposing an ID. CI verification pending.

@@ -83,6 +83,20 @@ class SuggestionTests(DatabaseFixture):
         with psycopg.connect(self.dsn) as conn:
             self.assertEqual(conn.execute("SELECT count(*) FROM community_suggestion_review").fetchone()[0], 0)
 
+    def test_corrupt_replay_denied_for_both_lookup_paths(self):
+        body = "Build printable charts"
+        first = self.submit("original", body)
+        with psycopg.connect(self.dsn) as conn:
+            conn.execute("ALTER TABLE community_suggestion DISABLE TRIGGER community_suggestion_immutable")
+            conn.execute("UPDATE community_suggestion SET body=%s WHERE id=%s",
+                         ("Corrupted content", first.suggestion_id))
+            conn.execute("ALTER TABLE community_suggestion ENABLE TRIGGER community_suggestion_immutable")
+        for key in ("original", "duplicate"):
+            receipt = self.submit(key, body)
+            self.assertEqual(receipt.status, "denied")
+            self.assertIsNone(receipt.suggestion_id)
+            self.assertFalse(receipt.replay)
+
     def test_drift_fails_closed(self):
         with patch("penny.brain.identity.SYSTEM_PROMPT", "changed"):
             self.assertEqual(self.submit("a", "Build something").status, "denied")

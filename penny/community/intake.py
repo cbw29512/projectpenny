@@ -7,12 +7,19 @@ from penny.guardian.policy import authorize
 from penny.guardian.state import Actor, Capability
 from penny.scheduler.storage_db import locked
 from .suggestion_state import (
-    SuggestionReceipt, screened_text,
+    SuggestionReceipt, screened_text, digest,
 )
 
 from .quota import capacity_reason
 
 logger = logging.getLogger(__name__)
+
+
+def _valid_replay(row, now):
+    # A receipt must refer to intact content and a plausible database timestamp.
+    return (0 <= row["submitted_at"] <= now
+            and digest(row["body"]) == row["body_sha256"]
+            and digest(row["body"].casefold()) == row["duplicate_sha256"])
 
 
 def submit_suggestion(dsn, token, *, key, body):
@@ -24,18 +31,22 @@ def submit_suggestion(dsn, token, *, key, body):
         with locked(dsn) as (conn, control, now):
             owner = resolve_member(conn, now, token)
             prior = conn.execute(
-                "SELECT id,body_sha256 FROM community_suggestion WHERE member_id=%s AND request_key=%s",
+                "SELECT id,body,body_sha256,duplicate_sha256,submitted_at FROM community_suggestion WHERE member_id=%s AND request_key=%s",
                 (owner, key),
             ).fetchone()
             if prior:
+                if not _valid_replay(prior, now):
+                    return SuggestionReceipt("denied")
                 if prior["body_sha256"] != exact:
                     return SuggestionReceipt("idempotency_conflict")
                 return SuggestionReceipt("accepted", prior["id"], True)
             old = conn.execute(
-                "SELECT id FROM community_suggestion WHERE member_id=%s AND duplicate_sha256=%s",
+                "SELECT id,body,body_sha256,duplicate_sha256,submitted_at FROM community_suggestion WHERE member_id=%s AND duplicate_sha256=%s",
                 (owner, duplicate),
             ).fetchone()
             if old:
+                if not _valid_replay(old, now):
+                    return SuggestionReceipt("denied")
                 # Do not bind an unused key to a different original request.
                 return SuggestionReceipt("duplicate", old["id"], True)
             if control["paused"]:
