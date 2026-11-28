@@ -150,3 +150,11 @@ attempt limiter (submit/claim/ack budgets), bounded JSON, exact routes and
 scoped parameterized repository. Returns explicit receipt or typed claim only.
 ASCII parity enforced before admission. No production gateway registration,
 provider activation, worker or live network test. CI pending.
+
+## Inactive community cycle candidate (066)
+Shared bridge advisory lock and default-off local gate reserve a durable
+900-second claim cooldown before network access. One claim and at most one
+ack after committed admission and independent receipt verification. No retries,
+no worker timer or runtime activation. Conservative cooldown intentionally
+limits throughput to four attempts/hour; durable ack recovery and provider
+backoff handling are still required before production. Mocked tests; CI pending.
