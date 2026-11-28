@@ -143,3 +143,10 @@ Community claim uses typed integer-epoch envelope; acknowledgment sends only
 cloud ID and fence. No remote routes or worker activated. Caller must verify
 committed local receipt before acknowledgment; reconciliation remains pending.
 Mock network tests added; CI pending.
+
+## Candidate community HTTP core
+Separate default-off handler uses existing signed identity, mandatory shared
+attempt limiter (submit/claim/ack budgets), bounded JSON, exact routes and
+scoped parameterized repository. Returns explicit receipt or typed claim only.
+ASCII parity enforced before admission. No production gateway registration,
+provider activation, worker or live network test. CI pending.
