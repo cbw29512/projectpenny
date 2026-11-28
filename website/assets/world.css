@@ -53,3 +53,9 @@ button:not(:disabled):hover { background: #10554f; }
 .thought-bubble .bubble-kind { color: #675744; }
 .bubble .bubble-kind { color: #245c50; }
 .scene-note { color: var(--muted); font-size: .78rem; }
+
+/* Hidden invitation controls must stay hidden despite flex/grid display rules. */
+#home-beta-auth[hidden],#home-beta-actions[hidden],#preview-send[hidden] { display:none; }
+.beta-auth { display:grid; gap:.55rem; border:1px solid var(--line); border-radius:.6rem; padding:.75rem; }
+.beta-auth input { width:100%; font:inherit; padding:.7rem; border:1px solid #9ca9a7; border-radius:.55rem; }
+#welcome { white-space:pre-wrap; overflow-wrap:anywhere; }

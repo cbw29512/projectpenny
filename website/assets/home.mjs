@@ -1,6 +1,12 @@
+import {bindHomeConversation} from "./home-conversation.mjs";
 import { MAX_QUESTION, PREVIEW_NOTICE, questionState, previewQuestion } from "./preview-state.mjs";
 
 function boot() {
+  if(document.getElementById("home-conversation")?.dataset.live==="true"){
+    bindHomeConversation({document,window,origin:location.origin,secure:globalThis.isSecureContext,
+      fetcher:(path,opts)=>fetch(path,opts),uuid:()=>crypto.randomUUID(),clock:Date.now});
+    return;
+  }
   const question = document.getElementById("question");
   const count = document.getElementById("count");
   const notice = document.getElementById("notice");

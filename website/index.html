@@ -96,15 +96,29 @@
           </div>
           <div class="bubble" aria-labelledby="speech-label">
             <span class="bubble-kind" id="speech-label">PENNY SAYS · LIVE OUTPUT UNAVAILABLE</span>
-            <p id="welcome">Live responses are not connected.</p>
+            <p id="welcome" aria-live="polite">Live responses are not connected.</p>
           </div>
           <p class="scene-note">Activity summaries describe verified events, not internal AI reasoning. Live AI is not connected.</p>
-          <div class="composer" aria-labelledby="question-label">
+          <div class="composer" id="home-conversation" data-live="false" aria-labelledby="question-label">
+            <div id="home-beta-auth" class="beta-auth" hidden>
+              <label for="home-beta-token">Private beta invitation credential</label>
+              <input id="home-beta-token" type="password" maxlength="1017" autocomplete="off" disabled>
+              <div class="composer-actions">
+                <button id="home-beta-sign-in" type="button" disabled>Load invitation</button>
+                <button id="home-beta-sign-out" type="button" disabled>Clear session</button>
+              </div>
+              <p class="small">Invitation only. Replies are reviewed before delivery. Leaving clears this browser session, not remote work.</p>
+            </div>
             <label id="question-label" for="question">Talk to Penny</label>
             <textarea id="question" rows="3" maxlength="2000" placeholder="Ask a question or share an idea..." aria-describedby="count notice" disabled></textarea>
             <div class="composer-actions">
               <span id="count" class="small">0 / 2000</span>
               <button id="preview-send" type="button" disabled>Preview question <span aria-hidden="true">→</span></button>
+              <div id="home-beta-actions" class="composer-actions" hidden>
+                <button id="home-beta-submit" type="button" disabled>Send question</button>
+                <button id="home-beta-read" type="button" disabled>Check reply</button>
+                <button id="home-beta-next" type="button" disabled>New question</button>
+              </div>
             </div>
             <p id="notice" class="small" role="status" aria-live="polite">Preview only. Nothing is sent or saved.</p>
             <noscript><p>Enable JavaScript to try the local question preview.</p></noscript>

@@ -10,3 +10,13 @@ test subprocess; production browser already retains its receipt in memory.
 Tests assert no unreviewed answer, exact approved text, foreign member denial,
 single inference and sign-out clearing. Existing human-review gate retained;
 no automatic publication or identity policy change. CI pending.
+
+## Homepage conversation integration
+CI 46088303882 passed the integrated conversation rehearsal. The main scene
+now has a staged invitation-only conversation adapter sharing the existing
+private beta renderer and mailbox. Existing question composer and speech
+bubble used; separate thought/activity state untouched. Explicit reviewed
+HTML flag, exact project HTTPS origin and secure context required; default
+flag false, hidden disabled controls and connect-src none unchanged. No
+query-parameter activation, auto-polling, persistent credentials or public
+signup. Pagehide clears private browser state. CI pending; no deployment.
