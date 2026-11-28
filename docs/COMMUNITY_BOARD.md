@@ -102,3 +102,5 @@ receipts (provisional). Trusted operator connection only; no scoped bridge
 runtime grant or network adapter, no cloud acknowledgment implementation.
 Retention, local role audit and end-to-end reconciliation still required.
 CI pending; no deployment.
+
+Local receipt admission locks the enabled identity mapping row during the transaction and validates receipt chronology on replay. Regression tests exercise reused fences/keys and forced receipt-write failure with atomic rollback. Scoped production admission remains pending; CI pending.

@@ -29,7 +29,7 @@ def admit_community_claim(dsn, *, cloud_id, cloud_owner, key, fence, body,
             if not now < lease_until <= expires_at <= now + 3600 or lease_until > now + 900:
                 return SuggestionReceipt("denied")
             mapping = conn.execute(
-                "SELECT local_member FROM bridge_member WHERE cloud_owner=%s AND enabled",
+                "SELECT local_member FROM bridge_member WHERE cloud_owner=%s AND enabled FOR UPDATE",
                 (cloud_owner,)).fetchone()
             if not mapping:
                 return SuggestionReceipt("denied")
@@ -46,7 +46,9 @@ def admit_community_claim(dsn, *, cloud_id, cloud_owner, key, fence, body,
                 row = conn.execute(
                     "SELECT * FROM community_suggestion WHERE id=%s AND member_id=%s",
                     (prior["suggestion_id"], owner)).fetchone()
-                if not row or not _valid_replay(row, now) or row["duplicate_sha256"] != duplicate:
+                if (not row or not _valid_replay(row, now)
+                        or not row["submitted_at"] <= prior["admitted_at"] <= now
+                        or row["duplicate_sha256"] != duplicate):
                     return SuggestionReceipt("denied")
                 return SuggestionReceipt("accepted", prior["suggestion_id"], True)
             if control["paused"]:
