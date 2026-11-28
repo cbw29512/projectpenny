@@ -1,0 +1,22 @@
+.life-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; margin-top:1rem; }
+.life h3 { font-size:1rem; margin:.25rem 0 .5rem; }
+.metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; margin:0; }
+.metric { min-width:0; border:1px solid var(--line); border-radius:.55rem; padding:.65rem; background:#f7f4ed; }
+.metric dt { color:var(--muted); font-size:.76rem; line-height:1.4; }
+.metric dd { margin:.3rem 0 0; font-weight:750; font-size:clamp(.9rem,2vw,1.1rem); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+#snapshot-status { font-weight:650; }
+@media(max-width:760px) { .life-columns { grid-template-columns:1fr; } }
+@media(max-width:360px) { .metrics { grid-template-columns:1fr; } }
+
+.timeline-controls { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; margin-top:1rem; }
+.timeline-controls label { font-weight:650; }
+.timeline-controls select { font:inherit; color:var(--ink); background:white; min-height:44px; border:1px solid #9ca9a7; border-radius:.5rem; padding:.4rem .7rem; max-width:100%; }
+.timeline-events { list-style:none; padding:0 0 0 .8rem; margin:1rem 0 0; }
+.timeline-events li { border-left:2px solid var(--line); padding:.3rem .8rem .8rem; overflow-wrap:anywhere; }
+.timeline-events time { font-size:.75rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+.timeline-events li p { color:var(--ink); margin-top:.2rem; }
+
+.achievement-verified .medal { background:#ead4a8; color:#503719; }
+.achievement-verified [data-award-status] { background:#deefe3; color:#23563a; }
+.achievements [data-award-date][hidden] { display:none; }
+.achievements [data-award-date] { margin-top:.2rem; }

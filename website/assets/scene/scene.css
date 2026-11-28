@@ -1,0 +1,19 @@
+/* Static, registered presentation layers; no data-driven URLs or coordinates. */
+.penny-scene {
+  display: grid;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 460 / 310;
+  isolation: isolate;
+}
+.room .penny-scene > img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 760px) {
+  .penny-scene { max-width: 360px; }
+}

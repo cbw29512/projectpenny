@@ -1,0 +1,67 @@
+/* Read-only merchandise concepts, separate from the canonical scene. */
+.collection-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-top:1rem; }
+.collection-grid details { border:1px solid var(--line); border-radius:.8rem; padding:.75rem; }
+.collection-grid summary { cursor:pointer; font-weight:700; min-height:44px; }
+.mug-concept { position:relative; isolation:isolate; box-sizing:border-box; width:calc(100% - 24px); max-width:220px; min-height:132px; margin:1rem auto; border:2px solid #526268; border-radius:12px; background:#e7e4d9; color:#243b45; display:grid; place-content:center; text-align:center; padding:.8rem .4rem; font:700 .85rem/1.2 monospace; overflow-wrap:anywhere; }
+.mug-concept::after { content:""; position:absolute; z-index:-1; right:-23px; top:26%; width:24px; height:48%; border:6px solid #526268; border-left:0; border-radius:0 20px 20px 0; }
+.mug-concept.charcoal { background:#263238; color:#c4efe5; }
+.mug-concept.sand { background:#f4e5d0; color:#573d32; }
+.mug-concept.navy { background:#345161; color:white; }
+.mug-concept.plum { background:#ded0df; color:#533b59; }
+.mug-concept small { margin-top:.6rem; font:.65rem/1.2 sans-serif; letter-spacing:.04em; }
+.collection-palette { display:flex; flex-wrap:wrap; gap:.55rem; padding:0; list-style:none; }
+.collection-palette li { border:1px solid var(--line); border-radius:.5rem; padding:.4rem .65rem; }
+
+/* Enlarged shirt inspector uses static color classes, not model-provided styles. */
+.shirt-concept {
+  width:100%; max-width:240px; aspect-ratio:1.12; margin:.75rem auto;
+  display:grid; place-items:center; text-align:center; background:#429285;
+  color:#132c28; clip-path:polygon(32% 3%,42% 11%,58% 11%,68% 3%,98% 22%,85% 46%,73% 39%,73% 98%,27% 98%,27% 39%,15% 46%,2% 22%);
+}
+.shirt-concept > div { width:44%; display:grid; gap:.18rem; font:700 clamp(.58rem,1.6vw,.78rem)/1.18 monospace; overflow-wrap:anywhere; }
+.shirt-concept small { margin-top:.5rem; font:.52rem/1.15 sans-serif; }
+.shirt-concept.teal { background:#429285; color:#132c28; }
+.shirt-concept.plum { background:#805477; color:#ffffff; }
+.shirt-concept.navy { background:#263e60; color:#ffffff; }
+.shirt-concept.forest { background:#41634b; color:#ffffff; }
+.shirt-concept.maroon { background:#803f4a; color:#ffffff; }
+.shirt-concept.mustard { background:#d1ac48; color:#252525; }
+.shirt-concept.charcoal { background:#42464d; color:#ffffff; }
+.shirt-concept.rust { background:#a35434; color:#ffffff; }
+.shirt-concept.steel-blue { background:#517b96; color:#101d25; }
+.shirt-concept.olive { background:#777c41; color:#10150d; }
+.shirt-concept.cranberry { background:#a33454; color:#ffffff; }
+.shirt-concept.slate { background:#616c80; color:#ffffff; }
+.shirt-concept.copper { background:#ad744c; color:#201409; }
+.shirt-concept.dusty-rose { background:#c58c9d; color:#392333; }
+
+/* Framed artwork inspector: fixed local themes and readable expanded text. */
+.poster-concept {
+  width:100%; max-width:220px; aspect-ratio:3/4; box-sizing:border-box;
+  margin:.75rem auto; border:6px solid #75543c; padding:.6rem;
+  display:grid; align-content:center; justify-items:center; gap:.25rem;
+  text-align:center; overflow-wrap:anywhere; font-size:.9rem;
+}
+.poster-concept strong { font-size:1rem; }
+.poster-concept .poster-symbol { font-size:2rem; line-height:1.2; }
+.poster-concept small { margin-top:.5rem; font-size:.65rem; letter-spacing:.06em; }
+.poster-concept.persistence { background:#243c48; color:#e5cb92; }
+.poster-concept.dream-big { background:#e8dcc4; color:#493e33; }
+.poster-concept.progress { background:#365b50; color:#f4eedb; }
+.poster-concept.optimism { background:#805477; color:#fff3e9; }
+.poster-concept.ambition { background:#34496b; color:#f6e6c6; }
+.poster-concept.mission { background:#292e34; color:#e8c773; }
+
+/* Daily wall art occupies the original chart frame only. */
+.room .penny-scene > [data-daily-poster-frame] {
+  position:absolute; left:69.347826%; top:8.709677%; width:23.043478%;
+  height:auto; max-width:none;
+}
+.room .penny-scene > [data-daily-poster-frame][hidden] { display:none !important; }
+.poster-print-preview { display:block; width:100%; max-width:320px; height:auto; margin:.75rem auto; }
+.daily-office-preview { width:100%; max-width:460px; font-size:.85rem; }
+.daily-office-preview dl { margin:.5rem 0; }
+.daily-office-preview dt { font-weight:700; }
+.daily-office-preview dd { margin:0 0 .4rem; }
+.daily-office-preview label { display:block; }
+.daily-office-preview input, .daily-office-preview button { min-height:44px; max-width:100%; }

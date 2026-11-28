@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Penny | Live Office</title>
+<link rel="stylesheet" href="/kiosk.css">
+<script type="module" src="/kiosk.mjs"></script>
+</head>
+<body data-layout="fixed-office-v2">
+<header><div><small>PROJECT PENNY · PRIVATE LIVE OFFICE</small><h1>Financially Underfunded.<br>Sarcastically Overqualified.</h1></div><div><span id="health">Connecting</span><time id="updated"></time></div></header>
+<main>
+<section class="office"><svg id="penny-face" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310" role="img" aria-labelledby="penny-art-title">
+  <title id="penny-art-title">Penny concept in a borrowed startup room</title>
+  <rect x="5" y="5" width="450" height="300" rx="16" fill="#345161"/>
+  <path d="M5 222H455V289Q455 305 439 305H21Q5 305 5 289Z" fill="#223947"/>
+  <rect x="31" y="26" width="121" height="94" rx="8" fill="#263f50"/>
+  <rect x="40" y="35" width="103" height="76" rx="3" fill="#668d99"/>
+  <path d="M91 35v76M40 73h103" stroke="#263f50" stroke-width="5"/>
+  <path d="M40 110l29-24 18 16 29-34 27 25v18z" fill="#94b0b4"/>
+  <rect x="319" y="27" width="106" height="61" rx="7" fill="#e2bd83"/>
+  <path d="M332 73l22-19 17 8 31-24" fill="none" stroke="#76603e" stroke-width="4" stroke-linecap="round"/>
+  <path d="M391 38h11v11" fill="none" stroke="#76603e" stroke-width="3"/>
+  <rect x="27" y="174" width="95" height="48" rx="5" fill="#a17a56"/>
+  <path d="M27 186h95M74 174v48" stroke="#75583f" stroke-width="2"/>
+  <rect x="37" y="146" width="67" height="28" rx="4" fill="#bb9268"/>
+  <rect x="337" y="183" width="79" height="39" rx="4" fill="#b28a60"/>
+  <path d="M337 194h79M374 183v39" stroke="#80603f" stroke-width="2"/>
+  <ellipse cx="230" cy="279" rx="105" ry="13" fill="#172e3a"/>
+  <!-- Provisional vector character; identity art is not yet approved. -->
+  <path d="M165 163q-14-70 7-97 23-32 60-31 40-1 61 30 20 31 6 99l-17 35H181Z" fill="#974c36"/>
+  <path d="M187 180q-32 8-43 34l-10 40h192l-10-40q-11-27-43-34Z" fill="#429285"/>
+  <path d="M212 158h38v38q-18 15-38 0Z" fill="#d99c82"/>
+  <ellipse cx="230" cy="115" rx="54" ry="61" fill="#f1c3a7"/>
+  <path d="M176 104q-8-60 46-69 65-13 69 61-38-5-71-39-14 33-44 47Z" fill="#b76143"/>
+  <path d="M177 105q-4 40 14 63l-17-4-12-44Z" fill="#b76143"/>
+  <ellipse cx="205" cy="116" rx="7" ry="10" fill="#253848"/>
+  <ellipse cx="256" cy="116" rx="7" ry="10" fill="#253848"/>
+  <circle cx="207" cy="113" r="2" fill="white"/>
+  <circle cx="258" cy="113" r="2" fill="white"/>
+  <path id="brows" d="M195 100q9-6 18-1m35 0q9-6 18 0" fill="none" stroke="#744c3e" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="192" cy="135" rx="10" ry="5" fill="#db967e"/>
+  <ellipse cx="269" cy="135" rx="10" ry="5" fill="#db967e"/>
+  <path id="mouth" d="M216 144q15 14 31-3" fill="none" stroke="#9d514d" stroke-width="4" stroke-linecap="round"/>
+  <path d="M209 191l21 18 23-18" fill="none" stroke="#d1ece0" stroke-width="4"/>
+  <circle cx="231" cy="225" r="7" fill="#e2bc78"/>
+  <rect x="110" y="251" width="241" height="18" rx="5" fill="#a17a56"/>
+  <path d="M163 247h134l-12-53H175z" fill="#e0dfd3" stroke="#9bada9" stroke-width="2"/>
+  <circle cx="230" cy="223" r="9" fill="#429285"/>
+  <path d="M106 269v25m250-25v25" stroke="#a17a56" stroke-width="8" stroke-linecap="round"/>
+</svg>
+
+<div class="panel thought"><small>THOUGHT CLOUD · EVIDENCE-BASED COMMENTARY</small><p id="aside">Waiting for verified runtime data.</p></div>
+<p id="emotion" class="expression">Expression: neutral</p>
+<div class="panel objective"><small>CURRENT OBJECTIVE · OBSERVED RUNTIME STATUS</small><h2 id="activity">Connecting to Penny</h2><p id="detail"></p><p id="elapsed"></p></div></section>
+<section class="work">
+<div class="stats"><div><small>MISSION</small><strong>$1M</strong></div><div><small>SUCCEEDED TASKS</small><strong id="done">—</strong></div><div><small>QUEUED TASKS</small><strong id="queue">—</strong></div></div>
+<div class="panel vault"><small>PENNY’S VAULT · USD</small><div class="finance-grid"><div><small>NET COMMERCIAL RECEIPTS</small><strong id="receipts">Unverified</strong></div><div><small>RECORDED COSTS &amp; FEES</small><strong id="expenses">Unverified</strong></div><div><small>RECORDED CASH</small><strong id="cash">Unverified</strong></div><div><small>COMMUNITY SUPPORT</small><strong id="support">Unverified</strong></div></div><p id="finance-status">Waiting for ledger data</p></div>
+<div class="panel compact"><small>LATEST MEASURED EXPERIMENT</small><p id="measurement">No measurement recorded</p></div>
+<div class="panel compact"><small>LATEST HOURLY DECISION</small><p id="plan">Unavailable</p></div>
+<div class="panel output"><small>PENNY'S LATEST OUTPUT · PRIVATE UNREVIEWED DRAFT</small><h2 id="title">No result available</h2><pre id="speech"></pre></div>
+<div class="panel feed"><div class="feed-heading"><small>LIVE BUSINESS ACTIVITY · NEWEST FIRST</small><small id="feed-position"></small></div><div id="feed-window"><ol id="history"></ol></div></div>
+</section>
+</main>
+<footer>Local read-only display · Drafts are not verified claims · No visitor messages or internal reasoning · Expressions are symbolic runtime reactions, not feelings · Concept artwork</footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Historical timeline v0.1 — reviewed business outcomes
+Migration 029 adds immutable disclosure reviews for terminal experiment
+events and append-only suppression records. Source event must exist in
+the business history; outcome kind/time derives from measured count and
+target or recorded stop/rejection, never model prose. Preview binds a
+private source digest; trusted admin confirms exact digest and separately
+reviewed disclosure evidence. One disclosure per source, exact replay,
+conflicting references fail. No automatic publication. No selection
+claim of complete history: admin must review successes AND setbacks;
+coverage reconciliation is a future gate. Current scope is terminal
+business events only, not upgrades, financial milestones or incidents.
+Local recent candidate read returns up to 20 fixed event kinds and UTC
+day timestamps, newest first; no IDs, evidence, titles or free text.
+Suppression replaces an event in the current view with a generic dated
+correction; original stays private, cannot reactivate on replay. No
+arbitrary replacement facts or public transport. Dates/rare outcomes
+still require privacy review; cached copies cannot be retroactively
+withdrawn by local suppression alone. Guardian reuses existing private
+progress review capability. Tests synthetic, no deployment. Next: build
+timeline browser consumer and approved cached transport; later add typed
+upgrade/incident/milestone source records and completeness controls.
+
+## Static browser consumer
+The local browser_candidate function builds a sanitized envelope under the
+same transaction lock, with generated/expiry times (one hour provisional).
+The static diary defaults to unavailable; no fixture or production records
+are committed. Browser validates the exact closed schema, ordered UTC-day
+timestamps, allowed event kinds, 20-event limit and freshness; malformed
+or expired data are hidden. Fixed labels and text-only DOM rendering.
+Filters default to all outcomes, including setbacks and corrections.
+No fetch, storage, polling or changed CSP. Expiry is checked locally and
+on resume; no server-side delivery or real-time correction guarantee.
+Future approved transport must enforce expiry, version/suppression and
+source review outside Git. Current data is recent reviewed history only.
+Real browser layout/accessibility and production transport unverified.

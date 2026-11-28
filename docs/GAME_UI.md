@@ -1,0 +1,116 @@
+# Penny's game-style public interface
+Status: interaction and design contract; no final artwork or live deployment.
+Penny is the main character, not a dashboard mascot. Simple readable
+mobile-first UI with a game dialogue scene, persistent progress and credit.
+Slogan: Financially Underfunded. Sarcastically Overqualified.
+
+## Home screen hierarchy
+1. Header: name, slogan, actual availability (available, busy, full, paused,
+   offline or stale), chapter. Never claim online without a fresh heartbeat.
+2. Main scene: canonical Penny character in current milestone-based room,
+   controlled expressions (idle, thinking, talking, celebrating); local
+   browser animation, no inference needed to render. Final assets/voice
+   require approval. Respect reduced-motion settings.
+3. Large readable dialogue bubble: latest private answer for signed-in
+   member, public welcome/approved diary excerpt otherwise. Clear AI/fiction
+   disclosure. Long answers scroll/expand; never truncate meaning.
+4. Question input (max 2000 chars), Send, character count, sign-in when
+   required. Accessible keyboard and screen-reader feedback. Preserve draft
+   on busy/error; no fake typing or progress. One outstanding free task
+   under existing scheduler policy. Show queued/working/answered/error states.
+   Keep private replies out of shared HTML, caches and public activity feeds.
+5. Mission progress: verified financial metric or unavailable, next objective,
+   actual update timestamp. Never display fabricated earnings or percentage.
+6. Achievement Center: compact unlocked/locked milestone tiles, title, date,
+   evidence-backed explanation, next milestone. Examples: first verified
+   dollar, first profitable venture, first owned compute upgrade. Development
+   milestones distinct from financial achievements. No award based on fiction.
+7. Greatest Contributors: visible opt-in public aliases, verified roles and
+   outcome summaries, equal credit regardless of paid tier. Initial showcase
+   grouped by verified impact/outcome; ranking formula not approved. No fake
+   names, monetary rankings, or public identity without consent. Ties fairly
+   represented. Corrections/revocations remove current attribution.
+8. Compact bottom navigation: Home, Progress, Vault, Council, Diary.
+   Additional ventures, wishlist, settings and personal history accessible
+   within sections without cluttering home. No dead buttons in released UI.
+
+## Visual continuity
+
+Use a fixed canonical character asset family and office baseline, with
+persistent versioned outfit and item placements. Render expressions, poses,
+lighting and responsive crops without mutating world state. Never generate a
+different face or room on page load or response. Only approved world events
+add, remove, move or replace objects or change the equipped outfit. Restore
+the last verified world revision on reload/offline/recovery and label stale
+status. See [visual continuity](PENNY_LIFE.md#persistent-visual-continuity--required-at-initial-launch).
+
+## Office Collection
+
+Offer accessible enlarged inspection of approved virtual designs, with
+literal phrases, concept/unlisted status and no purchase controls until
+explicit launch. Daily styles must use reviewed date-specific design IDs
+without modifying durable world state. See [office collection](OFFICE_COLLECTION.md).
+
+## Living office
+
+The permanent office should support inspectable posters, mugs, clothing,
+decorations and equipment in fixed slots. Show a consistent background
+and deliberate, recorded changes. Use separately controlled local-time
+lighting and clock, verified work status and reduced-motion-safe ambient
+animation. No synthetic activity or daily furniture resets. Permanent poster
+placement is persistent; the fixed daily frame, shirt and mug rotate as
+presentation only. The achievement wall is separate.
+See [office collection](OFFICE_COLLECTION.md#living-office-and-motivational-wall-art).
+
+## Window and time
+
+A locally calculated decorative Eastern Time sky overlays only the existing
+glass pane. It uses fixed fictional coordinates, approximate solar/lunar
+positions and a conservative horizon gate, with no location permission.
+Label the device-clock-derived time and sky as calculated scenery, not live
+weather or verified work. Pause updates in hidden tabs. Separate trusted
+server time and verified rest/work state remain required for operational gates.
+
+## Interaction and state
+Home uses cached public snapshot; chat uses owner-bound private API. Anonymous
+visitors can browse without LLM calls. Signed-in member submits text and sees
+the acknowledged state, then polls only while outstanding and tab visible;
+backoff on delays/errors. Do not let multiple tabs duplicate messages.
+Render model responses as escaped text; no arbitrary HTML or script.
+Conversation history accessible from home but not the default visual focus.
+Penny can publish approved expressions and commentary via typed snapshot
+fields; she cannot edit site code, alter identity artwork, or directly write
+public facts. Character pose conveys system state, not evidence of feelings.
+
+## Definition of done
+Responsive layout, readable contrast and font scaling, accessible controls,
+no layout shift on long replies, reduced-motion support. Offline state shows
+last verified world without false live status. Public contributor display
+respects explicit consent and withdrawal. Achievements unlock only from
+verified local records. Synthetic preview data labeled and excluded from
+production. Backend, API, authentication, cost and security acceptance in
+NETLIFY_BRIDGE.md must pass before public interactive launch.
+
+## Working but welcoming
+Penny's default fictional scene is occupied at her desk, not waiting for a
+question. Browsing does not create inference work. Only evidence-based activity commentary may appear as current thoughts.
+Local pose animation may run while visible, respect reduced motion, and never
+overwrite speech or visitor drafts. No rotating fictional work commentary.
+Optional Dream Mode is a separate explicitly fictional entertainment scene
+available only during verified off-duty state; see [life-cycle](PENNY_LIFE.md).
+
+Keep three independent state dimensions: scene (working/welcoming/chatting),
+verified service availability (available/busy/full/paused/offline/stale),
+and private request (none/queued/working/answered/error). A working scene
+does not prove a running business task or imply chat capacity. Actual public
+business activity must be reviewed, fresh, sanitized evidence; otherwise
+display unavailable. Opening a page must not schedule a business task.
+When a valid question is admitted, acknowledge receipt promptly without
+claiming inference has started. Existing bounded scheduler controls priority,
+fairness, quotas, timeouts and capacity; do not preempt an active generation
+or starve business work. Business tasks yield at safe task boundaries.
+Retain emergency pause, exact-answer review and session isolation.
+Resume the work scene after the interaction, without changing actual status.
+Acceptance: evidence-driven activity without browsing-triggered inference,
+no background tab animation timer, preserved visitor draft, honest unavailable state, no
+private text in public thoughts, and tested bounded scheduling under load.

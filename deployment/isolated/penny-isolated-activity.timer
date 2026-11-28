@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule isolated Penny activity candidate
+
+[Timer]
+OnBootSec=120s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Unit=penny-isolated-activity.service
+
+[Install]
+WantedBy=timers.target

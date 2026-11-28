@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule isolated Penny inference candidate
+
+[Timer]
+OnBootSec=45s
+OnUnitInactiveSec=15s
+AccuracySec=5s
+Unit=penny-isolated-inference.service
+
+[Install]
+WantedBy=timers.target

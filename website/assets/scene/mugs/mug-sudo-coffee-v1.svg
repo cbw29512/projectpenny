@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M76 30H85Q98 30 95 48Q94 63 76 63" stroke="#526268" stroke-width="12" fill="none"/>
+  <path d="M76 30H85Q98 30 95 48Q94 63 76 63" stroke="#263238" stroke-width="7" fill="none"/>
+  <rect x="6" y="8" width="76" height="85" rx="9" fill="#263238" stroke="#526268" stroke-width="3"/>
+  <text x="44" y="40" text-anchor="middle" font-family="monospace" font-size="8" fill="#c4efe5">sudo</text>
+  <text x="44" y="50" text-anchor="middle" font-family="monospace" font-size="8" fill="#c4efe5">make coffee</text>
+  <text x="44" y="82" text-anchor="middle" font-size="5" fill="#c4efe5">PROJECT PENNY</text>
+</svg>

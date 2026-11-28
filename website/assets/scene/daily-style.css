@@ -1,0 +1,9 @@
+/* Independent fixed daily overlays. No change to canonical geometry. */
+.room .penny-scene > #daily-shirt-art[hidden],
+.room .penny-scene > #daily-mug-art[hidden] { display:none !important; }
+.room .penny-scene:has(#daily-shirt-art:not([hidden])) > [data-world-base] { visibility:hidden; }
+.room .penny-scene > [data-world-layer="plum-outfit-v1"]:not([hidden]) ~ #daily-shirt-art { display:none !important; }
+.room .penny-scene > #daily-mug-art {
+  position:absolute; left:65.0%; top:81%; width:3.8%; height:auto;
+  max-width:none; transform:translate(-50%,-100%);
+}

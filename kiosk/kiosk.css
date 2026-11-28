@@ -1,0 +1,33 @@
+*{box-sizing:border-box}
+html{color-scheme:dark;width:100%;height:100%;overflow:hidden}
+body{margin:0;width:100%;height:100dvh;overflow:hidden;background:#14222c;color:#f0f4f1;font:clamp(11px,min(1.1vw,1.8vh),18px) system-ui,sans-serif;padding:clamp(6px,1vh,12px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:clamp(4px,0.8vh,9px)}
+header{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-width:0}
+h1{font-size:1.25rem;color:#e4bc82;margin:.1rem 0;line-height:1.1}
+h1 br{display:none}h1 br:after{content:" "}
+h2{font-size:1rem;margin:.15rem 0}
+small{font-size:.72rem;letter-spacing:.035em;color:#9fb6bf;font-weight:700}
+p{margin:.2rem 0;line-height:1.25}
+main{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr);gap:.6rem;min-height:0;overflow:hidden}
+.office,.work{display:grid;gap:.5rem;min-width:0;min-height:0;overflow:hidden}
+.office{grid-template-rows:minmax(0,1fr) auto auto auto}
+.work{grid-template-rows:auto auto auto auto minmax(0,.8fr) minmax(0,1fr)}
+.office svg{width:100%;height:100%;min-height:0;background:#223947;border-radius:10px}
+.panel,.stats{background:#22343f;border:1px solid #415763;border-radius:9px;padding:.5rem;min-width:0;min-height:0;overflow:hidden}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+.stats strong,.finance-grid strong{display:block;font-size:1.2rem;color:#dfbb80;overflow-wrap:anywhere}
+.finance-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem}
+#finance-status,.expression{font-size:.72rem;color:#9fb6bf}
+#health{display:block;color:#a1d7b7;font-weight:700;white-space:nowrap}
+#updated{display:block;font-size:.72rem;color:#9fb6bf}
+body[data-offline=true] #health{color:#ffc080}
+#aside,#detail,#activity,#measurement,#plan,#title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+#aside{-webkit-line-clamp:4}
+.output{display:flex;flex-direction:column}
+.output pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:.86rem;margin:.2rem 0;min-height:0;overflow:hidden}
+.feed{display:flex;flex-direction:column}
+.feed-heading{display:flex;justify-content:space-between;gap:.4rem}
+#feed-window{flex:1;min-height:0;overflow:hidden}
+#history{list-style:none;padding:0;margin:0}
+#history li{padding:.3rem 0;border-bottom:1px solid #415763;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:.85rem}
+footer{font-size:.65rem;color:#9fb6bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-height:600px){.office{gap:.25rem}.work{gap:.25rem}.panel,.stats{padding:.3rem}#aside{-webkit-line-clamp:3}.finance-grid strong{font-size:1rem}}

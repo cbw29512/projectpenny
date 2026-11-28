@@ -1,0 +1,187 @@
+# Penny's Command Center — suggestion intake and work board
+Approved goal: Penny works toward commercial success and remains welcoming.
+Community ideas are private until reviewed; no direct task or tool execution.
+
+## State and schema
+Community suggestion: UUID, authenticated member UUID, idempotency key,
+bounded normalized text, SHA-256 duplicate key, DB timestamp, policy version.
+Review: immutable single terminal decision bound to exact suggestion digest,
+trusted reviewer, fixed reason, timestamp and policy version. States:
+pending -> eligible / rejected / deferred. Eligible means candidate backlog,
+not permission to schedule, publish, spend, or execute. Deferred reconsideration
+will require an explicit later review contract. Never publish private text.
+Use existing member session resolution and scheduler transaction lock.
+No model calls during intake. No raw suggestions in logs, public snapshots,
+memory or executable prompts. Every input remains untrusted even after review.
+
+## Intake limits
+500 characters before and after normalization; reject invisible controls,
+empty/low-content input, and invalid key. Per authenticated owner: three new
+ideas in rolling 24 hours, three pending. Global: 60/day, 100 pending,
+4096 retained records. Exact owner-scoped duplicate is idempotent, including
+case/spacing variants. Never reveal another owner's submissions. All counts
+and inserts atomic; fail closed at capacity. Cross-owner near-duplicate and
+semantic moderation are later bounded review stages, not claimed here.
+Retention, erasure, public edge controls and identity provider integration
+are mandatory before public intake. No public HTTP route in this increment.
+
+## Work board and hourly planning (next increments)
+Reuse work_task, business opportunity/event, approval and outcome evidence.
+Project verified lanes: community inbox (aggregate only), evaluating,
+backlog, scheduled, in progress, awaiting Maker, testing, completed,
+rejected/deferred. Do not equate a successful draft with completed business.
+Hourly planner selects at most one eligible bounded task, with durable
+hour-slot idempotency, objective, deadline, evidence and safe checkpoint;
+never bypass pause, Guardian, capacity, fairness or approval. No guaranteed
+hourly activity: record skipped/blocked states honestly. Daily standup
+summarizes reviewed outcomes and current blockers, not model inventions.
+Review assistant may later suggest mission/revenue/feasibility/cost/community/
+originality scores (25/25/20/15/10/5), but scores are advisory. Legal,
+security, evidence and Maker review gates cannot be bypassed. Treat nonsense
+as defer/reject, retain humorous legitimate ideas. No keyword list is proof
+of safety. Voting and consented contributor recognition follow verified
+outcomes via existing recognition contracts. Never expose raw rejected text.
+
+## First private hourly planner slice
+Migration 032 adds an immutable UTC-hour decision record. A trusted operator
+calls plan_hour with explicit confirmation and reviewer identity. Under the
+existing scheduler transaction lock, replay the same slot, check pause and
+inference gates, skip any live queue work, and select only an already
+Maker-approved and started digital-product experiment with no prior workshop
+task. Reuse workshop admission and its quotas/deadline. Commit the decision
+and queued task together; one decision per hour, even when skipped. Failed
+transactions leave no slot record and may be retried. Prior prototypes,
+including invalid outputs, require independent review, not automatic retries.
+This is a private adapter, not a timer, public board or general-purpose agent.
+No software utility implementation, new ideas, spending, publication, approval,
+measurement or external actions. Runtime permissions and timer deployment
+remain separate acceptance gates.
+
+## Private suggestion review and owner status
+Bounded oldest-first worklist (maximum 20) and authenticated owner-only
+status lookup now share existing intake and terminal review records. No
+new scheduling authority, public text, or cross-owner access. Trusted local
+operator: `python -m penny.runtime.community --config PRIVATE_CONFIG list`;
+review requires exact digest, verdict/reason, reviewer UUID and --confirm.
+Retained text remains immutable; retention/erasure and typed cloud transport
+must be addressed before public suggestions. CI pending; no live deployment.
+
+Review admission also rejects future or negative submission times and refuses replay of a review outside its submission-to-current-time interval. Regression verification pending CI.
+
+Intake replay validates original content digest, duplicate digest and submission chronology before returning an existing receipt. Corrupted rows return denied without exposing an ID. CI verification pending.
+
+## Community wire candidate
+A separate Node validator accepts only a UUID request key and bounded idea text.
+No supplied owner, role, tier or command. Local screening remains authoritative;
+Unicode behavior must be cross-runtime tested before activation. No HTTP route,
+mailbox storage, identity mapping or publication is enabled by this slice.
+
+## Cloud admission candidate (012)
+Independent default-off gate and bounded suggestion table. Owner comes from trusted server identity; exact request replay, rolling 3/member and 60/global daily limits, 100 unexpired and 512 retained rows. One-hour expiry. SQL is invoker-only with PUBLIC access revoked; no runtime grants. Local shared feedback quota and screening remain authoritative. No claim, delivery, owner status, purge, retention approval or route yet. Expired rows retain quota history and capacity fails closed until a reviewed purge exists. CI pending; no deployment.
+
+Cloud fresh-install manifest now explicitly includes migration 012 and requires the community gate to remain disabled before commit. Install regression tests include rollback on an unexpectedly enabled community gate. CI pending.
+
+## Candidate community claim envelope
+Separate typed claim validator (not wired to any live transport): UUID claim,
+owner, request key and fence, bounded idea, integer UTC epoch-second expiry
+and lease. Lease must be live, at most 900 seconds remaining, and no later
+than the expiry (at most 3600 seconds remaining). These are provisional
+transport limits; local clock, identity mapping, durable receipt and SQL
+claim/ack must independently enforce the contract. CI pending; no deployment.
+
+## Cloud delivery candidate (013)
+Owner-only SQL routines claim a single live transfer using a unique fence and a lease of at most 15 minutes. Expired claims are never automatically reissued. Exact acknowledgment is idempotent; revoked owners and stale unacknowledged leases are refused. Acknowledgment is a transport receipt, not review or execution. No runtime grants, local durable receipt, HTTP wiring, reconciliation or deployment. Manifest and installer counts updated; CI pending.
+
+## Private durable receipt candidate (063)
+Reuse existing operator-owned bridge identity mapping and local locked suggestion
+admission, including shared feedback quotas. Exact cloud ID, key, owner, fence,
+raw payload digest and lease bind the immutable receipt to a stored suggestion.
+Local admission and receipt commit atomically; no task or inference created.
+Receipt replay requires a live lease and current identity mapping. Cap 4096
+receipts (provisional). Trusted operator connection only; no scoped bridge
+runtime grant or network adapter, no cloud acknowledgment implementation.
+Retention, local role audit and end-to-end reconciliation still required.
+CI pending; no deployment.
+
+Local receipt admission locks the enabled identity mapping row during the transaction and validates receipt chronology on replay. Regression tests exercise reused fences/keys and forced receipt-write failure with atomic rollback. Scoped production admission remains pending; CI pending.
+
+## Cloud restricted execution (014)
+Existing audited member role can execute only suggestion submission among the
+new community routines; bridge role can execute claim/ack. No direct table
+access; pinned definer search paths and PUBLIC revocation. Existing fresh
+installer still requires all gates disabled and explicit reviewed digest.
+Local receipt remains operator-only; provider throttling, transport, identity
+and production activation remain separate gates. CI pending.
+
+## Restricted local receipt verification (064)
+The audited bridge scope gains a boolean-only receipt verifier bound to cloud
+ID and fence, current enabled mapping, valid chronology and stored body hash.
+No raw body or member data is returned. Admission still requires the trusted
+operator path; scoped admission and transport remain pending. This verifier
+alone does not authorize network delivery. No production grants applied.
+
+## Scoped local admission candidate (065)
+Default-off independent local gate. Execute-only bridge routine admits mapped
+ASCII suggestions and receipt atomically with scheduler lock, shared quotas,
+lease and replay checks. ASCII restriction is deliberate until Unicode
+normalization/casefold parity is established; do not advertise Unicode support.
+Trusted Python transport must still check Guardian identity before invoking.
+SQL policy tag is pinned to v0.22; policy drift review required. No actual
+runtime activation, transport integration, or production certification.
+
+## Local transport adapter
+Typed Python claim parser enforces exact fields, canonical UUIDs, integer leases,
+ASCII admission parity and private text repr. Scoped persistence revalidates
+claim and Guardian authorization, calls only fixed SQL, and returns true only
+after transaction completion. No HTTPS route, acknowledgment or live worker
+activation yet. Mocked failure and authorization tests added; CI pending.
+
+## Candidate outbound HTTPS client
+Two fixed community claim/ack paths reuse existing verified TLS, public-only
+DNS, short-lived bridge bearer, bounded responses and no automatic retries.
+Community claim uses typed integer-epoch envelope; acknowledgment sends only
+cloud ID and fence. No remote routes or worker activated. Caller must verify
+committed local receipt before acknowledgment; reconciliation remains pending.
+Mock network tests added; CI pending.
+
+## Candidate community HTTP core
+Separate default-off handler uses existing signed identity, mandatory shared
+attempt limiter (submit/claim/ack budgets), bounded JSON, exact routes and
+scoped parameterized repository. Returns explicit receipt or typed claim only.
+ASCII parity enforced before admission. No production gateway registration,
+provider activation, worker or live network test. CI pending.
+
+## Inactive community cycle candidate (066)
+Shared bridge advisory lock and default-off local gate reserve a durable
+900-second claim cooldown before network access. One claim and at most one
+ack after committed admission and independent receipt verification. No retries,
+no worker timer or runtime activation. Conservative cooldown intentionally
+limits throughput to four attempts/hour; durable ack recovery and provider
+backoff handling are still required before production. Mocked tests; CI pending.
+
+## Durable acknowledgment evidence (067)
+Separate append-only local confirmation record, written only by the worker after
+remote success. Scoped routine checks gates, receipt, fence and live lease;
+worker reports ack_unrecorded if local confirmation fails. No automatic recovery
+selection or expired-lease reconciliation yet. CI pending; no deployment.
+
+## Live-lease recovery candidate (068)
+Select oldest unconfirmed durable receipt before new claim, with independent
+60-second DB recovery throttle and minimum 15 seconds remaining lease.
+Reverify before ack; never re-admit or re-claim the recovered suggestion.
+Expired lease reconciliation, provider backoff and persistent sticky blocking
+remain outstanding. No activation; CI pending.
+
+## Persistent community failure containment (069)
+Both claim and recovery reservations honor a common durable provider cooldown
+and sticky block. Authentication/conflict failures require trusted operator
+review; scoped worker cannot clear blocks. Provider retry delays bounded to
+60–86400 seconds and never shorten an existing cooldown. Expired lease
+reconciliation, operator tooling and DB integration certification pending.
+
+## CI repair (070)
+Run 46101826164: website passed; Python 531 tests, three errors in effective
+local role provisioning. Migration 069 replaced two definer functions without
+restating their pinned search paths. Migration 070 restores the exact audited
+configuration and PUBLIC revocation without weakening the audit. Explicit
+regression test added. Rerun required before certification.

@@ -1,0 +1,9 @@
+.board-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .75rem; margin: 1rem 0; padding: 0; list-style: none; }
+.board-lane { padding: .85rem; background: #f4f2ea; border: 1px solid var(--line); border-radius: .7rem; min-width: 0; }
+.board-lane h3,.board h3 { font-size: 1rem; margin: 0; }
+.board-empty { border-top: 1px solid var(--line); padding-top: .5rem; color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+.board-standup,.board-intake { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.board-intake { display: grid; gap: .55rem; }
+.board-intake button { justify-self: start; }
+@media (max-width: 760px) { .board-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 420px) { .board-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,79 @@
+"""Inactive bounded community worker; at most one claim and one acknowledgment."""
+import logging
+
+from penny.bridge.reply_db import reply_call
+from penny.bridge.state import BridgeResult
+from penny.bridge.worker_state import Cycle
+from penny.bridge.worker_store import exclusive_cycle
+from penny.guardian.policy import identity_matches
+from .scoped import persist_claim
+from .transport_state import CommunityClaim
+from penny.bridge.receipts import valid_id
+
+logger = logging.getLogger(__name__)
+
+
+def run_community_once(dsn, client):
+    """Never acknowledge an uncommitted receipt or automatically retry a claim."""
+    try:
+        if not identity_matches():
+            return Cycle("paused",900)
+        with exclusive_cycle(dsn) as acquired:
+            if not acquired:
+                return Cycle("busy",900)
+            recovery=reply_call(dsn,"community_recover",())
+            if recovery is not None:
+                if not all(valid_id(recovery.get(k)) for k in ("cloud_id","fence")):
+                    return Cycle("uncertain",900)
+                return _ack(dsn,client,recovery["cloud_id"],recovery["fence"])
+            row=reply_call(dsn,"community_reserve",())
+            if not row or row["recorded"] is not True:
+                return Cycle("paused",900)
+            result=client.community_claim()
+            if type(result) is not BridgeResult:
+                return _failure(dsn,result)
+            if result.status=="empty" and result.claim is None:
+                return Cycle("empty",900)
+            if result.status!="claimed" or type(result.claim) is not CommunityClaim:
+                return _failure(dsn,result)
+            claim=result.claim
+            if not persist_claim(dsn,claim):
+                return Cycle("not_admitted",900)
+            return _ack(dsn,client,claim.id,claim.fence)
+    except Exception as exc:
+        logger.warning("Community cycle stopped (%s)",type(exc).__name__)
+        return Cycle("uncertain",900)
+
+
+def _ack(dsn,client,cloud_id,fence):
+    # Recheck committed evidence immediately before each acknowledgment.
+    row=reply_call(dsn,"community_verify",(cloud_id,fence))
+    if not row or row["recorded"] is not True or not identity_matches():
+        return Cycle("receipt_unverified",900)
+    ack=client.community_ack(cloud_id,fence)
+    if type(ack) is BridgeResult and ack.status=="ok" and ack.claim is None:
+        recorded=reply_call(dsn,"community_record_ack",(cloud_id,fence))
+        if recorded and recorded["recorded"] is True:
+            return Cycle("acknowledged",60)
+        return Cycle("ack_unrecorded",60)
+    return _failure(dsn,ack,uncertain="ack_uncertain")
+
+
+def _failure(dsn,result,*,uncertain="uncertain"):
+    # A remote failure must never reopen either durable reservation path.
+    reason=None
+    delay=900
+    status=uncertain
+    if type(result) is not BridgeResult:
+        reason="local_integrity"
+    elif result.status in ("unauthorized","conflict"):
+        reason="authentication" if result.status=="unauthorized" else "remote_conflict"
+    elif result.status=="backoff" and type(result.retry_after) is int:
+        delay=max(60,min(result.retry_after,86400))
+        status="backoff"
+    if reason is not None:
+        status="blocked"
+    row=reply_call(dsn,"community_defer",(delay,reason))
+    if not row or row["recorded"] is not True:
+        raise RuntimeError("community cooldown not recorded")
+    return Cycle(status,delay)

@@ -1,0 +1,17 @@
+/* Night mode is a fixed visual overlay, not a scheduler control. */
+.room .penny-scene > #night-pajama-art[hidden] { display:none !important; }
+.room .penny-scene:has(#night-pajama-art:not([hidden])) > [data-world-base] { visibility:hidden; }
+.room .penny-scene:has(#night-pajama-art:not([hidden])) > #daily-shirt-art { display:none !important; }
+.room .penny-scene > [data-world-layer="plum-outfit-v1"]:not([hidden]) ~ #night-pajama-art { display:none !important; }
+.room .penny-scene[data-night-mode]::after {
+  content:""; position:absolute; inset:1.1%; border-radius:3.5%;
+  background:rgba(32,26,55,.23); pointer-events:none; z-index:3;
+}
+.pajama-inspector { display:block; max-width:170px; width:100%; height:auto; margin:.75rem auto; }
+#night-status { font-size:.85rem; }
+
+/* During verified rest the decorative dream replaces the work thought cloud.
+   Private speech and existing reply controls remain separate. */
+.world:has(.penny-scene[data-night-mode="reviewed"]) .thought-bubble { display:none; }
+#penny-dream[hidden] { display:none !important; }
+#penny-dream { font-size:.85rem; font-style:italic; }

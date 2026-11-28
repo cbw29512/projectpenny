@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule Penny private inference
+
+[Timer]
+OnBootSec=45s
+OnUnitInactiveSec=15s
+AccuracySec=5s
+Unit=penny-inference.service
+
+[Install]
+WantedBy=timers.target
