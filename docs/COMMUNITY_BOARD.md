@@ -91,3 +91,14 @@ claim/ack must independently enforce the contract. CI pending; no deployment.
 
 ## Cloud delivery candidate (013)
 Owner-only SQL routines claim a single live transfer using a unique fence and a lease of at most 15 minutes. Expired claims are never automatically reissued. Exact acknowledgment is idempotent; revoked owners and stale unacknowledged leases are refused. Acknowledgment is a transport receipt, not review or execution. No runtime grants, local durable receipt, HTTP wiring, reconciliation or deployment. Manifest and installer counts updated; CI pending.
+
+## Private durable receipt candidate (063)
+Reuse existing operator-owned bridge identity mapping and local locked suggestion
+admission, including shared feedback quotas. Exact cloud ID, key, owner, fence,
+raw payload digest and lease bind the immutable receipt to a stored suggestion.
+Local admission and receipt commit atomically; no task or inference created.
+Receipt replay requires a live lease and current identity mapping. Cap 4096
+receipts (provisional). Trusted operator connection only; no scoped bridge
+runtime grant or network adapter, no cloud acknowledgment implementation.
+Retention, local role audit and end-to-end reconciliation still required.
+CI pending; no deployment.
