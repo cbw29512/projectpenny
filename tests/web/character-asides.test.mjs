@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { runInNewContext } from "node:vm";
 import { nextAside } from "../../website/assets/character-asides.mjs";
 
 test("scripted asides cycle deterministically without visitor data", () => {
@@ -36,5 +37,32 @@ test("homepage does not invent live thought or speech", () => {
   assert.match(html, /not internal AI reasoning/);
   assert.match(css, /\.thought-bubble\s*\{[^}]*dashed/);
   assert.doesNotMatch(home, /nextAside|rotateAside/);
-  assert.doesNotMatch(home, /\bfetch\s*\(|\.innerHTML\s*=|localStorage|sessionStorage/);
+  assert.doesNotMatch(home, /\.innerHTML\s*=|localStorage|sessionStorage/);
+});
+
+test("actual homepage preview boot and interaction never use the network", () => {
+  const source = readFileSync(new URL("../../website/assets/home.mjs", import.meta.url), "utf8");
+  const events = {};
+  const question = { value: "A visitor question", addEventListener: (name, fn) => events[name] = fn };
+  const send = { addEventListener: (name, fn) => events["send:" + name] = fn };
+  const notice = {}, count = {};
+  const nodes = { "home-conversation": { dataset: { live: "false" } }, question, count, notice, "preview-send": send };
+  let networkCalls = 0, liveCalls = 0, errors = 0;
+  const state = { length: 18, canPreview: true, notice: "Local preview" };
+  // Execute the actual entrypoint with injected imports and a minimal DOM.
+  runInNewContext(source.replace(/^import .*;\s*$/gm, ""), {
+    document: { getElementById: id => nodes[id] },
+    fetch: () => { networkCalls++; throw Error("Unexpected network"); },
+    bindHomeConversation: () => { liveCalls++; throw Error("Unexpected live mode"); },
+    MAX_QUESTION: 500, PREVIEW_NOTICE: "Local preview",
+    questionState: () => state, previewQuestion: () => state,
+    console: { error: () => errors++ }
+  });
+  assert.equal(question.disabled, false);
+  events.input();
+  events["send:click"]();
+  assert.equal(notice.textContent, "Local preview");
+  assert.equal(networkCalls, 0);
+  assert.equal(liveCalls, 0);
+  assert.equal(errors, 0);
 });
