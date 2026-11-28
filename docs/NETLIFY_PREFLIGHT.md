@@ -56,3 +56,8 @@ Disposable fixture now opens a real login (not merely SET ROLE) and
 confirms shared default TEMP grant is rejected. Provider login/TLS still
 unverified; probe does not audit all object types or remote certificates
 outside libpq's verify-full validation. No provider changes. CI pending.
+
+## Operator interface
+CI 46086251885 passed login verification. See NETLIFY_OPERATOR.md for offline
+manifest review, confirmed fresh installation and separate runtime probes.
+Private Linux config files only; no live activation or provisioning. CI pending.

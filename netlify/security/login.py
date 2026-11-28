@@ -2,7 +2,7 @@
 import logging
 import re
 import psycopg
-from psycopg.conninfo import conninfo_to_dict
+from .credentials import validate_dsn
 from .audit import AuditResult,audit_role
 from .roles import NAME,SCOPES
 
@@ -59,17 +59,7 @@ def inspect_connection(conn,*,database,schema,role,scope,require_tls=True):
 def probe_login(dsn,*,database,role,scope):
     """Only explicit verified-TLS DSNs; never use ambient owner connection."""
     try:
-        import os
-        if any(k.startswith("PG") for k in os.environ):
-            raise PermissionError("ambient PostgreSQL environment refused")
-        fields=conninfo_to_dict(dsn)
-        if (set(fields)-{"host","port","dbname","user","password","sslmode","sslrootcert"}
-                or fields.get("dbname")!=database or database in ("penny","penny_test")
-                or fields.get("user")!=role or fields.get("sslmode")!="verify-full"
-                or not fields.get("host") or not fields.get("password")
-                or not fields.get("sslrootcert") or "," in fields["host"]
-                or "/" in fields["host"]):
-            raise ValueError("explicit verified-TLS runtime DSN required")
+        validate_dsn(dsn,database=database,role=role)
         with psycopg.connect(dsn,connect_timeout=5) as conn:
             conn.execute("SET TRANSACTION READ ONLY")
             conn.execute("SET LOCAL statement_timeout='5s'")
