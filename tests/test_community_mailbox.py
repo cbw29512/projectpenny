@@ -47,3 +47,26 @@ class CommunityMailboxTests(mailbox.DatabaseFixture):
         self.assertEqual(sum(r[0]=="member_quota" for r in rows),1)
         self.assertEqual(self.claim(),[])
         self.assertEqual(self.suggest(self.b,body="x"*501)[0],"invalid")
+
+    def test_fenced_delivery_and_replay(self):
+        self.assertEqual(self.call("SELECT * FROM community_mailbox_claim()"),[])
+        self.call("UPDATE community_mailbox_control SET enabled=true RETURNING enabled")
+        first=self.suggest(self.a)[1]
+        row=self.call("SELECT * FROM community_mailbox_claim()")[0]
+        self.assertEqual(row[0],first)
+        self.assertEqual(row[1],self.a)
+        self.assertEqual(self.call("SELECT * FROM community_mailbox_claim()"),[])
+        self.assertFalse(self.call("SELECT community_mailbox_ack(%s,%s)",first,uuid4())[0][0])
+        for _ in range(2):
+            self.assertTrue(self.call("SELECT community_mailbox_ack(%s,%s)",first,row[4])[0][0])
+        self.assertEqual(self.call("SELECT * FROM community_mailbox_claim()"),[])
+
+    def test_expired_claim_never_reissued(self):
+        self.call("UPDATE community_mailbox_control SET enabled=true RETURNING enabled")
+        first=self.suggest(self.a)[1]
+        row=self.call("SELECT * FROM community_mailbox_claim()")[0]
+        self.call("UPDATE community_mailbox_suggestion SET submitted_at=clock_timestamp()-interval '2 minutes', lease_until=clock_timestamp()-interval '1 minute' WHERE id=%s RETURNING id",first)
+        self.assertFalse(self.call("SELECT community_mailbox_ack(%s,%s)",first,row[4])[0][0])
+        self.assertEqual(self.call("SELECT * FROM community_mailbox_claim()"),[])
+        second=self.suggest(self.b)[1]
+        self.assertEqual(self.call("SELECT * FROM community_mailbox_claim()")[0][0],second)

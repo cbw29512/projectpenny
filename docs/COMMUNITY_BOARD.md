@@ -88,3 +88,6 @@ and lease. Lease must be live, at most 900 seconds remaining, and no later
 than the expiry (at most 3600 seconds remaining). These are provisional
 transport limits; local clock, identity mapping, durable receipt and SQL
 claim/ack must independently enforce the contract. CI pending; no deployment.
+
+## Cloud delivery candidate (013)
+Owner-only SQL routines claim a single live transfer using a unique fence and a lease of at most 15 minutes. Expired claims are never automatically reissued. Exact acknowledgment is idempotent; revoked owners and stale unacknowledged leases are refused. Acknowledgment is a transport receipt, not review or execution. No runtime grants, local durable receipt, HTTP wiring, reconciliation or deployment. Manifest and installer counts updated; CI pending.

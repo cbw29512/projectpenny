@@ -20,7 +20,7 @@ class OperatorTests(unittest.TestCase):
         with patch("netlify.security.operator.load") as load_mock,contextlib.redirect_stdout(out):
             self.assertEqual(main(["plan"]),0)
         load_mock.assert_not_called()
-        self.assertEqual(len(json.loads(out.getvalue())["migrations"]),12)
+        self.assertEqual(len(json.loads(out.getvalue())["migrations"]),13)
 
     @patch("netlify.security.operator.load")
     @patch("netlify.security.operator.apply")

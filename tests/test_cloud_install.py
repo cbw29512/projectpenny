@@ -14,11 +14,11 @@ from netlify.security.roles import SCOPES
 class ManifestTests(unittest.TestCase):
     def test_release_is_exact_order_and_digest(self):
         digest,entries=release_plan()
-        self.assertEqual(len(entries),12)
+        self.assertEqual(len(entries),13)
         self.assertEqual(len(digest),64)
         self.assertEqual(digest,release_plan()[0])
         self.assertEqual(entries[0][0],"001_schema.sql")
-        self.assertEqual(entries[-1][0],"012_community_admission.sql")
+        self.assertEqual(entries[-1][0],"013_community_delivery.sql")
 
 
 @unittest.skipUnless(DSN,"disposable PostgreSQL not configured")
@@ -56,14 +56,14 @@ class InstallTests(unittest.TestCase):
 
     def test_install_is_disabled_and_repeat_refuses_without_data_loss(self):
         report=self.install()
-        self.assertEqual(report["migration_count"],12)
+        self.assertEqual(report["migration_count"],13)
         self.assertFalse(report["production_certified"])
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(12,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(13,)])
         self.assertEqual(self.query("SELECT enabled FROM mailbox_control"),[(False,)])
         self.assertEqual(self.query("SELECT enabled FROM community_mailbox_control"),[(False,)])
         with self.assertRaises(PermissionError):
             self.install()
-        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(12,)])
+        self.assertEqual(self.query("SELECT count(*) FROM mailbox_install_manifest"),[(13,)])
 
     def test_bad_digest_and_existing_object_refuse(self):
         with self.assertRaises(ValueError):

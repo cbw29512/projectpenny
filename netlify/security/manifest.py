@@ -10,6 +10,7 @@ NAMES=(
     "008_activity_observation.sql","009_retire_cloud_admin.sql",
     "010_workshop_observation.sql","011_workshop_budget.sql",
     "012_community_admission.sql",
+    "013_community_delivery.sql",
 )
 ROOT=Path(__file__).resolve().parents[1]/"mailbox"
 
